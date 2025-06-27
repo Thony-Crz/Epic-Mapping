@@ -5,9 +5,16 @@
   import GreyCard from '$ui/components/GreyCard.svelte';
 </script>
 
-<div class="p-8 space-y-4">
-  <BlueCard title="Connexion utilisateur" />
-  <YellowCard title="Saisie des identifiants"/>
-  <GreenCard title="L'utilisateur saisit son mot de passe" />
-  <GreyCard title="Et si l'utilisateur oublie son mot de passe ?" />
-</div>
+<BlueCard title="Authentification">
+  <YellowCard title="Saisie login">
+    <GreenCard title="L'utilisateur entre un identifiant valide" />
+    <GreenCard title="L'utilisateur entre un identifiant valide" />
+    <GreenCard title="L'utilisateur entre un identifiant valide" />
+    <GreyCard title="Et si le champ est vide ?" />
+  </YellowCard>
+
+  <YellowCard title="Saisie mot de passe">
+    <GreenCard title="Le mot de passe est correct" />
+    <GreyCard title="Mot de passe oublié" />
+  </YellowCard>
+</BlueCard>
