@@ -1,10 +1,10 @@
-# 🧩 Extension Azure DevOps - Exemple Mapping to Work Items
+# 🧭 Application Web – Example Mapping + Intégration Azure DevOps
 
 ## 🎯 Objectif
 
-Créer une **extension Azure DevOps** permettant de structurer et d'automatiser la création d'éléments de travail à partir d'un **atelier d'Exemple Mapping**.
+Cette application web permet de **modéliser des User Story Maps à l’aide de l’Example Mapping**, et de **générer automatiquement l’arborescence correspondante (Epic, Features, Scenarios) dans un backlog Azure DevOps** une fois le travail d’analyse complété.
 
-Le but est de **faciliter la transition entre les cartes de l'atelier** (post-its) et les **Work Items Azure DevOps**, tout en respectant les contraintes métier.
+Elle est **autonome**, ne nécessite pas d’installation dans Azure DevOps, et fonctionne via les **API REST**.
 
 ## 🗺️ Règles de correspondance
 
@@ -17,50 +17,74 @@ Le but est de **faciliter la transition entre les cartes de l'atelier** (post-it
 
 ## 💡 Fonctionnalités prévues
 
-- Affichage des cartes Exemple Mapping (format numérique ou import)
-- Bouton **"Créer épopée"** visible à côté d’une carte 🟦 **bleue**
-  - **Désactivé tant qu’il reste des post-its ⬜ gris (questions ouvertes)**
-- À la création :
-  - Création d’un **Epic**
-  - Création automatique des **Fonctionnalités** pour chaque carte 🟨 jaune associée
-  - Création des **Tâches ou Test Cases** pour chaque 🟩 vert
-  - Liaison hiérarchique (Scénarios → Fonctionnalités → Épopée)
-- Traçabilité complète dans Azure DevOps
+### 1. 🏠 Page d’accueil
 
-## Maquette
+- Liste des **User Story Maps (Epics)** créées
+- Barre de **recherche** pour filtrer les epics existantes
+- Bouton pour **créer une nouvelle story map**
 
-![image](https://github.com/user-attachments/assets/0573012f-e690-49a8-abf7-7339e7e44eff)
+### 2. 🔍 Consultation d’une User Story Map
 
-## 🛠️ Stack technique envisagée
+- Affichage de :
+  - 🟪 **Epic** (nom de la story map)
+  - 🟦 **Règles métier** (Features)
+  - 🟩 **Scénarios** (Use cases)
+  - ❓ **Questions ouvertes** (modifiables, sous forme de post-its)
 
-- [Azure DevOps Extension SDK](https://learn.microsoft.com/en-us/azure/devops/extend/?view=azure-devops)
-- HTML/CSS + TypeScript (React possible)
-- API REST Azure DevOps (pour la création/lien des WI)
-- Stockage temporaire ou import/export des mappings (JSON, CSV, Miro, etc.)
-
-## 📊 Estimation par phase (MVP)
-
-| Phase                      | Détail                                                                 | Durée estimée        |
-|---------------------------|------------------------------------------------------------------------|----------------------|
-| 📐 Spécification           | Définir les règles, le modèle de données, les rôles des cartes         | 0.5 à 1 jour         |
-| 🎨 Maquettage UI           | Maquettage de l’interface post-it + zones colorées + bouton            | 0.5 à 1 jour         |
-| ⚙️ Développement Front     | Affichage des post-its, interaction, logique d’activation du bouton     | 2 à 3 jours          |
-| 🔌 Intégration API ADO     | Création Epic / Feature / Task via Azure DevOps REST API               | 3 à 5 jours          |
-| 🧪 Tests fonctionnels      | Cas normaux, erreurs API, blocage si post-its gris présents            | 1 à 2 jours          |
-| 📦 Packaging et déploiement| Création du manifeste, empaquetage VSIX, installation dans l’org       | 0.5 jour             |
+- Interface 100% **visuelle**, type post-it pour :
+  - Glisser-déposer
+  - Modifier, ajouter ou supprimer
+  - Organiser l’arborescence logicielle
 
 ---
 
-## ⏱️ Total estimé
+### 3. 🔁 Génération vers Azure DevOps
 
-**➡️ Durée totale : 8 à 12 jours ouvrés** pour une première version fonctionnelle (MVP).
+- Lorsqu’un epic est **complètement défini** (c’est-à-dire **sans question en attente**), un **bouton apparaît** :
+  
+  `Ajouter au backlog Azure`
+
+- Cela déclenche :
+  - La création d’un **Epic Azure DevOps**
+  - La génération automatique des **Features** et **Scenarios**
+  - L'association des liens hiérarchiques
+  - L’utilisation de l’API REST Azure DevOps via un PAT ou OAuth
+
+---
+
+## 📁 Exemple de flux
+
+1. Tu crées une nouvelle user story map : **"Inscription utilisateur"**
+2. Tu ajoutes :
+   - Règles métier : "Mot de passe sécurisé", "Validation e-mail"
+   - Scénarios : "Utilisateur saisit un mot de passe invalide", etc.
+   - Questions : "Quels types d’e-mail sont valides ?", etc.
+3. Tu termines l’analyse (plus de question ouverte)
+4. Tu cliques sur **"Ajouter au backlog Azure"**
+5. L'application crée :
+   - Un **Epic** "Inscription utilisateur"
+     - Des **Features** "Mot de passe sécurisé", etc.
+       - Des **Scenarios** comme tâches ou PBIs
+
+---
+
+## Maquette
+
+![image](https://github.com/user-attachments/assets/7ca75f25-cde6-4177-a05d-1dd8c67b0c1f)
+
+
+## 🛠️ Stack technique envisagée
+
+- Frontend : HTML / JavaScript (ou framework à définir)
+- Backend (optionnel) : Appels directs vers les APIs Azure DevOps REST
+- (à venir) Authentification : PAT (Personal Access Token), OAuth (à venir)
+- Stockage local (en l’état) ou backend à connecter ultérieurement
+- Stockage temporaire ou import/export des mappings (JSON, CSV, Miro, etc.)
 
 ---
 
 ## 🔁 Évolutions futures (non incluses)
 
-- Connexion directe à Miro / FigJam
-- Persistance ou import/export des mappings
 - Génération automatique de fichiers Gherkin
 - Interface collaborative multi-utilisateurs
 
