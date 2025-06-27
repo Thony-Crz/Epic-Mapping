@@ -27,6 +27,10 @@ Le but est de **faciliter la transition entre les cartes de l'atelier** (post-it
   - Liaison hiérarchique (Scénarios → Fonctionnalités → Épopée)
 - Traçabilité complète dans Azure DevOps
 
+## Maquette
+
+![image](https://github.com/user-attachments/assets/0573012f-e690-49a8-abf7-7339e7e44eff)
+
 ## 🛠️ Stack technique envisagée
 
 - [Azure DevOps Extension SDK](https://learn.microsoft.com/en-us/azure/devops/extend/?view=azure-devops)
