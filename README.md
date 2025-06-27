@@ -73,15 +73,81 @@ Elle est **autonome**, ne nécessite pas d’installation dans Azure DevOps, et 
 ![image](https://github.com/user-attachments/assets/7ca75f25-cde6-4177-a05d-1dd8c67b0c1f)
 
 
-## 🛠️ Stack technique envisagée
+## ⚙️ Architecture Technique
 
-- Frontend : HTML / JavaScript (ou framework à définir)
-- Backend (optionnel) : Appels directs vers les APIs Azure DevOps REST
-- (à venir) Authentification : PAT (Personal Access Token), OAuth (à venir)
-- Stockage local (en l’état) ou backend à connecter ultérieurement
-- Stockage temporaire ou import/export des mappings (JSON, CSV, Miro, etc.)
+### 🧠 Philosophie
+
+Ce projet s’inscrit dans une démarche **Software Craftsmanship**, avec un fort accent sur la **clarté du code**, la **séparation des responsabilités**, et l’**expérience utilisateur fluide**. L’objectif est de proposer une solution simple, testable et qualitative, orientée modélisation métier et automatisation de backlog.
 
 ---
+
+### 🏗️ Stack retenue
+
+| Couche | Technologie | Justification |
+|--------|-------------|------------------|
+| **Frontend** | [SvelteKit](https://kit.svelte.dev/) | Léger, réactif, syntaxe propre, excellent pour craft |
+| **Backend** | ASP.NET Core WebAPI (C#) | Robuste, typé, parfaite intégration avec Azure |
+| **API externe** | Azure DevOps REST API | Pour créer dynamiquement des Epics, Features, Scenarios |
+| **UI / CSS** | [Tailwind CSS](https://tailwindcss.com/) | Design clair et composable (ex : post-its, drag & drop) |
+
+---
+
+#### 📂 Organisation du projet
+
+```
+/src/
+├── Core/
+│   ├── Domain/               # Entités métier, value objects
+│   └── Application/          # Use cases, ports, DTOs
+├── Infrastructure/           # Implémentations concrètes (ex : Azure DevOps)
+├── WebApi/                   # Endpoints REST, injection de dépendances
+├── WebApp/                   # Application SvelteKit (frontend)
+├── Tests/
+│   ├── Application.UnitTests/
+│   ├── Application.IntegrationTests/
+│   ├── Infrastructure.IntegrationTests/
+│   └── E2e.Tests/
+```
+
+---
+### 🔐 Authentification
+---
+### 📦 Stockage (temporaire)
+
+- InMemory
+- Sauvegarde locale JSON
+- Import/export de story maps (JSON, CSV)
+- Option future : synchronisation avec Miro ou backend persistant
+- SqlLite
+
+---
+
+### 🧪 Tests & Qualité
+
+Le projet adopte une approche **Test-Driven Development (TDD)** structurée autour d’une architecture **Clean**, avec séparation claire des responsabilités et des couches testables indépendamment.
+
+#### 🔍 Backend – C# (ASP.NET Core)
+
+- **Framework de test** : [NUnit](https://nunit.org/)
+- **Style** : TDD, tests unitaires et d’intégration
+- **Moq** : pour les dépendances et comportements simulés
+
+> 📌 Possibilité d’introduire du **BDD** avec [SpecFlow](https://specflow.org/) si besoin (scénarios lisibles métier, Gherkin + NUnit)
+
+#### 🔍 Frontend
+
+- Tests de composants via `vitest`
+- Tests E2E via `Playwright` ou `Cypress` (dans `E2e.Tests`)
+- Contrôle visuel du bouton Azure selon la présence de questions
+
+#### 🧪 Types de tests
+
+| Type de test              | Cible                                      | Outils |
+|---------------------------|--------------------------------------------|--------|
+| ✅ Tests unitaires         | Règles métier (`Application`)              | NUnit, Moq, FluentAssertions |
+| 🔗 Tests d’intégration     | Appels inter-couches, connecteurs externes | NUnit + TestServer |
+| 🔐 Tests Azure DevOps      | Appels réels ou simulés vers l’API         | NUnit + HttpClient |
+| 🧪 Tests E2E / BDD         | Parcours utilisateur complet               | SpecFlow (optionnel), Playwright/Cypress (via WebApp) |
 
 ## 🔁 Évolutions futures (non incluses)
 
