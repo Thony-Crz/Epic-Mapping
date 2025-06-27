@@ -1,7 +1,8 @@
 <script lang="ts">
-	import '../app.css';
-
-	let { children } = $props();
+  import BlueCard from '$ui/components/BlueCard.svelte';
 </script>
 
-{@render children()}
+<div class="p-8 space-y-4">
+  <BlueCard title="Connexion utilisateur" />
+  <BlueCard title="Gestion des mappings Azure DevOps" />
+</div>
