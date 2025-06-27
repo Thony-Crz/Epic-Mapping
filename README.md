@@ -34,6 +34,32 @@ Le but est de **faciliter la transition entre les cartes de l'atelier** (post-it
 - API REST Azure DevOps (pour la création/lien des WI)
 - Stockage temporaire ou import/export des mappings (JSON, CSV, Miro, etc.)
 
+## 📊 Estimation par phase (MVP)
+
+| Phase                      | Détail                                                                 | Durée estimée        |
+|---------------------------|------------------------------------------------------------------------|----------------------|
+| 📐 Spécification           | Définir les règles, le modèle de données, les rôles des cartes         | 0.5 à 1 jour         |
+| 🎨 Maquettage UI           | Maquettage de l’interface post-it + zones colorées + bouton            | 0.5 à 1 jour         |
+| ⚙️ Développement Front     | Affichage des post-its, interaction, logique d’activation du bouton     | 2 à 3 jours          |
+| 🔌 Intégration API ADO     | Création Epic / Feature / Task via Azure DevOps REST API               | 3 à 5 jours          |
+| 🧪 Tests fonctionnels      | Cas normaux, erreurs API, blocage si post-its gris présents            | 1 à 2 jours          |
+| 📦 Packaging et déploiement| Création du manifeste, empaquetage VSIX, installation dans l’org       | 0.5 jour             |
+
+---
+
+## ⏱️ Total estimé
+
+**➡️ Durée totale : 8 à 12 jours ouvrés** pour une première version fonctionnelle (MVP).
+
+---
+
+## 🔁 Évolutions futures (non incluses)
+
+- Connexion directe à Miro / FigJam
+- Persistance ou import/export des mappings
+- Génération automatique de fichiers Gherkin
+- Interface collaborative multi-utilisateurs
+
 ## 📋 Étapes projet
 
 - [ ] Maquettage interface mapping (cartes colorées)
