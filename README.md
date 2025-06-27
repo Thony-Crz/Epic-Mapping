@@ -78,4 +78,3 @@ Le but est de **faciliter la transition entre les cartes de l'atelier** (post-it
 ---
 
 **Auteur** : à compléter  
-**Licence** : à définir (MIT / Apache 2.0 / autre)
