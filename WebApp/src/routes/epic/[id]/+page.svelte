@@ -55,6 +55,7 @@
             editable={true}
             on:titleUpdate={(e) => handleFeatureUpdate(feature.id, e.detail)}
           >
+          <br />
             {#each feature.scenarios as scenario, scenarioIndex}
               {#if scenario.type === 'green'}
                 <GreenCard 
