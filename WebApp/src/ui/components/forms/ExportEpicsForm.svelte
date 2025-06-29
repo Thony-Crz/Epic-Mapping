@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
+  import { projectsStore } from '$lib/stores/projectsStore';
 
   export let isOpen = false;
   export let readyEpics: any[] = [];
@@ -7,20 +8,44 @@
   const dispatch = createEventDispatcher();
 
   let selectedEpicId = '';
+  let selectedProjectId = 'all'; // Nouveau filtre par projet
   let isExporting = false;
   let azurePath = '';
   let showAzurePathInput = false;
 
+  // Épics filtrées par projet
+  $: filteredEpics = selectedProjectId === 'all' 
+    ? readyEpics 
+    : readyEpics.filter(epic => epic.projectId === selectedProjectId);
+
   // Réactive : épic sélectionnée
-  $: selectedEpic = readyEpics.find(epic => epic.id === selectedEpicId);
+  $: selectedEpic = filteredEpics.find(epic => epic.id === selectedEpicId);
+
+  // Réinitialiser la sélection d'épic quand le filtre projet change
+  $: if (selectedProjectId) {
+    if (filteredEpics.length > 0 && !filteredEpics.some(epic => epic.id === selectedEpicId)) {
+      selectedEpicId = filteredEpics[0]?.id || '';
+    } else if (filteredEpics.length === 0) {
+      selectedEpicId = '';
+    }
+  }
 
   // Initialiser la première épic par défaut quand les épics changent
-  $: if (readyEpics.length > 0 && !selectedEpicId) {
-    selectedEpicId = readyEpics[0].id;
+  $: if (filteredEpics.length > 0 && !selectedEpicId) {
+    selectedEpicId = filteredEpics[0].id;
+  }
+
+  // Trouver le nom du projet pour une épic
+  function getProjectName(projectId: string): string {
+    const project = $projectsStore.find(p => p.id === projectId);
+    return project ? project.name : 'Projet inconnu';
   }
 
   function closeModal() {
     isOpen = false;
+    selectedProjectId = 'all'; // Réinitialiser le filtre
+    selectedEpicId = '';
+    azurePath = '';
     dispatch('close');
   }
 
@@ -57,7 +82,11 @@
     if (!selectedEpic) return;
     
     const epic = selectedEpic;
+    const projectName = getProjectName(epic.projectId);
+    
     const epicData: any = {
+      'Project Name': projectName,
+      'Project ID': epic.projectId,
       'Epic Title': epic.title,
       'Epic ID': epic.id,
       'Status': epic.status,
@@ -76,7 +105,9 @@
     });
 
     const csvContent = convertToCSV([epicData]);
-    downloadCSV(csvContent, `epic-${epic.title.replace(/[^a-zA-Z0-9]/g, '-')}-export.csv`);
+    const safeProjectName = projectName.replace(/[^a-zA-Z0-9]/g, '-');
+    const safeEpicTitle = epic.title.replace(/[^a-zA-Z0-9]/g, '-');
+    downloadCSV(csvContent, `${safeProjectName}-epic-${safeEpicTitle}-export.csv`);
   }
 
   function convertToCSV(data: any[]) {
@@ -150,22 +181,58 @@
       <div class="mb-6">
         <p class="text-sm text-gray-600 mb-4">
           {readyEpics.length} épic{readyEpics.length > 1 ? 's' : ''} ready disponible{readyEpics.length > 1 ? 's' : ''}
+          {#if selectedProjectId !== 'all'}
+            • {filteredEpics.length} dans le projet sélectionné
+          {/if}
         </p>
+
+        <!-- Filtre par projet -->
+        <div class="mb-4">
+          <label for="project-filter" class="block text-sm font-medium text-gray-700 mb-2">
+            Filtrer par projet
+          </label>
+          <select 
+            id="project-filter"
+            bind:value={selectedProjectId}
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+          >
+            <option value="all">Tous les projets ({readyEpics.length} épics)</option>
+            {#each $projectsStore as project (project.id)}
+              {@const projectEpics = readyEpics.filter(epic => epic.projectId === project.id)}
+              {#if projectEpics.length > 0}
+                <option value={project.id}>
+                  {project.name} ({projectEpics.length} épic{projectEpics.length > 1 ? 's' : ''})
+                </option>
+              {/if}
+            {/each}
+          </select>
+        </div>
 
         <!-- Sélection de l'épic -->
         <div class="mb-4">
           <label for="epic-select" class="block text-sm font-medium text-gray-700 mb-2">
             Épic à exporter
           </label>
-          <select 
-            id="epic-select"
-            bind:value={selectedEpicId}
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors"
-          >
-            {#each readyEpics as epic (epic.id)}
-              <option value={epic.id}>{epic.title}</option>
-            {/each}
-          </select>
+          {#if filteredEpics.length > 0}
+            <select 
+              id="epic-select"
+              bind:value={selectedEpicId}
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors"
+            >
+              {#each filteredEpics as epic (epic.id)}
+                <option value={epic.id}>
+                  {epic.title}
+                  {#if selectedProjectId === 'all'}
+                    • {getProjectName(epic.projectId)}
+                  {/if}
+                </option>
+              {/each}
+            </select>
+          {:else}
+            <div class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 text-center">
+              Aucune épic ready dans ce projet
+            </div>
+          {/if}
           
           <!-- Aperçu de l'épic sélectionnée -->
           {#if selectedEpic}
@@ -214,7 +281,7 @@
           <!-- Bouton Export Excel -->
           <button 
             on:click={handleExportToExcel}
-            disabled={isExporting || !selectedEpic}
+            disabled={isExporting || !selectedEpic || filteredEpics.length === 0}
             class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             {#if isExporting}
@@ -233,7 +300,7 @@
           <!-- Bouton Transférer Azure -->
           <button 
             on:click={handleTransferToAzure}
-            disabled={isExporting || !selectedEpic || !azurePath.trim()}
+            disabled={isExporting || !selectedEpic || !azurePath.trim() || filteredEpics.length === 0}
             class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             {#if isExporting}
