@@ -1,8 +1,8 @@
 <script lang="ts">
   import { epicsStore } from '$lib/stores/epicsStore';
   import { goto } from '$app/navigation';
-  import BlueCard from '$ui/components/BlueCard.svelte';
-  import AddEpicForm from '$ui/components/AddEpicForm.svelte';
+  import BlueCard from '$ui/components/cards/BlueCard.svelte';
+  import AddEpicForm from '$ui/components/forms/AddEpicForm.svelte';
 
   // Fonction pour vérifier si une épic est "ready"
   function isEpicReady(epic: any): boolean {

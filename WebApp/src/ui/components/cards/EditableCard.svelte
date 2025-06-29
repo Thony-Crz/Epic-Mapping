@@ -1,7 +1,7 @@
 <!-- src/ui/components/EditableCard.svelte -->
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import EditableText from './EditableText.svelte';
+  import EditableText from '../common/EditableText.svelte';
 
   export let title: string;
   export let editable: boolean = false;

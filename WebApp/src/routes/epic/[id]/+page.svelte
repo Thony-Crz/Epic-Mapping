@@ -1,13 +1,13 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { epicsStore, updateFeature, updateScenario, updateEpicTitle, updateFeatureStatus, handleAutomaticStatusTransition, addScenarioToFeatureById } from '$lib/stores/epicsStore';
-  import BlueCard from '$ui/components/BlueCard.svelte';
-  import YellowCard from '$ui/components/YellowCard.svelte';
-  import GreenCard from '$ui/components/GreenCard.svelte';
-  import GreyCard from '$ui/components/GreyCard.svelte';
-  import YellowStatusCard from '$ui/components/YellowStatusCard.svelte';
-  import AddFeatureForm from '$ui/components/AddFeatureForm.svelte';
-  import AddScenarioForm from '$ui/components/AddScenarioForm.svelte';
+  import BlueCard from '$ui/components/cards/BlueCard.svelte';
+  import YellowCard from '$ui/components/cards/YellowCard.svelte';
+  import GreenCard from '$ui/components/cards/GreenCard.svelte';
+  import GreyCard from '$ui/components/cards/GreyCard.svelte';
+  import YellowStatusCard from '$ui/components/cards/YellowStatusCard.svelte';
+  import AddFeatureForm from '$ui/components/forms/AddFeatureForm.svelte';
+  import AddScenarioForm from '$ui/components/forms/AddScenarioForm.svelte';
 
   $: id = $page.params.id;
   $: epic = $epicsStore.find(e => e.id === id);
