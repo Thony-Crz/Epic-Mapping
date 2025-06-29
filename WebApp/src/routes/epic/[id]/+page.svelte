@@ -6,6 +6,7 @@
   import GreenCard from '$ui/components/GreenCard.svelte';
   import GreyCard from '$ui/components/GreyCard.svelte';
   import YellowStatusCard from '$ui/components/YellowStatusCard.svelte';
+  import AddFeatureForm from '$ui/components/AddFeatureForm.svelte';
 
   $: id = $page.params.id;
   $: epic = $epicsStore.find(e => e.id === id);
@@ -13,6 +14,8 @@
 
 {#if epic}
   <BlueCard title={epic.title}>
+    <AddFeatureForm epicId={id} />
+    <br class="my-4 border-t border-gray-200" />
     {#if epic.features.length > 0}
       <div class="flex flex-wrap gap-4">
         {#each epic.features as feature}
@@ -22,8 +25,9 @@
               <span class="text-xs px-2 py-1 rounded-full 
                 {feature.status === 'ready' ? 'bg-green-500 text-white' : 
                  feature.status === 'in-progress' ? 'bg-orange-500 text-white' : 
+                 feature.status === 'todo' ? 'bg-blue-500 text-white' :
                  'bg-gray-500 text-white'}">
-                {feature.status || 'undefined'}
+                {feature.status}
               </span>
             </div>
             {#each feature.scenarios as scenario}
@@ -45,9 +49,6 @@
           <p class="text-lg font-medium">Cette épic est vide</p>
           <p class="text-sm">Commencez par ajouter des fonctionnalités pour structurer votre épic.</p>
         </div>
-        <button class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
-          Ajouter une fonctionnalité
-        </button>
       </div>
     {/if}
   </BlueCard>

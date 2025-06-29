@@ -9,6 +9,7 @@ export interface Scenario {
 }
 
 export interface Feature {
+  id: string;
   title: string;
   status: 'ready' | 'in-progress' | 'todo';
   scenarios: Scenario[];
@@ -47,8 +48,9 @@ export function addFeatureToEpic(epicId: string, featureTitle: string) {
     return epics.map(epic => {
       if (epic.id === epicId) {
         const newFeature: Feature = {
+          id: crypto.randomUUID(),
           title: featureTitle,
-          status: 'todo',
+          status: 'todo' as const,
           scenarios: []
         };
         return {
