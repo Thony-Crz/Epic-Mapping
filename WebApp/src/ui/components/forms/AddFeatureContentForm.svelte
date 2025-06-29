@@ -7,16 +7,16 @@
   const dispatch = createEventDispatcher();
   
   let isFormVisible = false;
-  let scenarioTitle = '';
-  let scenarioType: 'green' | 'grey' = 'green';
+  let contentTitle = '';
+  let contentType: 'green' | 'grey' = 'green';
 
   function handleSubmit() {
-    if (scenarioTitle.trim()) {
-      dispatch('addScenario', {
-        title: scenarioTitle.trim(),
-        type: scenarioType
+    if (contentTitle.trim()) {
+      dispatch('addContent', {
+        title: contentTitle.trim(),
+        type: contentType
       });
-      scenarioTitle = '';
+      contentTitle = '';
       isFormVisible = false;
     }
   }
@@ -24,7 +24,7 @@
   function toggleForm() {
     isFormVisible = !isFormVisible;
     if (!isFormVisible) {
-      scenarioTitle = '';
+      contentTitle = '';
     }
   }
 
@@ -46,16 +46,16 @@
       <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
       </svg>
-      Ajouter un scénario
+      Ajouter du contenu
     </button>
   {:else}
     <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
-      <h4 class="text-sm font-medium mb-2">Nouveau scénario</h4>
+      <h4 class="text-sm font-medium mb-2">Nouveau contenu</h4>
       <form on:submit|preventDefault={handleSubmit} class="space-y-2">
         <div>
           <input
             type="text"
-            bind:value={scenarioTitle}
+            bind:value={contentTitle}
             placeholder="Ex: L'utilisateur saisit des données valides"
             class="w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             required
@@ -63,21 +63,21 @@
         </div>
         <div>
           <fieldset>
-            <legend class="block text-xs font-medium text-gray-700 mb-1">Type de scénario</legend>
+            <legend class="block text-xs font-medium text-gray-700 mb-1">Type de contenu</legend>
             <div class="flex gap-2">
               <label class="flex items-center">
                 <input
                   type="radio"
-                  bind:group={scenarioType}
+                  bind:group={contentType}
                   value="green"
                   class="mr-1"
                 />
-                <span class="text-xs">Scénario (vert)</span>
+                <span class="text-xs">Exemple (vert)</span>
               </label>
               <label class="flex items-center">
                 <input
                   type="radio"
-                  bind:group={scenarioType}
+                  bind:group={contentType}
                   value="grey"
                   class="mr-1"
                 />
@@ -90,7 +90,7 @@
           <button
             type="submit"
             class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 transition-colors disabled:opacity-50 text-xs"
-            disabled={!scenarioTitle.trim()}
+            disabled={!contentTitle.trim()}
           >
             Ajouter
           </button>

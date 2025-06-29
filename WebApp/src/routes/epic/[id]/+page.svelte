@@ -7,7 +7,7 @@
   import GreyCard from '$ui/components/cards/GreyCard.svelte';
   import YellowStatusCard from '$ui/components/cards/YellowStatusCard.svelte';
   import AddFeatureForm from '$ui/components/forms/AddFeatureForm.svelte';
-  import AddScenarioForm from '$ui/components/forms/AddScenarioForm.svelte';
+  import AddFeatureContentForm from '$ui/components/forms/AddFeatureContentForm.svelte';
 
   $: id = $page.params.id;
   $: epic = $epicsStore.find(e => e.id === id);
@@ -90,9 +90,9 @@
                 />
               {/if}
             {/each}
-            <AddScenarioForm 
+            <AddFeatureContentForm 
               featureId={feature.id}
-              on:addScenario={(e) => handleAddScenario(feature.id, e)}
+              on:addContent={(e) => handleAddScenario(feature.id, e)}
             />
           </YellowCard>
         {/each}
