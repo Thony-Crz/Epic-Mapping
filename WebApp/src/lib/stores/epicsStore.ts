@@ -263,3 +263,93 @@ export function handleAutomaticStatusTransition(epicId: string, featureId: strin
     });
   });
 }
+
+// Fonction pour réorganiser les features dans une epic
+export function reorderFeatures(epicId: string, newFeatures: Feature[]) {
+  epicsStore.update(epics => {
+    return epics.map(epic => {
+      if (epic.id === epicId) {
+        return {
+          ...epic,
+          features: newFeatures
+        };
+      }
+      return epic;
+    });
+  });
+}
+
+// Fonction pour réorganiser les scenarios dans une feature
+export function reorderScenarios(epicId: string, featureId: string, newScenarios: Scenario[]) {
+  epicsStore.update(epics => {
+    return epics.map(epic => {
+      if (epic.id === epicId) {
+        const updatedFeatures = epic.features.map(feature => {
+          if (feature.id === featureId) {
+            return {
+              ...feature,
+              scenarios: newScenarios
+            };
+          }
+          return feature;
+        });
+        return {
+          ...epic,
+          features: updatedFeatures
+        };
+      }
+      return epic;
+    });
+  });
+}
+
+// Fonction pour déplacer un scenario d'une feature à une autre
+export function moveScenarioBetweenFeatures(
+  epicId: string, 
+  sourceFeatureId: string, 
+  targetFeatureId: string, 
+  scenarioIndex: number, 
+  targetIndex: number
+) {
+  epicsStore.update(epics => {
+    return epics.map(epic => {
+      if (epic.id === epicId) {
+        const sourceFeature = epic.features.find(f => f.id === sourceFeatureId);
+        const targetFeature = epic.features.find(f => f.id === targetFeatureId);
+        
+        if (!sourceFeature || !targetFeature || !sourceFeature.scenarios[scenarioIndex]) {
+          return epic;
+        }
+
+        const scenarioToMove = sourceFeature.scenarios[scenarioIndex];
+        
+        const updatedFeatures = epic.features.map(feature => {
+          if (feature.id === sourceFeatureId) {
+            // Retirer le scenario de la feature source
+            const newScenarios = [...feature.scenarios];
+            newScenarios.splice(scenarioIndex, 1);
+            return {
+              ...feature,
+              scenarios: newScenarios
+            };
+          } else if (feature.id === targetFeatureId) {
+            // Ajouter le scenario à la feature target
+            const newScenarios = [...feature.scenarios];
+            newScenarios.splice(targetIndex, 0, scenarioToMove);
+            return {
+              ...feature,
+              scenarios: newScenarios
+            };
+          }
+          return feature;
+        });
+        
+        return {
+          ...epic,
+          features: updatedFeatures
+        };
+      }
+      return epic;
+    });
+  });
+}
