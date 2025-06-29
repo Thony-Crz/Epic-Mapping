@@ -23,7 +23,17 @@ export interface Epic {
 }
 
 // Store pour les epics
-export const epicsStore = writable<Epic[]>(exampleMapping as Epic[]);
+function initializeEpicsWithIds(epics: any[]): Epic[] {
+  return epics.map(epic => ({
+    ...epic,
+    features: epic.features.map((feature: any) => ({
+      ...feature,
+      id: feature.id || crypto.randomUUID()
+    }))
+  }));
+}
+
+export const epicsStore = writable<Epic[]>(initializeEpicsWithIds(exampleMapping));
 
 // Fonction pour ajouter une nouvelle epic
 export function addNewEpic(title: string) {
@@ -79,6 +89,76 @@ export function addScenarioToFeature(epicId: string, featureIndex: number, scena
             scenarios: [...updatedFeatures[featureIndex].scenarios, newScenario]
           };
         }
+        return {
+          ...epic,
+          features: updatedFeatures
+        };
+      }
+      return epic;
+    });
+  });
+}
+
+// Fonction pour mettre à jour le titre d'une epic
+export function updateEpicTitle(epicId: string, newTitle: string) {
+  epicsStore.update(epics => {
+    return epics.map(epic => {
+      if (epic.id === epicId) {
+        return {
+          ...epic,
+          title: newTitle
+        };
+      }
+      return epic;
+    });
+  });
+}
+
+// Fonction pour mettre à jour une feature
+export function updateFeature(epicId: string, featureId: string, newTitle: string) {
+  epicsStore.update(epics => {
+    return epics.map(epic => {
+      if (epic.id === epicId) {
+        const updatedFeatures = epic.features.map(feature => {
+          if (feature.id === featureId) {
+            return {
+              ...feature,
+              title: newTitle
+            };
+          }
+          return feature;
+        });
+        return {
+          ...epic,
+          features: updatedFeatures
+        };
+      }
+      return epic;
+    });
+  });
+}
+
+// Fonction pour mettre à jour un scénario
+export function updateScenario(epicId: string, featureId: string, scenarioIndex: number, newTitle: string) {
+  epicsStore.update(epics => {
+    return epics.map(epic => {
+      if (epic.id === epicId) {
+        const updatedFeatures = epic.features.map(feature => {
+          if (feature.id === featureId) {
+            const updatedScenarios = [...feature.scenarios];
+            if (updatedScenarios[scenarioIndex]) {
+              updatedScenarios[scenarioIndex] = {
+                ...updatedScenarios[scenarioIndex],
+                title: newTitle
+              };
+            }
+            return {
+              ...feature,
+              scenarios: updatedScenarios
+            };
+          }
+          return feature;
+        });
         return {
           ...epic,
           features: updatedFeatures

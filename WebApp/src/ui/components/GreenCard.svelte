@@ -1,8 +1,17 @@
 <script lang="ts">
+  import EditableCard from './EditableCard.svelte';
+
   export let title: string;
+  export let editable: boolean = false;
 </script>
 
-<div class="bg-green-300 text-black p-3 rounded-xl shadow-sm hover:shadow-md transition">
-  <h4 class="text-base font-medium">{title}</h4>
+<EditableCard
+  {title}
+  {editable}
+  placeholder="Scénario..."
+  cardClass="bg-green-300 text-black p-3 rounded-xl shadow-sm hover:shadow-md transition"
+  titleClass="text-base font-medium"
+  on:titleUpdate
+>
   <slot />
-</div>
+</EditableCard>

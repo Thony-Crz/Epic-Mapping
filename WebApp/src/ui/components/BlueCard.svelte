@@ -1,10 +1,19 @@
 <script lang="ts">
+  import EditableCard from './EditableCard.svelte';
+
   export let title: string;
+  export let editable: boolean = false;
 </script>
 
-<div class="text-blue-900 ">
-  <h2 class="text-lg font-semibold">{title}</h2>
+<EditableCard
+  {title}
+  {editable}
+  placeholder="Titre de l'epic..."
+  cardClass="text-blue-900"
+  titleClass="text-lg font-semibold"
+  on:titleUpdate
+>
   <div class="mt-2">
     <slot />
   </div>
-</div>
+</EditableCard>

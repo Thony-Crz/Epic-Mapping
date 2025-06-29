@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { epicsStore } from '$lib/stores/epicsStore';
+  import { epicsStore, updateFeature, updateScenario, updateEpicTitle } from '$lib/stores/epicsStore';
   import BlueCard from '$ui/components/BlueCard.svelte';
   import YellowCard from '$ui/components/YellowCard.svelte';
   import GreenCard from '$ui/components/GreenCard.svelte';
@@ -10,16 +10,36 @@
 
   $: id = $page.params.id;
   $: epic = $epicsStore.find(e => e.id === id);
+
+  function handleEpicTitleUpdate(newTitle: string) {
+    updateEpicTitle(id, newTitle);
+  }
+
+  function handleFeatureUpdate(featureId: string, newTitle: string) {
+    updateFeature(id, featureId, newTitle);
+  }
+
+  function handleScenarioUpdate(featureId: string, scenarioIndex: number, newTitle: string) {
+    updateScenario(id, featureId, scenarioIndex, newTitle);
+  }
 </script>
 
 {#if epic}
-  <BlueCard title={epic.title}>
+  <BlueCard 
+    title={epic.title} 
+    editable={true}
+    on:titleUpdate={(e) => handleEpicTitleUpdate(e.detail)}
+  >
     <AddFeatureForm epicId={id} />
     <br class="my-4 border-t border-gray-200" />
     {#if epic.features.length > 0}
       <div class="flex flex-wrap gap-4">
-        {#each epic.features as feature}
-          <YellowCard title={feature.title}>
+        {#each epic.features as feature, featureIndex}
+          <YellowCard 
+            title={feature.title} 
+            editable={true}
+            on:titleUpdate={(e) => handleFeatureUpdate(feature.id, e.detail)}
+          >
             <div class="flex items-center justify-between mb-2">
               <span class="text-sm font-medium">Status:</span>
               <span class="text-xs px-2 py-1 rounded-full 
@@ -30,11 +50,19 @@
                 {feature.status}
               </span>
             </div>
-            {#each feature.scenarios as scenario}
+            {#each feature.scenarios as scenario, scenarioIndex}
               {#if scenario.type === 'green'}
-                <GreenCard title={scenario.title} />
+                <GreenCard 
+                  title={scenario.title} 
+                  editable={true}
+                  on:titleUpdate={(e) => handleScenarioUpdate(feature.id, scenarioIndex, e.detail)}
+                />
               {:else if scenario.type === 'grey'}
-                <GreyCard title={scenario.title} />
+                <GreyCard 
+                  title={scenario.title} 
+                  editable={true}
+                  on:titleUpdate={(e) => handleScenarioUpdate(feature.id, scenarioIndex, e.detail)}
+                />
               {/if}
             {/each}
           </YellowCard>
