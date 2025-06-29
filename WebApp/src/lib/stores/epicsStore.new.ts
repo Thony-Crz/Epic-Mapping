@@ -1,16 +1,10 @@
 // src/lib/stores/epicsStore.new.ts
 
-import { derived } from 'svelte/store';
 import { serviceContainer } from '../../services/ServiceContainer';
-import type { Epic, EpicProps } from '../../domain/entities';
+import type { Epic } from '../../domain/entities';
 
-// Export du store réactif pour l'UI (entités)
+// Export du store réactif pour l'UI
 export const epicsStore = serviceContainer.getEpicsStore();
-
-// Store dérivé pour l'affichage (props sérialisées)
-export const epicsDisplayStore = derived(epicsStore, (epics: Epic[]) => {
-  return epics.map(epic => epic.toProps());
-});
 
 // Service pour les opérations métier
 const epicService = serviceContainer.getEpicService();

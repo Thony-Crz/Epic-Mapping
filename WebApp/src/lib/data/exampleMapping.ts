@@ -7,6 +7,7 @@ export const exampleMapping = [
     status: "open",
     features: [
       {
+        id: 'feature-001-1',
         title: "Saisie login",
         status: "ready",
         scenarios: [
@@ -16,6 +17,7 @@ export const exampleMapping = [
         ]
       },
       {
+        id: 'feature-001-2',
         title: "Saisie mot de passe",
         status: "in-progress",
         scenarios: [
@@ -31,6 +33,7 @@ export const exampleMapping = [
     status: "in progress",
     features: [
       {
+        id: 'feature-002-1',
         title: "Menu principal",
         status: "ready",
         scenarios: [
@@ -40,6 +43,7 @@ export const exampleMapping = [
         ]
       },
       {
+        id: 'feature-002-2',
         title: "Barre de recherche",
         status: "ready",
         scenarios: [
@@ -48,6 +52,7 @@ export const exampleMapping = [
         ]
       },
       {
+        id: 'feature-002-3',
         title: "Fil d'Ariane",
         status: "ready",
         scenarios: [
@@ -63,6 +68,7 @@ export const exampleMapping = [
     status: "closed",
     features: [
       {
+        id: 'feature-003-1',
         title: "Création d'utilisateur",
         status: "ready",
         scenarios: [
@@ -71,6 +77,7 @@ export const exampleMapping = [
         ]
       },
       {
+        id: 'feature-003-2',
         title: "Suppression d'utilisateur",
         status: "in-progress",
         scenarios: [
@@ -85,6 +92,7 @@ export const exampleMapping = [
     status: "open",
     features: [
       {
+        id: 'feature-004-1',
         title: "Attribution de rôle",
         status: "ready",
         scenarios: [
@@ -100,6 +108,7 @@ export const exampleMapping = [
     status: "in progress",
     features: [
       {
+        id: 'feature-005-1',
         title: "Affichage des statistiques",
         status: "in-progress",
         scenarios: [
@@ -115,6 +124,7 @@ export const exampleMapping = [
     status: "open",
     features: [
       {
+        id: 'feature-006-1',
         title: "Envoi de notification",
         status: "ready",
         scenarios: [
@@ -130,6 +140,7 @@ export const exampleMapping = [
     status: "closed",
     features: [
       {
+        id: 'feature-007-1',
         title: "Modification du mot de passe",
         status: "ready",
         scenarios: [
@@ -145,6 +156,7 @@ export const exampleMapping = [
     status: "in progress",
     features: [
       {
+        id: 'feature-008-1',
         title: "Création de ticket",
         status: "in-progress",
         scenarios: [
@@ -160,6 +172,7 @@ export const exampleMapping = [
     status: "open",
     features: [
       {
+        id: 'feature-009-1',
         title: "Export CSV",
         status: "ready",
         scenarios: [
@@ -175,6 +188,7 @@ export const exampleMapping = [
     status: "open",
     features: [
       {
+        id: 'feature-010-1',
         title: "Import CSV",
         status: "in-progress",
         scenarios: [
@@ -190,6 +204,7 @@ export const exampleMapping = [
     status: "in progress",
     features: [
       {
+        id: 'feature-011-1',
         title: "Connexion SSO",
         status: "ready",
         scenarios: [

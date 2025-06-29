@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { epicsStore, updateFeature, updateScenario, updateEpicTitle, updateFeatureStatus, handleAutomaticStatusTransition, addScenarioToFeatureById, reorderFeatures, reorderScenarios, moveScenarioBetweenFeatures, deleteFeature, deleteScenario } from '$lib/stores/epicsStore';
+  import { epicsDisplayStore, updateFeature, updateScenario, updateEpicTitle, updateFeatureStatus, addScenarioToFeatureById, reorderFeatures, reorderScenarios, moveScenarioBetweenFeatures, deleteFeature, deleteScenario } from '$lib/stores/epicsStore';
   import { dndzone, TRIGGERS, SOURCES } from 'svelte-dnd-action';
   import BlueCard from '$ui/components/cards/BlueCard.svelte';
   import YellowCard from '$ui/components/cards/YellowCard.svelte';
@@ -11,7 +11,7 @@
   import AddFeatureContentForm from '$ui/components/forms/AddFeatureContentForm.svelte';
 
   $: id = $page.params.id;
-  $: epic = $epicsStore.find(e => e.id === id);
+  $: epic = $epicsDisplayStore.find(e => e.id === id);
 
   // Variables pour le drag and drop
   let featuresWithId: any[] = [];
@@ -33,11 +33,7 @@
   }
 
   // Effet réactif pour gérer les transitions automatiques de statut
-  $: if (epic) {
-    epic.features.forEach(feature => {
-      handleAutomaticStatusTransition(id, feature.id, feature.scenarios);
-    });
-  }
+  // TODO: Implémenter la logique de transition automatique si nécessaire
 
   function handleEpicTitleUpdate(newTitle: string) {
     updateEpicTitle(id, newTitle);

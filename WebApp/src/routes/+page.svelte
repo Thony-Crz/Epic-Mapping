@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { epicsStore } from '$lib/stores/epicsStore';
+  import { epicsDisplayStore } from '$lib/stores/epicsStore';
   import { goto } from '$app/navigation';
   import BlueCard from '$ui/components/cards/BlueCard.svelte';
   import AddEpicForm from '$ui/components/forms/AddEpicForm.svelte';
@@ -23,8 +23,8 @@
   }
 
   // Variables réactives qui se mettent à jour automatiquement
-  $: readyEpics = $epicsStore.filter(isEpicReady);
-  $: openEpics = $epicsStore.filter(epic => !isEpicReady(epic));
+  $: readyEpics = $epicsDisplayStore.filter(isEpicReady);
+  $: openEpics = $epicsDisplayStore.filter(epic => !isEpicReady(epic));
 </script>
 
 <!-- Bouton pour ajouter une nouvelle epic -->
