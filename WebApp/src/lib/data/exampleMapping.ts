@@ -8,6 +8,7 @@ export const exampleMapping = [
     features: [
       {
         title: "Saisie login",
+        status: "ready",
         scenarios: [
           { title: "L'utilisateur entre un identifiant valide", type: "green" },
           { title: "L'utilisateur entre un identifiant invalide", type: "green" },
@@ -16,6 +17,7 @@ export const exampleMapping = [
       },
       {
         title: "Saisie mot de passe",
+        status: "in-progress",
         scenarios: [
           { title: "Le mot de passe est correct", type: "green" },
           { title: "Mot de passe oublié", type: "grey" }
@@ -30,22 +32,23 @@ export const exampleMapping = [
     features: [
       {
         title: "Menu principal",
+        status: "ready",
         scenarios: [
           { title: "Affichage du menu utilisateur connecté", type: "green" },
-          { title: "Menu responsive sur mobile", type: "yellow" },
           { title: "Sous-menus déroulants", type: "green" }
         ]
       },
       {
         title: "Barre de recherche",
+        status: "in-progress",
         scenarios: [
           { title: "Recherche avec résultats", type: "green" },
-          { title: "Recherche sans résultat", type: "grey" },
-          { title: "Autocomplétion des suggestions", type: "yellow" }
+          { title: "Recherche sans résultat", type: "grey" }
         ]
       },
       {
         title: "Fil d'Ariane",
+        status: "ready",
         scenarios: [
           { title: "Navigation dans l'arborescence", type: "green" },
           { title: "Retour à la page précédente", type: "green" }
@@ -60,6 +63,7 @@ export const exampleMapping = [
     features: [
       {
         title: "Création d'utilisateur",
+        status: "ready",
         scenarios: [
           { title: "L'utilisateur saisit des informations valides", type: "green" },
           { title: "L'utilisateur oublie un champ obligatoire", type: "grey" }
@@ -67,9 +71,9 @@ export const exampleMapping = [
       },
       {
         title: "Suppression d'utilisateur",
+        status: "in-progress",
         scenarios: [
-          { title: "Suppression confirmée", type: "green" },
-          { title: "Annulation de la suppression", type: "yellow" }
+          { title: "Suppression confirmée", type: "green" }
         ]
       }
     ]
@@ -81,6 +85,7 @@ export const exampleMapping = [
     features: [
       {
         title: "Attribution de rôle",
+        status: "ready",
         scenarios: [
           { title: "Rôle administrateur attribué", type: "green" },
           { title: "Erreur lors de l'attribution", type: "grey" }
@@ -95,6 +100,7 @@ export const exampleMapping = [
     features: [
       {
         title: "Affichage des statistiques",
+        status: "in-progress",
         scenarios: [
           { title: "Statistiques chargées avec succès", type: "green" },
           { title: "Erreur de chargement", type: "grey" }
@@ -109,6 +115,7 @@ export const exampleMapping = [
     features: [
       {
         title: "Envoi de notification",
+        status: "ready",
         scenarios: [
           { title: "Notification envoyée", type: "green" },
           { title: "Notification non envoyée", type: "grey" }
@@ -123,6 +130,7 @@ export const exampleMapping = [
     features: [
       {
         title: "Modification du mot de passe",
+        status: "ready",
         scenarios: [
           { title: "Mot de passe modifié", type: "green" },
           { title: "Ancien mot de passe incorrect", type: "grey" }
@@ -137,6 +145,7 @@ export const exampleMapping = [
     features: [
       {
         title: "Création de ticket",
+        status: "in-progress",
         scenarios: [
           { title: "Ticket créé avec succès", type: "green" },
           { title: "Erreur lors de la création", type: "grey" }
@@ -151,6 +160,7 @@ export const exampleMapping = [
     features: [
       {
         title: "Export CSV",
+        status: "ready",
         scenarios: [
           { title: "Export réussi", type: "green" },
           { title: "Erreur d'export", type: "grey" }
@@ -165,6 +175,7 @@ export const exampleMapping = [
     features: [
       {
         title: "Import CSV",
+        status: "in-progress",
         scenarios: [
           { title: "Import réussi", type: "green" },
           { title: "Erreur d'import", type: "grey" }
@@ -179,6 +190,7 @@ export const exampleMapping = [
     features: [
       {
         title: "Connexion SSO",
+        status: "ready",
         scenarios: [
           { title: "Connexion réussie", type: "green" },
           { title: "Échec de connexion", type: "grey" }
