@@ -27,39 +27,63 @@
   $: openEpics = $epicsStore.filter(epic => !isEpicReady(epic));
 </script>
 
-<h1 class="text-2xl font-bold mb-6">📘 Gestion des Epics</h1>
-
 <!-- Bouton pour ajouter une nouvelle epic -->
-<div class="mb-6">
+<div class="mb-8 text-center">
   <AddEpicForm />
 </div>
 
 <!-- Section des Epics Ready -->
-<section class="mb-8">
-  <h2 class="text-xl font-semibold mb-4 text-green-700">✅ Epics Ready ({readyEpics.length})</h2>
-  <div class="flex flex-wrap gap-4">
+<section class="mb-12 bg-white/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 shadow-sm">
+  <div class="flex items-center gap-3 mb-6">
+    <div class="w-4 h-4 bg-green-500 rounded-full"></div>
+    <h2 class="text-2xl font-bold text-green-700">Epics Ready</h2>
+    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">{readyEpics.length}</span>
+  </div>
+  
+  <div class="flex flex-wrap gap-6 justify-start">
     {#each readyEpics as card (card.id)}
       <button 
         on:click={() => goto(`/epic/${card.id}`)}
-        class="bg-green-100 text-green-900 w-60 p-4 rounded-lg shadow-lg rotate-[1deg] hover:rotate-0 transition-transform cursor-pointer border-2 border-green-300">
-        <BlueCard title={card.title} id={card.id} />
+        class="post-it-card bg-green-200 hover:bg-green-100 text-green-900 w-64 p-5 rounded-lg shadow-lg transform rotate-1 hover:rotate-0 hover:scale-105 transition-all duration-300 cursor-pointer border-l-4 border-green-500 relative group"
+        style="box-shadow: 4px 4px 8px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.5);"
+      >
+        <!-- Effet "punaise" -->
+        <div class="absolute -top-2 -right-2 w-4 h-4 bg-red-400 rounded-full shadow-md border-2 border-white opacity-60 group-hover:opacity-80 transition-opacity"></div>
+        <BlueCard title={card.title} />
       </button>
     {/each}
   </div>
+  
   {#if readyEpics.length === 0}
-    <p class="text-gray-500 italic">Aucune épic ready pour le moment</p>
+    <div class="text-center py-12">
+      <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+      <p class="text-gray-500 italic">Aucune épic ready pour le moment</p>
+    </div>
   {/if}
 </section>
 
 <!-- Section des Epics Open -->
-<section>
-  <h2 class="text-xl font-semibold mb-4 text-blue-700">🔄 Epics en cours ({openEpics.length})</h2>
-  <div class="flex flex-wrap gap-4">
+<section class="bg-white/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 shadow-sm">
+  <div class="flex items-center gap-3 mb-6">
+    <div class="w-4 h-4 bg-blue-500 rounded-full"></div>
+    <h2 class="text-2xl font-bold text-blue-700">Epics en cours</h2>
+    <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">{openEpics.length}</span>
+  </div>
+  
+  <div class="flex flex-wrap gap-6 justify-start">
     {#each openEpics as card (card.id)}
       <button 
         on:click={() => goto(`/epic/${card.id}`)}
-        class="bg-blue-100 text-blue-900 w-60 p-4 rounded-lg shadow-lg rotate-[1deg] hover:rotate-0 transition-transform cursor-pointer">
-        <BlueCard title={card.title} id={card.id} />
+        class="post-it-card bg-blue-200 hover:bg-blue-100 text-blue-900 w-64 p-5 rounded-lg shadow-lg transform -rotate-1 hover:rotate-0 hover:scale-105 transition-all duration-300 cursor-pointer border-l-4 border-blue-500 relative group"
+        style="box-shadow: 4px 4px 8px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.5);"
+      >
+        <!-- Effet "punaise" -->
+        <div class="absolute -top-2 -right-2 w-4 h-4 bg-red-400 rounded-full shadow-md border-2 border-white opacity-60 group-hover:opacity-80 transition-opacity"></div>
+        <BlueCard title={card.title} />
       </button>
     {/each}
   </div>

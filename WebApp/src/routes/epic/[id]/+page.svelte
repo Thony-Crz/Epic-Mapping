@@ -25,14 +25,28 @@
 </script>
 
 {#if epic}
-  <BlueCard 
-    title={epic.title} 
-    editable={true}
-    on:titleUpdate={(e) => handleEpicTitleUpdate(e.detail)}
-  >
-    <AddFeatureForm epicId={id} />
-    <br class="my-4 border-t border-gray-200" />
-    {#if epic.features.length > 0}
+  <!-- Bouton de retour -->
+  <div class="mb-6">
+    <button 
+      on:click={() => history.back()}
+      class="bg-white/80 backdrop-blur-sm hover:bg-white text-gray-600 hover:text-gray-800 px-4 py-2 rounded-lg shadow-sm border border-gray-200 transition-all duration-200 flex items-center gap-2"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+      </svg>
+      Retour
+    </button>
+  </div>
+
+  <!-- Container principal avec effet tableau blanc -->
+  <div class="bg-white/60 backdrop-blur-sm rounded-3xl p-8 border border-gray-200 shadow-lg">
+    <BlueCard 
+      title={epic.title} 
+      editable={true}
+      on:titleUpdate={(e) => handleEpicTitleUpdate(e.detail)}    >
+      <AddFeatureForm epicId={id} />
+      <hr class="my-6 border-t border-gray-200" />
+      {#if epic.features.length > 0}
       <div class="flex flex-wrap gap-4">
         {#each epic.features as feature, featureIndex}
           <YellowCard 
@@ -79,7 +93,8 @@
         </div>
       </div>
     {/if}
-  </BlueCard>
+    </BlueCard>
+  </div>
 {:else}
   <p class="text-red-500">Épic non trouvé</p>
 {/if}
