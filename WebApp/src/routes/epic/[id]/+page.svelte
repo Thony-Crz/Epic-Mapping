@@ -12,17 +12,19 @@
 
 {#if epic}
   <BlueCard title={epic.title}>
-    {#each epic.features as feature}
-      <YellowCard title={feature.title}>
-        {#each feature.scenarios as scenario}
-          {#if scenario.type === 'green'}
-            <GreenCard title={scenario.title} />
-          {:else if scenario.type === 'grey'}
-            <GreyCard title={scenario.title} />
-          {/if}
-        {/each}
-      </YellowCard>
-    {/each}
+    <div class="flex flex-wrap gap-4">
+      {#each epic.features as feature}
+        <YellowCard title={feature.title}>
+          {#each feature.scenarios as scenario}
+            {#if scenario.type === 'green'}
+              <GreenCard title={scenario.title} />
+            {:else if scenario.type === 'grey'}
+              <GreyCard title={scenario.title} />
+            {/if}
+          {/each}
+        </YellowCard>
+      {/each}
+    </div>
   </BlueCard>
 {:else}
   <p class="text-red-500">Épic non trouvé</p>

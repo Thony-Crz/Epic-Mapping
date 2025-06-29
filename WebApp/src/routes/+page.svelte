@@ -13,7 +13,7 @@
 
   <button 
   on:click={() => goto(`/epic/${card.id}`)}
-  class="cursor-pointer">
+  class="bg-blue-100 text-blue-900 w-60 p-4 rounded-lg shadow-lg rotate-[1deg] hover:rotate-0 transition-transform cursor-pointer">
     <BlueCard title={card.title} id={card.id} />
   </button>
 
