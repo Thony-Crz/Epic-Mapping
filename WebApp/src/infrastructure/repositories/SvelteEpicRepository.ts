@@ -25,6 +25,7 @@ function initializeEpicsWithIds(epics: any[]): Epic[] {
       id: epic.id,
       title: epic.title,
       status: epic.status,
+      projectId: epic.projectId, // Ajout du projectId
       features
     });
   });
@@ -35,6 +36,11 @@ export class SvelteEpicRepository implements EpicRepository {
 
   constructor() {
     this.store = writable<Epic[]>(initializeEpicsWithIds(exampleMapping));
+  }
+
+  // Méthode pour réinitialiser les données avec les nouvelles données d'exemple
+  reinitializeData(): void {
+    this.store.set(initializeEpicsWithIds(exampleMapping));
   }
 
   getStore(): Writable<Epic[]> {

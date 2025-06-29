@@ -9,6 +9,7 @@ export interface EpicProps {
   title: string;
   status: EpicStatus;
   features: FeatureProps[];
+  projectId: string; // Référence au projet
 }
 
 export class Epic {
@@ -44,6 +45,10 @@ export class Epic {
 
   get status(): EpicStatus {
     return this.props.status;
+  }
+
+  get projectId(): string {
+    return this.props.projectId;
   }
 
   get features(): Feature[] {
@@ -118,7 +123,8 @@ export class Epic {
       id: this.props.id,
       title: this.props.title,
       status: this.props.status,
-      features: this.props.features
+      features: this.props.features,
+      projectId: this.props.projectId
     };
   }
 }

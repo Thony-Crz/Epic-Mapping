@@ -1,17 +1,25 @@
 <!-- src/ui/components/AddEpicForm.svelte -->
 <script lang="ts">
   import { addNewEpic } from '$lib/stores/epicsStore';
+  import { projectsStore } from '$lib/stores/projectsStore';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
 
   let showForm = false;
   let epicTitle = '';
+  let selectedProjectId = '';
+
+  // S'assurer qu'un projet est sélectionné par défaut
+  $: if ($projectsStore.length > 0 && !selectedProjectId) {
+    selectedProjectId = $projectsStore[0].id;
+  }
 
   function handleSubmit() {
-    if (epicTitle.trim()) {
-      addNewEpic(epicTitle.trim());
+    if (epicTitle.trim() && selectedProjectId) {
+      addNewEpic(epicTitle.trim(), selectedProjectId);
       epicTitle = '';
+      selectedProjectId = $projectsStore.length > 0 ? $projectsStore[0].id : '';
       showForm = false;
       dispatch('epicAdded');
     }
@@ -19,6 +27,7 @@
 
   function handleCancel() {
     epicTitle = '';
+    selectedProjectId = $projectsStore.length > 0 ? $projectsStore[0].id : '';
     showForm = false;
   }
 </script>
@@ -42,6 +51,30 @@
             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             required
           />
+        </div>
+
+        <div class="mb-4">
+          <label for="projectSelect" class="block text-sm font-medium text-gray-700 mb-2">
+            Projet
+          </label>
+          <select
+            id="projectSelect"
+            bind:value={selectedProjectId}
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            required
+          >
+            {#each $projectsStore as project (project.id)}
+              <option value={project.id}>
+                ● {project.name}
+              </option>
+            {/each}
+          </select>
+          
+          {#if $projectsStore.length === 0}
+            <p class="text-sm text-red-600 mt-1">
+              Aucun projet disponible. Créez d'abord un projet.
+            </p>
+          {/if}
         </div>
         
         <div class="flex justify-end space-x-3">

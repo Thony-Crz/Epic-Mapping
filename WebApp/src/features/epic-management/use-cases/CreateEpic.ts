@@ -5,6 +5,7 @@ import type { EpicRepository } from '../../../domain/repositories';
 
 export interface CreateEpicInput {
   title: string;
+  projectId: string;
   status?: 'open' | 'in progress' | 'closed';
 }
 
@@ -19,7 +20,8 @@ export class CreateEpic {
     const epic = Epic.create({
       title: input.title,
       status: input.status || 'open',
-      features: []
+      features: [],
+      projectId: input.projectId
     });
 
     await this.epicRepository.save(epic);

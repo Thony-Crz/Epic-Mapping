@@ -17,9 +17,9 @@ const epicService = serviceContainer.getEpicService();
 
 // API simplifiée pour l'UI - chaque fonction utilise les use cases appropriés
 
-export async function addNewEpic(title: string) {
+export async function addNewEpic(title: string, projectId: string) {
   try {
-    await epicService.createNewEpic({ title });
+    await epicService.createNewEpic({ title, projectId });
   } catch (error) {
     console.error('Failed to create epic:', error);
     throw error;
