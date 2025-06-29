@@ -75,8 +75,12 @@
     console.log('📋 Détail épics:', $epicsDisplayStore.map(e => `${e.title} (${e.status}) - Projet: ${e.projectId}`));
   }
 
-  // Regrouper les épics par projet
-  $: epicsByProject = $projectsStore.reduce((acc, project) => {
+  // Regrouper les épics par projet avec filtre
+  $: filteredProjects = selectedProjectFilter === 'all' 
+    ? $projectsStore 
+    : $projectsStore.filter(project => project.id === selectedProjectFilter);
+
+  $: epicsByProject = filteredProjects.reduce((acc, project) => {
     acc[project.id] = {
       project,
       readyEpics: readyEpics.filter(epic => epic.projectId === project.id),
@@ -86,8 +90,21 @@
     return acc;
   }, {} as Record<string, any>);
 
+  // Calculer les totaux pour les badges du filtre
+  $: projectStats = $projectsStore.reduce((acc, project) => {
+    acc[project.id] = {
+      ready: readyEpics.filter(epic => epic.projectId === project.id).length,
+      open: openEpics.filter(epic => epic.projectId === project.id).length,
+      archived: archivedEpics.filter(epic => epic.projectId === project.id).length
+    };
+    return acc;
+  }, {} as Record<string, any>);
+
   // Variables pour le modal d'export
   let isExportModalOpen = false;
+  
+  // Variable pour le filtre par projet
+  let selectedProjectFilter = 'all';
 
   function openExportModal() {
     if (readyEpics.length === 0) {
@@ -133,6 +150,77 @@
   </div>
 </div>
 
+<!-- Filtre par projet -->
+{#if $projectsStore.length > 1}
+  <div class="mb-6 bg-white/60 backdrop-blur-sm rounded-2xl p-4 border border-gray-200 shadow-sm">
+    <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+      <div class="flex-1">
+        <label for="project-filter" class="block text-sm font-medium text-gray-700 mb-2">
+          Filtrer par projet
+        </label>
+        <select 
+          id="project-filter"
+          bind:value={selectedProjectFilter}
+          class="w-full sm:w-80 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors bg-white"
+        >
+          <option value="all">
+            Tous les projets ({readyEpics.length + openEpics.length + archivedEpics.length} épics)
+          </option>
+          {#each $projectsStore as project (project.id)}
+            {@const stats = projectStats[project.id]}
+            {@const totalEpics = stats.ready + stats.open + stats.archived}
+            {#if totalEpics > 0}
+              <option value={project.id}>
+                {project.name} ({totalEpics} épic{totalEpics > 1 ? 's' : ''})
+              </option>
+            {/if}
+          {/each}
+        </select>
+      </div>
+      
+      <!-- Statistiques du filtre sélectionné -->
+      <div class="flex gap-2 flex-wrap">
+        {#if selectedProjectFilter === 'all'}
+          {#if readyEpics.length > 0}
+            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+              {readyEpics.length} ready
+            </span>
+          {/if}
+          {#if openEpics.length > 0}
+            <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+              {openEpics.length} en cours
+            </span>
+          {/if}
+          {#if archivedEpics.length > 0}
+            <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">
+              {archivedEpics.length} archivée{archivedEpics.length > 1 ? 's' : ''}
+            </span>
+          {/if}
+        {:else}
+          {@const stats = projectStats[selectedProjectFilter]}
+          {#if stats}
+            {#if stats.ready > 0}
+              <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+                {stats.ready} ready
+              </span>
+            {/if}
+            {#if stats.open > 0}
+              <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                {stats.open} en cours
+              </span>
+            {/if}
+            {#if stats.archived > 0}
+              <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">
+                {stats.archived} archivée{stats.archived > 1 ? 's' : ''}
+              </span>
+            {/if}
+          {/if}
+        {/if}
+      </div>
+    </div>
+  </div>
+{/if}
+
 <!-- Bouton Export global pour toutes les épics ready -->
 {#if readyEpics.length > 0}
   <div class="mb-6 flex justify-end">
@@ -144,7 +232,12 @@
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
       </svg>
-      Exporter épics ready ({readyEpics.length})
+      Exporter épics ready
+      {#if selectedProjectFilter === 'all'}
+        ({readyEpics.length})
+      {:else}
+        ({projectStats[selectedProjectFilter]?.ready || 0})
+      {/if}
     </button>
   </div>
 {/if}
@@ -277,7 +370,7 @@
 {/each}
 
 <!-- Message si aucun projet ou épic -->
-{#if $projectsStore.length === 0 || ($epicsDisplayStore.filter(epic => epic.status !== 'archived').length === 0)}
+{#if $projectsStore.length === 0}
   <div class="text-center py-16 bg-white/50 backdrop-blur-sm rounded-2xl border border-gray-200">
     <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
       <svg class="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -288,6 +381,34 @@
     <p class="text-gray-500 mb-6">Créez votre premier projet pour organiser vos épics</p>
     <div class="flex gap-3 justify-center">
       <AddProjectForm />
+    </div>
+  </div>
+{:else if Object.values(epicsByProject).every(({ project, readyEpics, openEpics, archivedEpics }) => 
+  readyEpics.length === 0 && openEpics.length === 0 && archivedEpics.length === 0)}
+  <div class="text-center py-16 bg-white/50 backdrop-blur-sm rounded-2xl border border-gray-200">
+    <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+      <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+      </svg>
+    </div>
+    {#if selectedProjectFilter === 'all'}
+      <h3 class="text-xl font-semibold text-gray-700 mb-2">Aucune épic trouvée</h3>
+      <p class="text-gray-500 mb-6">Créez votre première épic pour commencer</p>
+    {:else}
+      {@const selectedProject = $projectsStore.find(p => p.id === selectedProjectFilter)}
+      <h3 class="text-xl font-semibold text-gray-700 mb-2">Aucune épic dans "{selectedProject?.name}"</h3>
+      <p class="text-gray-500 mb-6">Créez une épic pour ce projet ou changez de filtre</p>
+    {/if}
+    <div class="flex gap-3 justify-center">
+      <AddEpicForm />
+      {#if selectedProjectFilter !== 'all'}
+        <button 
+          on:click={() => selectedProjectFilter = 'all'}
+          class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors"
+        >
+          Voir tous les projets
+        </button>
+      {/if}
     </div>
   </div>
 {/if}
