@@ -29,6 +29,10 @@
   function handleMarkAsReady() {
     dispatch('statusUpdate', 'ready');
   }
+
+  function handleDelete() {
+    dispatch('delete');
+  }
   
   // Générer les classes d'ombre selon le statut effectif
   $: shadowClasses = effectiveStatus === 'ready' ? 'shadow-green-300/50 hover:shadow-green-400/60' : 
@@ -53,6 +57,18 @@
 </script>
 
 <div class="relative">
+  <!-- Bouton de suppression -->
+  <button
+    on:click={handleDelete}
+    class="absolute -top-2 -right-2 z-20 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110"
+    title="Supprimer cette fonctionnalité"
+    aria-label="Supprimer cette fonctionnalité"
+  >
+    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+    </svg>
+  </button>
+
   <!-- Bande de statut focusable -->
   <button 
     class="{bandColor} h-2 rounded-t-2xl w-full cursor-help focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-all duration-200 border-0"

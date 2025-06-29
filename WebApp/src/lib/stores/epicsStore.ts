@@ -353,3 +353,43 @@ export function moveScenarioBetweenFeatures(
     });
   });
 }
+
+// Fonction pour supprimer un scenario
+export function deleteScenario(epicId: string, featureId: string, scenarioIndex: number) {
+  epicsStore.update(epics => {
+    return epics.map(epic => {
+      if (epic.id === epicId) {
+        return {
+          ...epic,
+          features: epic.features.map(feature => {
+            if (feature.id === featureId) {
+              const newScenarios = [...feature.scenarios];
+              newScenarios.splice(scenarioIndex, 1);
+              return {
+                ...feature,
+                scenarios: newScenarios
+              };
+            }
+            return feature;
+          })
+        };
+      }
+      return epic;
+    });
+  });
+}
+
+// Fonction pour supprimer une feature
+export function deleteFeature(epicId: string, featureId: string) {
+  epicsStore.update(epics => {
+    return epics.map(epic => {
+      if (epic.id === epicId) {
+        return {
+          ...epic,
+          features: epic.features.filter(feature => feature.id !== featureId)
+        };
+      }
+      return epic;
+    });
+  });
+}

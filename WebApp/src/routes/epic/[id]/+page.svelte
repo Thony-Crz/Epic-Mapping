@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { epicsStore, updateFeature, updateScenario, updateEpicTitle, updateFeatureStatus, handleAutomaticStatusTransition, addScenarioToFeatureById, reorderFeatures, reorderScenarios, moveScenarioBetweenFeatures } from '$lib/stores/epicsStore';
+  import { epicsStore, updateFeature, updateScenario, updateEpicTitle, updateFeatureStatus, handleAutomaticStatusTransition, addScenarioToFeatureById, reorderFeatures, reorderScenarios, moveScenarioBetweenFeatures, deleteFeature, deleteScenario } from '$lib/stores/epicsStore';
   import { dndzone, TRIGGERS, SOURCES } from 'svelte-dnd-action';
   import BlueCard from '$ui/components/cards/BlueCard.svelte';
   import YellowCard from '$ui/components/cards/YellowCard.svelte';
@@ -58,6 +58,27 @@
   function handleAddScenario(featureId: string, event: CustomEvent<{title: string, type: 'green' | 'grey'}>) {
     const { title, type } = event.detail;
     addScenarioToFeatureById(id, featureId, title, type);
+  }
+
+  function handleDeleteFeature(featureId: string) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette fonctionnalité ?')) {
+      deleteFeature(id, featureId);
+    }
+  }
+
+  function handleDeleteScenario(featureId: string, scenario: any) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce scénario ?')) {
+      // Trouver l'index réel dans le tableau original
+      const feature = epic?.features.find(f => f.id === featureId);
+      if (feature) {
+        const realIndex = feature.scenarios.findIndex(s => 
+          s.title === scenario.title && s.type === scenario.type
+        );
+        if (realIndex !== -1) {
+          deleteScenario(id, featureId, realIndex);
+        }
+      }
+    }
   }
 
   // Fonction pour sauvegarder les changements
@@ -174,6 +195,7 @@
               editable={true}
               on:titleUpdate={(e) => handleFeatureUpdate(feature.id, e.detail)}
               on:statusUpdate={(e) => handleFeatureStatusUpdate(feature.id, e.detail)}
+              on:delete={() => handleDeleteFeature(feature.id)}
             >
             <br />
               <!-- Zone de glisser-déposer pour les scenarios -->
@@ -205,6 +227,7 @@
                             handleScenarioUpdate(feature.id, realIndex, e.detail);
                           }
                         }}
+                        on:delete={() => handleDeleteScenario(feature.id, scenario)}
                       />
                     {:else if scenario.type === 'grey'}
                       <GreyCard 
@@ -219,6 +242,7 @@
                             handleScenarioUpdate(feature.id, realIndex, e.detail);
                           }
                         }}
+                        on:delete={() => handleDeleteScenario(feature.id, scenario)}
                       />
                     {/if}
                   </div>
