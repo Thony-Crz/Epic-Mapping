@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { exampleMapping } from '$lib/data/exampleMapping';
+  import { epicsStore } from '$lib/stores/epicsStore';
   import { goto } from '$app/navigation';
   import BlueCard from '$ui/components/BlueCard.svelte';
+  import AddEpicForm from '$ui/components/AddEpicForm.svelte';
 
   // Fonction pour vérifier si une épic est "ready"
   function isEpicReady(epic: any): boolean {
@@ -21,11 +22,17 @@
     return allFeaturesReady;
   }
 
-  const readyEpics = exampleMapping.filter(isEpicReady);
-  const openEpics = exampleMapping.filter(epic => !isEpicReady(epic));
+  // Variables réactives qui se mettent à jour automatiquement
+  $: readyEpics = $epicsStore.filter(isEpicReady);
+  $: openEpics = $epicsStore.filter(epic => !isEpicReady(epic));
 </script>
 
 <h1 class="text-2xl font-bold mb-6">📘 Gestion des Epics</h1>
+
+<!-- Bouton pour ajouter une nouvelle epic -->
+<div class="mb-6">
+  <AddEpicForm />
+</div>
 
 <!-- Section des Epics Ready -->
 <section class="mb-8">

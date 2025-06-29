@@ -35,15 +35,16 @@ export const exampleMapping = [
         status: "ready",
         scenarios: [
           { title: "Affichage du menu utilisateur connecté", type: "green" },
-          { title: "Sous-menus déroulants", type: "green" }
+          { title: "Sous-menus déroulants", type: "green" },
+          { title: "Menu responsive sur mobile", type: "green" }
         ]
       },
       {
         title: "Barre de recherche",
-        status: "in-progress",
+        status: "ready",
         scenarios: [
           { title: "Recherche avec résultats", type: "green" },
-          { title: "Recherche sans résultat", type: "grey" }
+          { title: "Autocomplétion fonctionnelle", type: "green" }
         ]
       },
       {
