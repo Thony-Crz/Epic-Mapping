@@ -3,6 +3,7 @@
   import { goto } from '$app/navigation';
   import BlueCard from '$ui/components/cards/BlueCard.svelte';
   import AddEpicForm from '$ui/components/forms/AddEpicForm.svelte';
+  import ExportEpicsForm from '$ui/components/forms/ExportEpicsForm.svelte';
 
   // Fonction pour vérifier si une épic est "ready"
   function isEpicReady(epic: any): boolean {
@@ -36,6 +37,21 @@
   $: readyEpics = $epicsDisplayStore.filter(epic => epic.status !== 'archived' && isEpicReady(epic));
   $: openEpics = $epicsDisplayStore.filter(epic => epic.status !== 'archived' && !isEpicReady(epic));
   $: archivedEpics = $epicsDisplayStore.filter(epic => epic.status === 'archived');
+
+  // Variables pour le modal d'export
+  let isExportModalOpen = false;
+
+  function openExportModal() {
+    if (readyEpics.length === 0) {
+      alert('Aucune épic ready à exporter');
+      return;
+    }
+    isExportModalOpen = true;
+  }
+
+  function closeExportModal() {
+    isExportModalOpen = false;
+  }
 </script>
 
 <!-- Bouton pour ajouter une nouvelle epic -->
@@ -45,10 +61,25 @@
 
 <!-- Section des Epics Ready -->
 <section class="mb-12 bg-white/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 shadow-sm">
-  <div class="flex items-center gap-3 mb-6">
-    <div class="w-4 h-4 bg-green-500 rounded-full"></div>
-    <h2 class="text-2xl font-bold text-green-700">Epics Ready</h2>
-    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">{readyEpics.length}</span>
+  <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center gap-3">
+      <div class="w-4 h-4 bg-green-500 rounded-full"></div>
+      <h2 class="text-2xl font-bold text-green-700">Epics Ready</h2>
+      <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">{readyEpics.length}</span>
+    </div>
+    
+    {#if readyEpics.length > 0}
+      <button 
+        on:click={openExportModal}
+        class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2 shadow-sm"
+        title="Exporter les épics ready"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        Exporter
+      </button>
+    {/if}
   </div>
   
   <div class="flex flex-wrap gap-6 justify-start">
@@ -153,3 +184,10 @@
     </div>
   {/if}
 </section>
+
+<!-- Modal d'export -->
+<ExportEpicsForm 
+  bind:isOpen={isExportModalOpen} 
+  {readyEpics}
+  on:close={closeExportModal} 
+/>

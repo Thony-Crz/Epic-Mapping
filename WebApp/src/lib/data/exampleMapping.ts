@@ -4,7 +4,7 @@ export const exampleMapping = [
   {
     id: 'epic-001',
     title: "Authentification",
-    status: "open",
+    status: "in progress",
     features: [
       {
         id: 'feature-001-1',
@@ -13,16 +13,16 @@ export const exampleMapping = [
         scenarios: [
           { title: "L'utilisateur entre un identifiant valide", type: "green" },
           { title: "L'utilisateur entre un identifiant invalide", type: "green" },
-          { title: "Et si le champ est vide ?", type: "grey" }
+          { title: "Et si le champ est vide ?", type: "green" }
         ]
       },
       {
         id: 'feature-001-2',
         title: "Saisie mot de passe",
-        status: "in-progress",
+        status: "ready",
         scenarios: [
           { title: "Le mot de passe est correct", type: "green" },
-          { title: "Mot de passe oublié", type: "grey" }
+          { title: "Mot de passe oublié", type: "green" }
         ]
       }
     ]
