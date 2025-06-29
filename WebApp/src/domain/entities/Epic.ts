@@ -2,7 +2,7 @@
 
 import { Feature, type FeatureProps } from './Feature';
 
-export type EpicStatus = 'open' | 'in progress' | 'closed';
+export type EpicStatus = 'open' | 'in progress' | 'closed' | 'archived';
 
 export interface EpicProps {
   id: string;
@@ -62,6 +62,13 @@ export class Epic {
     return new Epic({
       ...this.props,
       status: newStatus
+    });
+  }
+
+  archive(): Epic {
+    return new Epic({
+      ...this.props,
+      status: 'archived'
     });
   }
 

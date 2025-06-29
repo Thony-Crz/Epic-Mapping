@@ -190,6 +190,30 @@ export async function moveScenarioBetweenFeatures(
   }
 }
 
+export async function deleteEpic(epicId: string) {
+  try {
+    await epicService.removeEpic({ epicId });
+  } catch (error) {
+    console.error('Failed to delete epic:', error);
+    throw error;
+  }
+}
+
+export async function archiveEpic(epicId: string) {
+  try {
+    const epic = await epicService.getEpicById(epicId);
+    if (!epic) {
+      throw new Error(`Epic with id ${epicId} not found`);
+    }
+    
+    const archivedEpic = epic.archive();
+    await serviceContainer.getEpicRepository().save(archivedEpic);
+  } catch (error) {
+    console.error('Failed to archive epic:', error);
+    throw error;
+  }
+}
+
 // Fonctions dépréciées pour compatibilité ascendante
 export function addScenarioToFeature(epicId: string, featureIndex: number, scenarioTitle: string, scenarioType: 'green' | 'grey' | 'yellow' = 'grey') {
   console.warn('addScenarioToFeature is deprecated, use addScenarioToFeatureById instead');
