@@ -99,6 +99,46 @@ export function addScenarioToFeature(epicId: string, featureIndex: number, scena
   });
 }
 
+// Fonction pour ajouter un scénario à une feature par ID
+export function addScenarioToFeatureById(epicId: string, featureId: string, scenarioTitle: string, scenarioType: 'green' | 'grey' | 'yellow' = 'grey') {
+  epicsStore.update(epics => {
+    return epics.map(epic => {
+      if (epic.id === epicId) {
+        const updatedFeatures = epic.features.map(feature => {
+          if (feature.id === featureId) {
+            const newScenario: Scenario = {
+              title: scenarioTitle,
+              type: scenarioType
+            };
+            const updatedScenarios = [...feature.scenarios, newScenario];
+            
+            // Vérifier si on doit changer le statut automatiquement
+            const hasGreenCards = updatedScenarios.some(scenario => scenario.type === 'green');
+            let newStatus = feature.status;
+            
+            // Si la feature est en "todo" et qu'on ajoute une carte verte, passer à "in-progress"
+            if (feature.status === 'todo' && scenarioType === 'green') {
+              newStatus = 'in-progress';
+            }
+            
+            return {
+              ...feature,
+              scenarios: updatedScenarios,
+              status: newStatus
+            };
+          }
+          return feature;
+        });
+        return {
+          ...epic,
+          features: updatedFeatures
+        };
+      }
+      return epic;
+    });
+  });
+}
+
 // Fonction pour mettre à jour le titre d'une epic
 export function updateEpicTitle(epicId: string, newTitle: string) {
   epicsStore.update(epics => {
@@ -156,6 +196,61 @@ export function updateScenario(epicId: string, featureId: string, scenarioIndex:
               ...feature,
               scenarios: updatedScenarios
             };
+          }
+          return feature;
+        });
+        return {
+          ...epic,
+          features: updatedFeatures
+        };
+      }
+      return epic;
+    });
+  });
+}
+
+// Fonction pour mettre à jour le statut d'une feature
+export function updateFeatureStatus(epicId: string, featureId: string, newStatus: 'ready' | 'in-progress' | 'todo') {
+  epicsStore.update(epics => {
+    return epics.map(epic => {
+      if (epic.id === epicId) {
+        const updatedFeatures = epic.features.map(feature => {
+          if (feature.id === featureId) {
+            return {
+              ...feature,
+              status: newStatus
+            };
+          }
+          return feature;
+        });
+        return {
+          ...epic,
+          features: updatedFeatures
+        };
+      }
+      return epic;
+    });
+  });
+}
+
+// Fonction pour gérer la transition automatique des statuts
+export function handleAutomaticStatusTransition(epicId: string, featureId: string, scenarios: Scenario[]) {
+  epicsStore.update(epics => {
+    return epics.map(epic => {
+      if (epic.id === epicId) {
+        const updatedFeatures = epic.features.map(feature => {
+          if (feature.id === featureId) {
+            // Vérifier s'il y a des cartes vertes
+            const hasGreenCards = scenarios.some(scenario => scenario.type === 'green');
+            
+            // Si la feature est en "todo" et qu'il y a des cartes vertes, passer à "in-progress"
+            if (feature.status === 'todo' && hasGreenCards) {
+              return {
+                ...feature,
+                status: 'in-progress' as const
+              };
+            }
+            return feature;
           }
           return feature;
         });

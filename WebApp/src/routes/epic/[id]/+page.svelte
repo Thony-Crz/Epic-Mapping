@@ -1,15 +1,23 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { epicsStore, updateFeature, updateScenario, updateEpicTitle } from '$lib/stores/epicsStore';
+  import { epicsStore, updateFeature, updateScenario, updateEpicTitle, updateFeatureStatus, handleAutomaticStatusTransition, addScenarioToFeatureById } from '$lib/stores/epicsStore';
   import BlueCard from '$ui/components/BlueCard.svelte';
   import YellowCard from '$ui/components/YellowCard.svelte';
   import GreenCard from '$ui/components/GreenCard.svelte';
   import GreyCard from '$ui/components/GreyCard.svelte';
   import YellowStatusCard from '$ui/components/YellowStatusCard.svelte';
   import AddFeatureForm from '$ui/components/AddFeatureForm.svelte';
+  import AddScenarioForm from '$ui/components/AddScenarioForm.svelte';
 
   $: id = $page.params.id;
   $: epic = $epicsStore.find(e => e.id === id);
+
+  // Effet réactif pour gérer les transitions automatiques de statut
+  $: if (epic) {
+    epic.features.forEach(feature => {
+      handleAutomaticStatusTransition(id, feature.id, feature.scenarios);
+    });
+  }
 
   function handleEpicTitleUpdate(newTitle: string) {
     updateEpicTitle(id, newTitle);
@@ -19,8 +27,17 @@
     updateFeature(id, featureId, newTitle);
   }
 
+  function handleFeatureStatusUpdate(featureId: string, newStatus: 'ready' | 'in-progress' | 'todo') {
+    updateFeatureStatus(id, featureId, newStatus);
+  }
+
   function handleScenarioUpdate(featureId: string, scenarioIndex: number, newTitle: string) {
     updateScenario(id, featureId, scenarioIndex, newTitle);
+  }
+
+  function handleAddScenario(featureId: string, event: CustomEvent<{title: string, type: 'green' | 'grey'}>) {
+    const { title, type } = event.detail;
+    addScenarioToFeatureById(id, featureId, title, type);
   }
 </script>
 
@@ -52,8 +69,10 @@
           <YellowCard 
             title={feature.title} 
             status={feature.status}
+            scenarios={feature.scenarios}
             editable={true}
             on:titleUpdate={(e) => handleFeatureUpdate(feature.id, e.detail)}
+            on:statusUpdate={(e) => handleFeatureStatusUpdate(feature.id, e.detail)}
           >
           <br />
             {#each feature.scenarios as scenario, scenarioIndex}
@@ -71,6 +90,10 @@
                 />
               {/if}
             {/each}
+            <AddScenarioForm 
+              featureId={feature.id}
+              on:addScenario={(e) => handleAddScenario(feature.id, e)}
+            />
           </YellowCard>
         {/each}
       </div>
