@@ -16,6 +16,7 @@
   // Variables pour le drag and drop
   let featuresWithId: any[] = [];
   let scenariosForDnd: {[key: string]: any[]} = {};
+  let isFeaturesDragging = false;
   
   $: if (epic) {
     // Préparer les features avec des IDs uniques pour le DnD
@@ -59,34 +60,53 @@
     addScenarioToFeatureById(id, featureId, title, type);
   }
 
+  // Fonction pour sauvegarder les changements
+  function handleSaveChanges() {
+    // Ici vous pouvez ajouter la logique de sauvegarde
+    // Par exemple : envoyer les données à une API, localStorage, etc.
+    console.log('Sauvegarde des changements pour l\'épic:', epic?.title);
+    console.log('Données à sauvegarder:', epic);
+    
+    // Exemple de notification (vous pouvez personnaliser cela)
+    alert('Changements sauvegardés avec succès !');
+  }
+
   // Gestion du drag and drop pour les features
   function handleFeaturesDnd(e: CustomEvent) {
-    const newFeatures = e.detail.items.map((item: any) => {
-      // Les items gardent déjà la structure correcte
-      return item;
-    });
-    reorderFeatures(id, newFeatures);
+    if (e.type === 'consider') {
+      isFeaturesDragging = true;
+      // Mettre à jour l'affichage pendant le glissement
+      featuresWithId = e.detail.items;
+    } else if (e.type === 'finalize') {
+      // Petite pause pour éviter les conflits de timing
+      setTimeout(() => {
+        const newFeatures = e.detail.items.map((item: any) => {
+          return item;
+        });
+        reorderFeatures(id, newFeatures);
+        isFeaturesDragging = false;
+      }, 10);
+    }
   }
 
   // Gestion du drag and drop pour les scenarios dans une feature
   function handleScenariosDnd(featureId: string, e: CustomEvent) {
-    console.log('DnD Event:', e.type, e.detail.items);
-    
     if (e.type === 'consider') {
       // Mettre à jour l'affichage pendant le glissement
       scenariosForDnd[featureId] = e.detail.items;
     } else if (e.type === 'finalize') {
-      // Sauvegarder définitivement quand le glissement est terminé
-      const newScenarios = e.detail.items.map((item: any) => {
-        const { id: dndId, ...scenario } = item;
-        return scenario;
-      });
-      
-      console.log('Saving scenarios:', newScenarios);
-      reorderScenarios(id, featureId, newScenarios);
-      
-      // Remettre à jour la version pour DnD
-      scenariosForDnd[featureId] = prepareScenariosForDnd(newScenarios);
+      // Petite pause pour éviter les conflits de timing
+      setTimeout(() => {
+        const newScenarios = e.detail.items.map((item: any) => {
+          const { id: dndId, ...scenario } = item;
+          return scenario;
+        });
+        
+        reorderScenarios(id, featureId, newScenarios);
+        
+        // Remettre à jour la version pour DnD
+        scenariosForDnd[featureId] = prepareScenariosForDnd(newScenarios);
+      }, 10);
     }
   }
 
@@ -100,8 +120,8 @@
 </script>
 
 {#if epic}
-  <!-- Bouton de retour -->
-  <div class="mb-6">
+  <!-- Bouton de retour et sauvegarde -->
+  <div class="mb-6 flex items-center gap-4">
     <button 
       on:click={() => history.back()}
       class="bg-white/80 backdrop-blur-sm hover:bg-white text-gray-600 hover:text-gray-800 px-4 py-2 rounded-lg shadow-sm border border-gray-200 transition-all duration-200 flex items-center gap-2"
@@ -110,6 +130,16 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
       </svg>
       Retour
+    </button>
+    
+    <button 
+      on:click={handleSaveChanges}
+      class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-sm transition-all duration-200 flex items-center gap-2"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3-3m0 0l-3 3m3-3v12"></path>
+      </svg>
+      Sauvegarder les changements
     </button>
   </div>
 
