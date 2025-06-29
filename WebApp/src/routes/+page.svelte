@@ -1,20 +1,21 @@
 <script lang="ts">
+  import { exampleMapping } from '$lib/data/exampleMapping';
+  import { goto } from '$app/navigation';
   import BlueCard from '$ui/components/BlueCard.svelte';
-  import YellowCard from '$ui/components/YellowCard.svelte';
-  import GreenCard from '$ui/components/GreenCard.svelte';
-  import GreyCard from '$ui/components/GreyCard.svelte';
+
+  const blueCards = exampleMapping.filter(e => e.status === 'open');
 </script>
 
-<BlueCard title="Authentification">
-  <YellowCard title="Saisie login">
-    <GreenCard title="L'utilisateur entre un identifiant valide" />
-    <GreenCard title="L'utilisateur entre un identifiant valide" />
-    <GreenCard title="L'utilisateur entre un identifiant valide" />
-    <GreyCard title="Et si le champ est vide ?" />
-  </YellowCard>
+<h1 class="text-2xl font-bold mb-4">📘 Epics en cours</h1>
 
-  <YellowCard title="Saisie mot de passe">
-    <GreenCard title="Le mot de passe est correct" />
-    <GreyCard title="Mot de passe oublié" />
-  </YellowCard>
-</BlueCard>
+<div class="flex flex-wrap gap-4">
+  {#each blueCards as card (card.id)}
+
+  <button 
+  on:click={() => goto(`/epic/${card.id}`)}
+  class="cursor-pointer">
+    <BlueCard title={card.title} id={card.id} />
+  </button>
+
+  {/each}
+</div>
