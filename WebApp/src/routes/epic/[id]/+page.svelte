@@ -51,19 +51,10 @@
         {#each epic.features as feature, featureIndex}
           <YellowCard 
             title={feature.title} 
+            status={feature.status}
             editable={true}
             on:titleUpdate={(e) => handleFeatureUpdate(feature.id, e.detail)}
           >
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-sm font-medium">Status:</span>
-              <span class="text-xs px-2 py-1 rounded-full 
-                {feature.status === 'ready' ? 'bg-green-500 text-white' : 
-                 feature.status === 'in-progress' ? 'bg-orange-500 text-white' : 
-                 feature.status === 'todo' ? 'bg-blue-500 text-white' :
-                 'bg-gray-500 text-white'}">
-                {feature.status}
-              </span>
-            </div>
             {#each feature.scenarios as scenario, scenarioIndex}
               {#if scenario.type === 'green'}
                 <GreenCard 

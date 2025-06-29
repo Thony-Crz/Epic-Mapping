@@ -55,7 +55,7 @@
     <span class="flex-1">{text}</span>
     <button
       on:click={() => dispatch('edit')}
-      class="p-1 text-gray-400 hover:text-gray-600 transition-colors opacity-0 group-hover:opacity-100"
+      class="p-1 text-gray-500 hover:text-gray-700 transition-colors ml-2"
       title="Modifier"
       aria-label="Modifier"
     >
