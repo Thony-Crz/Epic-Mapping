@@ -50,6 +50,12 @@ class ServiceContainer {
   async reinitializeProjectsData(exampleProjects: any[]): Promise<void> {
     await this.projectService.reinitializeWithExampleData(exampleProjects);
   }
+
+  // Méthode pour vider complètement le localStorage et forcer la réinitialisation
+  async clearAllData(): Promise<void> {
+    await this.projectService.clearStorage();
+    this.epicRepository.reinitializeData();
+  }
 }
 
 export const serviceContainer = ServiceContainer.getInstance();

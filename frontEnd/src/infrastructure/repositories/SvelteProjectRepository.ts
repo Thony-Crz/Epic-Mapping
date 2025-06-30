@@ -61,4 +61,10 @@ export class SvelteProjectRepository implements ProjectRepository {
   async update(project: Project): Promise<void> {
     await this.save(project);
   }
+
+  // Méthode pour vider complètement le localStorage des projets
+  async clearAll(): Promise<void> {
+    if (!this.isClient()) return;
+    localStorage.removeItem(this.storageKey);
+  }
 }

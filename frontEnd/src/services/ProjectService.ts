@@ -48,4 +48,9 @@ export class ProjectService {
       await this.createProject(request);
     }
   }
+
+  // Méthode pour vider complètement le localStorage et forcer la réinitialisation
+  async clearStorage(): Promise<void> {
+    await this.projectRepository.clearAll();
+  }
 }

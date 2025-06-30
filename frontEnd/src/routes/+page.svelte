@@ -13,10 +13,20 @@
   // Charger les données au démarrage
   onMount(async () => {
     try {
-      // D'abord charger/initialiser les projets
+      console.log('🚀 Initialisation de l\'application...');
+      
+      // Vider complètement le localStorage et réinitialiser toutes les données
+      await serviceContainer.clearAllData();
+      console.log('🧹 localStorage vidé et données réinitialisées');
+      
+      // Charger/initialiser les projets
       await loadProjects();
-      // Puis réinitialiser les données épics avec les nouvelles données d'exemple
+      console.log('📋 Projets chargés');
+      
+      // Réinitialiser les données épics avec les nouvelles données d'exemple
       serviceContainer.reinitializeEpicsData();
+      console.log('📝 Épics réinitialisées');
+      
     } catch (error) {
       console.error('❌ Erreur lors du chargement initial:', error);
     }
