@@ -25,7 +25,7 @@ Cette refactorisation suit les principes du Domain-Driven Design (DDD) et du cra
 - `AddFeatureToEpic.ts` - Ajouter une feature à une epic
 - `UpdateFeature.ts` - Mettre à jour une feature
 - `DeleteFeature.ts` - Supprimer une feature
-
+ 
 **Scenario Management** (`scenario-management/use-cases/`)
 - `AddScenarioToFeature.ts` - Ajouter un scénario à une feature
 - `UpdateScenario.ts` - Mettre à jour un scénario
