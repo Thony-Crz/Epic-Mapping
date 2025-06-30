@@ -95,6 +95,16 @@ Elle est **autonome**, ne nécessite pas d'installation dans Azure DevOps, et fo
 
 ![image](https://github.com/user-attachments/assets/7ca75f25-cde6-4177-a05d-1dd8c67b0c1f)
 
+## Ecrans
+
+### Accueil
+
+![image](https://github.com/user-attachments/assets/d8701d53-46ff-43e3-adf5-388654796cab)
+
+### Epic
+
+![image](https://github.com/user-attachments/assets/f1d6aed0-2d51-47ce-9325-9b070578fcfa)
+
 ## ⚙️ Architecture Technique
 
 ### 🧠 Philosophie
