@@ -42,3 +42,6 @@
 /backEnd/WebApi/.vs
 /backEnd/WebApi/bin/Debug/net9.0
 /backEnd/WebApi/obj
+/backEnd/EpicMapping.WebApi/.vs
+/backEnd/EpicMapping.WebApi/bin/Debug/net9.0
+/backEnd/EpicMapping.WebApi/obj
