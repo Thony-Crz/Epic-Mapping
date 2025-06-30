@@ -153,8 +153,8 @@ Epic-Mapping/
 │   └── Tests/                      # 🧪 Test Projects
 │       ├── Application.UnitTests/
 │       ├── Application.IntegrationTests/
-│       ├── Infrastructure.IntegrationTests/
-│       └── E2e.Tests/
+│       └── Infrastructure.IntegrationTests/
+│      
 └── README.md                       # 📖 Documentation principale
 ```
 
