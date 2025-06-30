@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { epicsDisplayStore, archiveEpic } from '$lib/stores/epicsStore';
+  import { epicsDisplayStore, archiveEpic, epicsStore } from '$lib/stores/epicsStore';
   import { projectsStore, loadProjects } from '$lib/stores/projectsStore';
   import { serviceContainer } from '../services/ServiceContainer';
   import { exampleProjects } from '$lib/data/exampleMapping';
@@ -13,17 +13,10 @@
   // Charger les données au démarrage
   onMount(async () => {
     try {
-      console.log('🔄 Initialisation de l\'application...');
-      
-      // Réinitialiser les données épics avec les nouvelles données d'exemple
-      serviceContainer.reinitializeEpicsData();
-      console.log('✅ Données épics réinitialisées');
-      
-      // Charger les projets
+      // D'abord charger/initialiser les projets
       await loadProjects();
-      console.log('✅ Projets chargés');
-      
-      console.log('🎉 Initialisation terminée');
+      // Puis réinitialiser les données épics avec les nouvelles données d'exemple
+      serviceContainer.reinitializeEpicsData();
     } catch (error) {
       console.error('❌ Erreur lors du chargement initial:', error);
     }
@@ -64,16 +57,9 @@
   }
 
   // Variables réactives qui se mettent à jour automatiquement
-  $: readyEpics = $epicsDisplayStore.filter(epic => epic.status !== 'archived' && isEpicReady(epic));
-  $: openEpics = $epicsDisplayStore.filter(epic => epic.status !== 'archived' && !isEpicReady(epic));
-  $: archivedEpics = $epicsDisplayStore.filter(epic => epic.status === 'archived');
-
-  // Debug logs
-  $: if ($epicsDisplayStore.length > 0) {
-    console.log(`📊 Épics totales: ${$epicsDisplayStore.length}`);
-    console.log(`✅ Ready: ${readyEpics.length}, 🔄 En cours: ${openEpics.length}, 📦 Archivées: ${archivedEpics.length}`);
-    console.log('📋 Détail épics:', $epicsDisplayStore.map(e => `${e.title} (${e.status}) - Projet: ${e.projectId}`));
-  }
+  $: readyEpics = ($projectsStore.length > 0) ? $epicsDisplayStore.filter(epic => epic.status !== 'archived' && isEpicReady(epic)) : [];
+  $: openEpics = ($projectsStore.length > 0) ? $epicsDisplayStore.filter(epic => epic.status !== 'archived' && !isEpicReady(epic)) : [];
+  $: archivedEpics = ($projectsStore.length > 0) ? $epicsDisplayStore.filter(epic => epic.status === 'archived') : [];
 
   // Regrouper les épics par projet avec filtre
   $: filteredProjects = selectedProjectFilter === 'all' 
@@ -126,27 +112,6 @@
   <div class="flex gap-3">
     <AddProjectForm />
     <AddEpicForm />
-    <!-- Bouton debug temporaire -->
-    <button 
-      on:click={async () => {
-        console.log('🔄 Rechargement forcé des données...');
-        // Réinitialiser les projets d'abord avec les IDs corrects
-        await serviceContainer.reinitializeProjectsData(exampleProjects);
-        console.log('✅ Projets réinitialisés avec IDs prédéfinis');
-        
-        // Puis réinitialiser les épics
-        serviceContainer.reinitializeEpicsData();
-        console.log('✅ Épics réinitialisées');
-        
-        // Recharger les projets dans le store
-        await loadProjects();
-        console.log('✅ Store des projets rechargé');
-      }}
-      class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
-      title="Recharger les données (debug)"
-    >
-      🔄 Debug
-    </button>
   </div>
 </div>
 

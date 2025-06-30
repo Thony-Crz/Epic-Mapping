@@ -6,7 +6,7 @@ import type { EpicRepository } from '../../domain/repositories';
 import { exampleMapping } from '../../lib/data/exampleMapping';
 
 function initializeEpicsWithIds(epics: any[]): Epic[] {
-  return epics.map(epic => {
+  return epics.map((epic, epicIndex) => {
     const features = epic.features.map((feature: any, index: number) => {
       const scenarios = feature.scenarios.map((scenario: any) => ({
         title: scenario.title,
@@ -21,13 +21,15 @@ function initializeEpicsWithIds(epics: any[]): Epic[] {
       };
     });
 
-    return Epic.fromProps({
+    const epicResult = Epic.fromProps({
       id: epic.id,
       title: epic.title,
       status: epic.status,
       projectId: epic.projectId, // Ajout du projectId
       features
     });
+    
+    return epicResult;
   });
 }
 
