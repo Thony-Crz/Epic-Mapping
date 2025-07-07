@@ -1,0 +1,47 @@
+﻿using Application.UseCases.AuthenticateUser;
+using FluentValidation.TestHelper;
+
+namespace Application.UnitTests.Authentification
+{
+    public class AuthenticateUserCommandValidatorTests
+    {
+        private AuthenticateUserCommandValidator _validator;
+
+        [SetUp]
+        public void Setup()
+        {
+            _validator = new AuthenticateUserCommandValidator();
+        }
+
+        [Test]
+        public void Should_HaveValidationError_When_AuthorizationCode_IsEmpty()
+        {
+            var command = new AuthenticateUserCommand(string.Empty, "https://localhost/callback");
+
+            var result = _validator.TestValidate(command);
+
+            result.ShouldHaveValidationErrorFor(c => c.AuthorizationCode);
+        }
+
+        [Test]
+        public void Should_HaveValidationError_When_RedirectUri_IsEmpty()
+        {
+            var command = new AuthenticateUserCommand("auth-code", string.Empty);
+
+            var result = _validator.TestValidate(command);
+
+            result.ShouldHaveValidationErrorFor(c => c.RedirectUri);
+        }
+
+        [Test]
+        public void Should_NotHaveValidationErrors_When_CommandIsValid()
+        {
+            var command = new AuthenticateUserCommand("auth-code", "https://localhost/callback");
+
+            var result = _validator.TestValidate(command);
+
+            result.ShouldNotHaveAnyValidationErrors();
+        }
+
+    }
+}

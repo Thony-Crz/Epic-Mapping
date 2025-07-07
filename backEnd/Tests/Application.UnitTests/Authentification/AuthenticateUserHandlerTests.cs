@@ -46,5 +46,22 @@ namespace Application.UnitTests.Authentification
             result.ExpiresAt.Should().BeCloseTo(expectedAuthResult.ExpiresAt, TimeSpan.FromSeconds(1));
         }
 
+        [Test]
+        public async Task Handle_ShouldThrowException_WhenAuthenticationFails()
+        {
+            // Arrange
+            var request = new AuthenticateUserCommand("invalid-code", "https://localhost/callback");
+            _mockAuthService
+                .Setup(s => s.AuthenticateWithOAuthAsync(request.AuthorizationCode, request.RedirectUri))
+                .ThrowsAsync(new UnauthorizedAccessException("Invalid code"));
+
+            // Act
+            Func<Task> act = async () => await _handler.Handle(request, CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<UnauthorizedAccessException>()
+                .WithMessage("Invalid code");
+        }
+
     }
 }
