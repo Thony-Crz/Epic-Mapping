@@ -11,7 +11,7 @@ namespace EpicMapping.WebApi.Controllers
     public class AuthController(IMediator mediator) : ControllerBase
     {
         [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate([FromBody] AuthenticateUserCommand command)
+        public async Task<IActionResult> Authenticate([FromBody] AuthorizeExternalProviderCommand command)
         {
             try
             {

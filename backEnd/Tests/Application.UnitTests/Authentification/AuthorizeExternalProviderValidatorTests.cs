@@ -3,20 +3,20 @@ using FluentValidation.TestHelper;
 
 namespace Application.UnitTests.Authentification
 {
-    public class AuthenticateUserCommandValidatorTests
+    public class AuthorizeExternalProviderValidatorTests
     {
-        private AuthenticateUserCommandValidator _validator;
+        private AuthorizeExternalProviderValidator _validator;
 
         [SetUp]
         public void Setup()
         {
-            _validator = new AuthenticateUserCommandValidator();
+            _validator = new AuthorizeExternalProviderValidator();
         }
 
         [Test]
         public void Should_HaveValidationError_When_AuthorizationCode_IsEmpty()
         {
-            var command = new AuthenticateUserCommand(string.Empty, "https://localhost/callback");
+            var command = new AuthorizeExternalProviderCommand(string.Empty, "https://localhost/callback");
 
             var result = _validator.TestValidate(command);
 
@@ -26,7 +26,7 @@ namespace Application.UnitTests.Authentification
         [Test]
         public void Should_HaveValidationError_When_RedirectUri_IsEmpty()
         {
-            var command = new AuthenticateUserCommand("auth-code", string.Empty);
+            var command = new AuthorizeExternalProviderCommand("auth-code", string.Empty);
 
             var result = _validator.TestValidate(command);
 
@@ -36,7 +36,7 @@ namespace Application.UnitTests.Authentification
         [Test]
         public void Should_NotHaveValidationErrors_When_CommandIsValid()
         {
-            var command = new AuthenticateUserCommand("auth-code", "https://localhost/callback");
+            var command = new AuthorizeExternalProviderCommand("auth-code", "https://localhost/callback");
 
             var result = _validator.TestValidate(command);
 

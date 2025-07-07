@@ -11,7 +11,7 @@ namespace Application.UseCases.Token
     public record GenerateTokenCommand(string Username, string Password)
         : IRequest<GenerateTokenResult>;
 
-    public class GenerateTokenHandler(IConfiguration config)
+    public class GenerateToken(IConfiguration config)
     : IRequestHandler<GenerateTokenCommand, GenerateTokenResult>
     {
         // TODO : les dépendances devraient aller dans la couche Infrastructure, mais pour simplifier l'exemple, on les met ici.

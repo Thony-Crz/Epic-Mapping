@@ -2,9 +2,9 @@
 
 namespace Application.UseCases.AuthenticateUser;
 
-public class AuthenticateUserCommandValidator : AbstractValidator<AuthenticateUserCommand>
+public class AuthorizeExternalProviderValidator : AbstractValidator<AuthorizeExternalProviderCommand>
 {
-    public AuthenticateUserCommandValidator()
+    public AuthorizeExternalProviderValidator()
     {
         RuleFor(x => x.AuthorizationCode)
             .NotEmpty().WithMessage("Authorization code is required.");

@@ -74,8 +74,8 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // Add MediatR and FluentValidation
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<AuthenticateUserCommand>());
-builder.Services.AddValidatorsFromAssemblyContaining<AuthenticateUserCommandValidator>();
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<AuthorizeExternalProviderCommand>());
+builder.Services.AddValidatorsFromAssemblyContaining<AuthorizeExternalProviderValidator>();
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 // Register the authentication service

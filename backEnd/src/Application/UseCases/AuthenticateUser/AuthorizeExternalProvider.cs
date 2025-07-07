@@ -4,13 +4,13 @@ using MediatR;
 
 namespace Application.UseCases.AuthenticateUser
 {
-    public record AuthenticateUserCommand(string AuthorizationCode, string RedirectUri)
+    public record AuthorizeExternalProviderCommand(string AuthorizationCode, string RedirectUri)
         : IRequest<AuthenticateUserResult>;
 
-    public class AuthenticateUserHandler(IAuthenticationService authService)
-        : IRequestHandler<AuthenticateUserCommand, AuthenticateUserResult>
+    public class AuthorizeExternalProvider(IAuthenticationService authService)
+        : IRequestHandler<AuthorizeExternalProviderCommand, AuthenticateUserResult>
     {
-        public async Task<AuthenticateUserResult> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
+        public async Task<AuthenticateUserResult> Handle(AuthorizeExternalProviderCommand request, CancellationToken cancellationToken)
         {
             var authResult = await authService.AuthenticateWithOAuthAsync(request.AuthorizationCode, request.RedirectUri);
 

@@ -6,16 +6,16 @@ using Moq;
 
 namespace Application.UnitTests.Authentification
 {
-    public class AuthenticateUserHandlerTests
+    public class AuthorizeExternalProviderTests
     {
         private Mock<IAuthenticationService> _mockAuthService;
-        private AuthenticateUserHandler _handler;
+        private AuthorizeExternalProvider _handler;
 
         [SetUp]
         public void Setup()
         {
             _mockAuthService = new Mock<IAuthenticationService>();
-            _handler = new AuthenticateUserHandler(_mockAuthService.Object);
+            _handler = new AuthorizeExternalProvider(_mockAuthService.Object);
         }
 
 
@@ -23,7 +23,7 @@ namespace Application.UnitTests.Authentification
         public async Task Handle_ShouldReturnAuthenticateUserResult_WhenAuthorizationCodeIsValid()
         {
             // Arrange
-            var request = new AuthenticateUserCommand("valid-code", "https://localhost/callback");
+            var request = new AuthorizeExternalProviderCommand("valid-code", "https://localhost/callback");
             var expectedAuthResult = new AuthResult
             {
                 AccessToken = "azure-token",
@@ -50,7 +50,7 @@ namespace Application.UnitTests.Authentification
         public async Task Handle_ShouldThrowException_WhenAuthenticationFails()
         {
             // Arrange
-            var request = new AuthenticateUserCommand("invalid-code", "https://localhost/callback");
+            var request = new AuthorizeExternalProviderCommand("invalid-code", "https://localhost/callback");
             _mockAuthService
                 .Setup(s => s.AuthenticateWithOAuthAsync(request.AuthorizationCode, request.RedirectUri))
                 .ThrowsAsync(new UnauthorizedAccessException("Invalid code"));
