@@ -1,6 +1,7 @@
 ﻿using Application.UseCases.AuthenticateUser;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EpicMapping.WebApi.Controllers
