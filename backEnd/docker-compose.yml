@@ -1,0 +1,39 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: epicmapping-postgres
+    environment:
+      POSTGRES_DB: EPICMAPPING
+      POSTGRES_USER: epicmapping_user
+      POSTGRES_PASSWORD: epicmapping_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - epicmapping-network
+    restart: unless-stopped
+
+  web-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: epicmapping-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=EPICMAPPING;Username=epicmapping_user;Password=epicmapping_password;Port=5432
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      - postgres
+    networks:
+      - epicmapping-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  epicmapping-network:
+    driver: bridge

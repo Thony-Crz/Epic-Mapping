@@ -4,11 +4,14 @@ using Domain.Interfaces;
 using EpicMapping.WebApi.Configuration;
 using EpicMapping.WebApi.Middleware;
 using FluentValidation;
+using Infrastructure.Data;
+using Infrastructure.Extensions;
 using Infrastructure.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -22,6 +25,9 @@ var securitySettings = builder.Configuration.GetSecuritySettings();
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+// Configure Infrastructure services (Entity Framework, Repositories, etc.)
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // Custom Security Services
 builder.Services.AddCustomSecurity(builder.Configuration);
