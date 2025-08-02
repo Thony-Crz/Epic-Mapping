@@ -50,5 +50,39 @@ namespace EpicMapping.WebApi.Controllers
             // TODO: Implement token revocation logic
             return Ok(new { message = "Token revoked successfully" });
         }
+
+        [HttpPost("dev-token")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GenerateDevToken([FromBody] GenerateDevTokenRequest? request = null)
+        {
+            try
+            {
+                // Use provided username or default to "dev-user"
+                var username = request?.Username ?? "dev-user";
+                
+                // Create a command with the dev user credentials
+                var command = new GenerateTokenCommand(username, "dev-password");
+                var result = await mediator.Send(command);
+                
+                return Ok(new
+                {
+                    token = result.TokenString,
+                    tokenType = result.TokenType,
+                    expiresAt = result.ExpiresAt,
+                    userName = result.UserName,
+                    message = "Development token generated successfully. Do not use in production!"
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Dev token generation error: {ex.Message}");
+                return StatusCode(500, new { message = "An error occurred while generating dev token" });
+            }
+        }
+    }
+
+    public class GenerateDevTokenRequest
+    {
+        public string? Username { get; set; }
     }
 }

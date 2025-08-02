@@ -4,3 +4,43 @@ GET {{WebApi_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+# Generate Development Token (No Authentication Required)
+POST {{WebApi_HostAddress}}/api/token/dev-token
+Content-Type: application/json
+
+{
+  "username": "dev-user"
+}
+
+###
+
+# Generate Development Token with default user
+POST {{WebApi_HostAddress}}/api/token/dev-token
+Content-Type: application/json
+
+{}
+
+###
+
+# Login with standard authentication
+POST {{WebApi_HostAddress}}/api/token/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "password"
+}
+
+###
+
+# Login with dev user
+POST {{WebApi_HostAddress}}/api/token/login
+Content-Type: application/json
+
+{
+  "username": "dev-user",
+  "password": "dev-password"
+}
+
+###

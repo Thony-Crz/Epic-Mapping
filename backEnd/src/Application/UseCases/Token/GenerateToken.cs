@@ -86,7 +86,8 @@ namespace Application.UseCases.Token
             {
                 { "admin", "password" },
                 { "demo", "demo123" },
-                { "test", "test123" }
+                { "test", "test123" },
+                { "dev-user", "dev-password" } // Development user for testing
             };
 
             return validUsers.TryGetValue(username, out var validPassword) && validPassword == password;
