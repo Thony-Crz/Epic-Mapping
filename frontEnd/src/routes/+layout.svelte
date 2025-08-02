@@ -1,6 +1,7 @@
 <script lang="ts">
   import '../app.css';
   import AuthGuard from '$ui/components/AuthGuard.svelte';
+  import Logo from '$ui/components/Logo.svelte';
   import { authStore } from '$lib/stores/authStore';
   import { page } from '$app/stores';
 
@@ -16,7 +17,7 @@
       <!-- Logo/Titre -->
       <div class="flex items-center">
         <div class="flex-shrink-0">
-          <h1 class="text-xl font-bold text-gray-900">Epic Mapping</h1>
+          <Logo size="md" />
         </div>
       </div>
 

@@ -1,4 +1,7 @@
-# 🧭 Epic Mapping - Example Mapping + Intégration Azure DevOps
+<div align="center">
+  <img src="logo.svg" alt="Epic Mapping Logo" width="300"/>
+  <h1>🧭 Epic Mapping - Example Mapping + Intégration Azure DevOps</h1>
+</div>
 
 ## 🎯 Objectif
 

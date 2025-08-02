@@ -1,5 +1,6 @@
 <script lang="ts">
   import { authStore } from '$lib/stores/authStore';
+  import Logo from '$ui/components/Logo.svelte';
   import { onMount } from 'svelte';
 
   let email = '';
@@ -44,8 +45,10 @@
 <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
   <div class="max-w-md w-full space-y-8 p-8">
     <!-- Logo/Titre -->
-    <div class="text-center">
-      <h1 class="text-4xl font-bold text-gray-900 mb-2">Epic Mapping</h1>
+    <div class="text-center space-y-4">
+      <div class="flex justify-center">
+        <Logo size="lg" />
+      </div>
       <p class="text-gray-600">Connectez-vous pour commencer</p>
     </div>
 
