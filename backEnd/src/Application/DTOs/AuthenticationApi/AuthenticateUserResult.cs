@@ -2,8 +2,8 @@
 {
     public class AuthenticateUserResult
     {
-        public string JwtToken { get; set; }
-        public string UserName { get; set; }
+        public required string JwtToken { get; set; }
+        public required string UserName { get; set; }
         public DateTime ExpiresAt { get; set; }
     }
 }

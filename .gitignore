@@ -50,3 +50,22 @@
 /backEnd/.vs
 .vscode/launch.json
 .vscode/tasks.json
+
+# Security - Environment variables and secrets
+.env
+.env.local
+.env.production
+.env.development
+*.key
+*.pem
+*.p12
+*.pfx
+appsettings.Production.json
+appsettings.Staging.json
+secrets.json
+user-secrets.json
+
+# Logs
+logs/
+*.log
+log.txt
