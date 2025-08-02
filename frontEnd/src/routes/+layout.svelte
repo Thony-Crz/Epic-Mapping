@@ -1,5 +1,12 @@
 <script lang="ts">
   import '../app.css';
+  import AuthGuard from '$ui/components/AuthGuard.svelte';
+  import { authStore } from '$lib/stores/authStore';
+  import { page } from '$app/stores';
+
+  function handleLogout() {
+    authStore.logout();
+  }
 </script>
 
 <!-- Header -->
@@ -15,13 +22,29 @@
 
       <!-- Navigation et actions -->
       <div class="flex items-center space-x-4">
-        <!-- Bouton d'authentification -->
-        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-          </svg>
-          Se connecter
-        </button>
+        {#if $authStore.isAuthenticated && $page.route.id !== '/login'}
+          <!-- Utilisateur connecté -->
+          <div class="flex items-center space-x-3">
+            <span class="text-gray-700">Bonjour, {$authStore.user?.name}</span>
+            <button 
+              on:click={handleLogout}
+              class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+              </svg>
+              Se déconnecter
+            </button>
+          </div>
+        {:else if $page.route.id !== '/login'}
+          <!-- Bouton d'authentification -->
+          <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+            </svg>
+            Se connecter
+          </button>
+        {/if}
       </div>
     </div>
   </div>
@@ -34,9 +57,17 @@
     <div class="absolute inset-0" style="background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.1) 1px, transparent 0); background-size: 20px 20px;"></div>
   </div>
   
-  <!-- Contenu -->
-  <div class="relative z-10 container mx-auto px-4 py-8">
-    <slot />
+  <!-- Contenu avec AuthGuard -->
+  <div class="relative z-10">
+    <AuthGuard>
+      {#if $page.route.id === '/login'}
+        <slot />
+      {:else}
+        <div class="container mx-auto px-4 py-8">
+          <slot />
+        </div>
+      {/if}
+    </AuthGuard>
   </div>
   
   <!-- Effets décoratifs pour simuler un tableau -->
