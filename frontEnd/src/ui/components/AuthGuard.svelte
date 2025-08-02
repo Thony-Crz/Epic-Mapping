@@ -5,29 +5,49 @@
   import { page } from '$app/stores';
 
   let isReady = false;
+  let shouldShowContent = false;
 
   onMount(async () => {
-    // Initialiser l'authentification
+    // Initialiser l'authentification de manière synchrone
     authStore.init();
     
-    // Attendre un court délai pour que l'état soit bien initialisé
-    await new Promise(resolve => setTimeout(resolve, 100));
+    // Vérifier immédiatement l'état d'authentification
+    const currentAuth = $authStore;
+    const currentRoute = $page.route.id;
+    
+    if (!currentAuth.isAuthenticated && currentRoute !== '/login') {
+      // Pas connecté et pas sur la page de login -> rediriger immédiatement
+      goto('/login', { replaceState: true });
+    } else if (currentAuth.isAuthenticated && currentRoute === '/login') {
+      // Connecté mais sur la page de login -> rediriger vers l'accueil
+      goto('/', { replaceState: true });
+    } else {
+      // État correct -> afficher le contenu
+      shouldShowContent = true;
+    }
     
     isReady = true;
   });
 
-  // Réactif: rediriger si pas connecté et pas sur la page de login
-  $: if (isReady && !$authStore.isAuthenticated && $page.route.id !== '/login') {
-    goto('/login');
-  }
-
-  // Réactif: rediriger vers l'accueil si connecté et sur la page de login
-  $: if (isReady && $authStore.isAuthenticated && $page.route.id === '/login') {
-    goto('/');
+  // Réactions pour les changements d'état après l'initialisation
+  $: if (isReady) {
+    const currentAuth = $authStore;
+    const currentRoute = $page.route.id;
+    
+    if (!currentAuth.isAuthenticated && currentRoute !== '/login' && shouldShowContent) {
+      goto('/login', { replaceState: true });
+      shouldShowContent = false;
+    } else if (currentAuth.isAuthenticated && currentRoute === '/login' && shouldShowContent) {
+      goto('/', { replaceState: true });
+      shouldShowContent = false;
+    } else if ((currentAuth.isAuthenticated && currentRoute !== '/login') || 
+               (!currentAuth.isAuthenticated && currentRoute === '/login')) {
+      shouldShowContent = true;
+    }
   }
 </script>
 
-{#if isReady}
+{#if isReady && shouldShowContent}
   <slot />
 {:else}
   <!-- Écran de chargement -->
