@@ -4,28 +4,28 @@ import { Epic } from '../../../domain/entities';
 import type { EpicRepository } from '../../../domain/repositories';
 
 export interface CreateEpicInput {
-  title: string;
-  projectId: string;
-  status?: 'open' | 'in progress' | 'closed';
+	title: string;
+	projectId: string;
+	status?: 'open' | 'in progress' | 'closed';
 }
 
 export interface CreateEpicOutput {
-  epic: Epic;
+	epic: Epic;
 }
 
 export class CreateEpic {
-  constructor(private epicRepository: EpicRepository) {}
+	constructor(private epicRepository: EpicRepository) {}
 
-  async execute(input: CreateEpicInput): Promise<CreateEpicOutput> {
-    const epic = Epic.create({
-      title: input.title,
-      status: input.status || 'open',
-      features: [],
-      projectId: input.projectId
-    });
+	async execute(input: CreateEpicInput): Promise<CreateEpicOutput> {
+		const epic = Epic.create({
+			title: input.title,
+			status: input.status || 'open',
+			features: [],
+			projectId: input.projectId
+		});
 
-    await this.epicRepository.save(epic);
+		await this.epicRepository.save(epic);
 
-    return { epic };
-  }
+		return { epic };
+	}
 }

@@ -14,7 +14,7 @@ const config = {
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		adapter: adapter(),
 		alias: {
-      		$ui: path.resolve('./src/ui')
+			$ui: path.resolve('./src/ui')
 		}
 	}
 };

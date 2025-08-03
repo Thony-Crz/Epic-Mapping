@@ -4,9 +4,9 @@ import type { Project } from '../../../domain/entities/Project';
 import type { ProjectRepository } from '../../../domain/repositories/ProjectRepository';
 
 export class GetAllProjects {
-  constructor(private projectRepository: ProjectRepository) {}
+	constructor(private projectRepository: ProjectRepository) {}
 
-  async execute(): Promise<Project[]> {
-    return await this.projectRepository.findAll();
-  }
+	async execute(): Promise<Project[]> {
+		return await this.projectRepository.findAll();
+	}
 }

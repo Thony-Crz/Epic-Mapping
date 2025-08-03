@@ -14,6 +14,7 @@ Une application SvelteKit pour la gestion et la visualisation d'épiques, de fon
 ## Architecture
 
 Le projet suit une architecture hexagonale avec :
+
 - **Entités** : Epic, Feature, Scenario, Project
 - **Use Cases** : Logique métier pour chaque fonctionnalité
 - **Repositories** : Accès aux données
@@ -32,6 +33,7 @@ Le projet suit une architecture hexagonale avec :
 ## Installation et Développement
 
 ### Prérequis
+
 - Node.js (version 18 ou supérieure)
 - npm, pnpm ou yarn
 

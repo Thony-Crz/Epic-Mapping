@@ -1,11 +1,11 @@
 {
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "composite": true,
-    "noEmit": false,  
-    "baseUrl": ".",
-    "paths": {
-      "$ui/*": ["src/ui/*"]
-    }
-  }
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"composite": true,
+		"noEmit": false,
+		"baseUrl": ".",
+		"paths": {
+			"$ui/*": ["src/ui/*"]
+		}
+	}
 }

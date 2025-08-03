@@ -11,5 +11,5 @@
 		"strict": true,
 		"moduleResolution": "bundler"
 	},
-	"references": [{"path": "./tsconfig.app.json"}]
+	"references": [{ "path": "./tsconfig.app.json" }]
 }

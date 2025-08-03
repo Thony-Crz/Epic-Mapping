@@ -2,17 +2,17 @@
 
 /**
  * Ce fichier sert de guide pour migrer progressivement de l'ancien store vers la nouvelle architecture.
- * 
+ *
  * ÉTAPES DE MIGRATION :
- * 
+ *
  * 1. Dans vos composants Svelte, remplacez l'import :
  *    Ancien : import { epicsStore, addNewEpic } from '$lib/stores/epicsStore';
  *    Nouveau : import { epicsStore, addNewEpic } from '$lib/stores/epicsStore.new';
- * 
+ *
  * 2. Mettez à jour les appels de fonctions pour les rendre async :
  *    Ancien : addNewEpic('Mon Epic');
  *    Nouveau : await addNewEpic('Mon Epic');
- * 
+ *
  * 3. Ajoutez la gestion d'erreurs :
  *    try {
  *      await addNewEpic('Mon Epic');
@@ -45,9 +45,9 @@ handleAutomaticStatusTransition(...) → La logique est maintenant dans l'entit�
 */
 
 export const MIGRATION_NOTES = {
-  storeReactivity: "Le store reste réactif avec Svelte, aucun changement côté UI",
-  errorHandling: "Toutes les fonctions sont maintenant async et peuvent throw des erreurs",
-  businessLogic: "La logique métier est maintenant dans les entités du domain",
-  validation: "La validation est automatique dans les entités",
-  testing: "Les use cases peuvent être testés unitairement",
+	storeReactivity: 'Le store reste réactif avec Svelte, aucun changement côté UI',
+	errorHandling: 'Toutes les fonctions sont maintenant async et peuvent throw des erreurs',
+	businessLogic: 'La logique métier est maintenant dans les entités du domain',
+	validation: 'La validation est automatique dans les entités',
+	testing: 'Les use cases peuvent être testés unitairement'
 };

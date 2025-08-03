@@ -3,24 +3,24 @@
 import type { EpicRepository } from '../../../domain/repositories';
 
 export interface DeleteEpicInput {
-  epicId: string;
+	epicId: string;
 }
 
 export interface DeleteEpicOutput {
-  success: boolean;
+	success: boolean;
 }
 
 export class DeleteEpic {
-  constructor(private epicRepository: EpicRepository) {}
+	constructor(private epicRepository: EpicRepository) {}
 
-  async execute(input: DeleteEpicInput): Promise<DeleteEpicOutput> {
-    const existingEpic = await this.epicRepository.findById(input.epicId);
-    if (!existingEpic) {
-      throw new Error(`Epic with id ${input.epicId} not found`);
-    }
+	async execute(input: DeleteEpicInput): Promise<DeleteEpicOutput> {
+		const existingEpic = await this.epicRepository.findById(input.epicId);
+		if (!existingEpic) {
+			throw new Error(`Epic with id ${input.epicId} not found`);
+		}
 
-    await this.epicRepository.delete(input.epicId);
+		await this.epicRepository.delete(input.epicId);
 
-    return { success: true };
-  }
+		return { success: true };
+	}
 }

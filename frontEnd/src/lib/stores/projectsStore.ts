@@ -13,64 +13,64 @@ export const projectsStore = writable<Project[]>([]);
 
 // Actions pour gérer les projets
 export async function loadProjects() {
-  try {
-    console.log('🔍 Chargement des projets...');
-    let projects = await projectService.getAllProjects();
-    console.log(`📋 Projets existants trouvés: ${projects.length}`);
-    
-    // Si aucun projet n'existe, initialiser avec les projets d'exemple
-    if (projects.length === 0) {
-      console.log('🏗️ Initialisation des projets par défaut...');
-      for (const projectData of exampleProjects) {
-        const request: CreateProjectRequest = {
-          id: projectData.id, // Utiliser l'ID prédéfini
-          name: projectData.name,
-          description: projectData.description,
-          color: projectData.color
-        };
-        await projectService.createProject(request);
-        console.log(`✅ Projet créé: ${projectData.name} avec ID: ${projectData.id}`);
-      }
-      projects = await projectService.getAllProjects();
-      console.log(`🎯 Total projets après initialisation: ${projects.length}`);
-    }
-    
-    projectsStore.set(projects);
-    console.log('💾 Store des projets mis à jour');
-    return projects;
-  } catch (error) {
-    console.error('Erreur lors du chargement des projets:', error);
-    throw error;
-  }
+	try {
+		console.log('🔍 Chargement des projets...');
+		let projects = await projectService.getAllProjects();
+		console.log(`📋 Projets existants trouvés: ${projects.length}`);
+
+		// Si aucun projet n'existe, initialiser avec les projets d'exemple
+		if (projects.length === 0) {
+			console.log('🏗️ Initialisation des projets par défaut...');
+			for (const projectData of exampleProjects) {
+				const request: CreateProjectRequest = {
+					id: projectData.id, // Utiliser l'ID prédéfini
+					name: projectData.name,
+					description: projectData.description,
+					color: projectData.color
+				};
+				await projectService.createProject(request);
+				console.log(`✅ Projet créé: ${projectData.name} avec ID: ${projectData.id}`);
+			}
+			projects = await projectService.getAllProjects();
+			console.log(`🎯 Total projets après initialisation: ${projects.length}`);
+		}
+
+		projectsStore.set(projects);
+		console.log('💾 Store des projets mis à jour');
+		return projects;
+	} catch (error) {
+		console.error('Erreur lors du chargement des projets:', error);
+		throw error;
+	}
 }
 
 export async function createProject(request: CreateProjectRequest) {
-  try {
-    const newProject = await projectService.createProject(request);
-    
-    // Mettre à jour le store
-    projectsStore.update(projects => [...projects, newProject]);
-    
-    return newProject;
-  } catch (error) {
-    console.error('Erreur lors de la création du projet:', error);
-    throw error;
-  }
+	try {
+		const newProject = await projectService.createProject(request);
+
+		// Mettre à jour le store
+		projectsStore.update((projects) => [...projects, newProject]);
+
+		return newProject;
+	} catch (error) {
+		console.error('Erreur lors de la création du projet:', error);
+		throw error;
+	}
 }
 
 export async function deleteProject(projectId: string) {
-  try {
-    await projectService.deleteProject(projectId);
-    
-    // Mettre à jour le store
-    projectsStore.update(projects => projects.filter(p => p.id !== projectId));
-  } catch (error) {
-    console.error('Erreur lors de la suppression du projet:', error);
-    throw error;
-  }
+	try {
+		await projectService.deleteProject(projectId);
+
+		// Mettre à jour le store
+		projectsStore.update((projects) => projects.filter((p) => p.id !== projectId));
+	} catch (error) {
+		console.error('Erreur lors de la suppression du projet:', error);
+		throw error;
+	}
 }
 
 // Initialiser le store au premier import (uniquement côté client)
 if (typeof window !== 'undefined') {
-  loadProjects();
+	loadProjects();
 }

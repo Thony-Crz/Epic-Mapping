@@ -3,8 +3,8 @@
 import { Epic } from '../entities';
 
 export interface EpicRepository {
-  findAll(): Promise<Epic[]>;
-  findById(id: string): Promise<Epic | null>;
-  save(epic: Epic): Promise<void>;
-  delete(id: string): Promise<void>;
+	findAll(): Promise<Epic[]>;
+	findById(id: string): Promise<Epic | null>;
+	save(epic: Epic): Promise<void>;
+	delete(id: string): Promise<void>;
 }
