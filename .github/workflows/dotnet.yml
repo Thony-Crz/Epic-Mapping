@@ -1,0 +1,82 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    # Définir le répertoire de travail pour toutes les étapes
+    defaults:
+      run:
+        working-directory: ./backEnd
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore EpicMapping.sln
+      
+    - name: Build
+      run: dotnet build EpicMapping.sln --no-restore --configuration Release
+      
+    - name: Test
+      run: dotnet test EpicMapping.sln --no-build --verbosity normal --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
+      
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: ./backEnd/TestResults
+        retention-days: 30
+        
+    - name: Upload code coverage
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: code-coverage
+        path: ./backEnd/TestResults/**/coverage.cobertura.xml
+        retention-days: 30
+
+  # Job séparé pour vérifier la structure du frontend (optionnel)
+  frontend-check:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ./frontEnd
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: './frontEnd/package-lock.json'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Lint
+      run: npm run lint --if-present
+      
+    - name: Build
+      run: npm run build --if-present
+      
+    - name: Test
+      run: npm test --if-present
