@@ -15,6 +15,12 @@ public class CreateProjectHandler : IRequestHandler<CreateProject, CreateProject
 
     public async Task<CreateProjectResult> Handle(CreateProject request, CancellationToken cancellationToken)
     {
+        // Validation
+        if (string.IsNullOrWhiteSpace(request.Name))
+        {
+            throw new ArgumentException("Name is required", nameof(request.Name));
+        }
+
         var project = new Project
         {
             Name = request.Name,
