@@ -10,10 +10,7 @@ public class Project
     public DateTime? UpdatedAt { get; set; }
     public string CreatedBy { get; set; } = string.Empty;
     
-    // Foreign key
-    public int EpicId { get; set; }
-    
-    // Navigation properties
-    public virtual Epic Epic { get; set; } = null!;
+    // Navigation properties - Project est maintenant l'entité racine
+    public virtual ICollection<Epic> Epics { get; set; } = new List<Epic>();
     public virtual ICollection<Feature> Features { get; set; } = new List<Feature>();
 }

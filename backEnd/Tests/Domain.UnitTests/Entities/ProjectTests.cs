@@ -1,11 +1,12 @@
 using Domain.Entities;
-using Xunit;
+using FluentAssertions;
 
 namespace Domain.UnitTests.Entities;
 
+[TestFixture]
 public class ProjectTests
 {
-    [Fact]
+    [Test]
     public void Project_ShouldBeCreated_WithValidData()
     {
         // Arrange
@@ -24,9 +25,9 @@ public class ProjectTests
         };
 
         // Assert
-        Assert.Equal(name, project.Name);
-        Assert.Equal(description, project.Description);
-        Assert.Equal(color, project.Color);
-        Assert.Equal("system", project.CreatedBy);
+        project.Name.Should().Be(name);
+        project.Description.Should().Be(description);
+        project.Color.Should().Be(color);
+        project.CreatedBy.Should().Be("system");
     }
 }

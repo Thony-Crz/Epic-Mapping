@@ -6,6 +6,7 @@ public class Scenario
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string AcceptanceCriteria { get; set; } = string.Empty;
+    public ScenarioType Type { get; set; } = ScenarioType.Grey;
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
     public string CreatedBy { get; set; } = string.Empty;
