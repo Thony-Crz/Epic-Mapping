@@ -1,3 +1,6 @@
+[![.NET](https://github.com/Thony-Crz/Epic-Mapping/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/Thony-Crz/Epic-Mapping/actions/workflows/dotnet.yml)
+
+
 <div align="center">
   <img src="logo.svg" alt="Epic Mapping Logo" width="300"/>
   <h1>🧭 Epic Mapping - Example Mapping + Intégration Azure DevOps</h1>
