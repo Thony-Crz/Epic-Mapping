@@ -40,6 +40,7 @@ Elle est **autonome**, ne nécessite pas d'installation dans Azure DevOps, et fo
 - ⏳ Authentification et autorisation
 - ⏳ Persistance base de données
 - ⏳ Tests d'intégration backend/frontend
+- ajouter une fonctionnalité qui permet de faire des sessions d'exemple mapping times
 
 ## 🗺️ Règles de correspondance
 
