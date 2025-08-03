@@ -1,6 +1,7 @@
 using MediatR;
 using Domain.Entities;
 using Domain.Interfaces;
+using Application.Common.Validators;
 
 namespace Application.Projects;
 
@@ -15,11 +16,17 @@ public class CreateProjectHandler : IRequestHandler<CreateProject, CreateProject
 
     public async Task<CreateProjectResult> Handle(CreateProject request, CancellationToken cancellationToken)
     {
-        // Validation
+        // Validation du nom
         if (string.IsNullOrWhiteSpace(request.Name))
         {
             throw new ArgumentException("Name is required", nameof(request.Name));
         }
+
+        // Validation de la couleur hexadécimale
+        HexColorValidator.Validate(request.Color, nameof(request.Color));
+
+        // Validation contre les injections malveillantes
+        SecurityValidator.Validate(request.Description, nameof(request.Description));
 
         var project = new Project
         {
