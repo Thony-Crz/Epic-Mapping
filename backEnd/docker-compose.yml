@@ -45,6 +45,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=EPICMAPPING;Username=epicmapping_user;Password=epicmapping_password;Port=5432
+      - JWT_SECRET_KEY=CECI_EST_UNE_CLE_SECRETE_POUR_JWT_AU_MOINS_32_CARACTERES_LONG
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -55,11 +56,11 @@ services:
       - epicmapping-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "dotnet --version > /dev/null || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/api/Database/health || exit 1"]
       interval: 30s
       timeout: 10s
-      retries: 3
-      start_period: 60s
+      retries: 5
+      start_period: 90s
 
 volumes:
   postgres_data:

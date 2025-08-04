@@ -33,5 +33,9 @@ RUN dotnet publish "EpicMapping.WebApi.csproj" -c $BUILD_CONFIGURATION -o /app/p
 # Image finale
 FROM base AS final
 WORKDIR /app
+
+# Installation de curl pour les health checks
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "EpicMapping.WebApi.dll"]
