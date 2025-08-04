@@ -24,6 +24,17 @@
 - 🔧 **API**: http://localhost:8080
 - 🏥 **Health Check**: http://localhost:8080/api/Database/health
 
+## 📚 Documentation
+
+👀 **[Consultez la documentation complète dans /Docs/](./Docs/README.md)**
+
+| Guide | Description |
+|-------|-------------|
+| [**Guide de développement**](./Docs/DEVELOPMENT-ENVIRONMENT.md) | 🌟 Démarrage environnement complet |
+| [**Guide Docker**](./Docs/README-DOCKER.md) | 🐳 Configuration Docker avancée |
+| [**Architecture**](./Docs/ARCHITECTURE.md) | 🏗️ Structure DDD du code |
+| [**Sécurité**](./Docs/SECURITY.md) | 🔒 Bonnes pratiques sécurité |
+
 ## 🎯 Objectif
 
 Cette application web permet de **modéliser des User Story Maps à l'aide de l'Example Mapping**, et de **générer automatiquement l'arborescence correspondante (Epic, Features, Scenarios) dans un backlog Azure DevOps** une fois le travail d'analyse complété.
