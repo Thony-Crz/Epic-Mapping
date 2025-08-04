@@ -22,7 +22,7 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin123
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     ports:
-      - "8080:80"
+      - "8082:80"
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     networks:

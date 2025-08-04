@@ -139,7 +139,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Epic Mapping API V1");
-        c.RoutePrefix = string.Empty; // Makes Swagger available at the app's root
+        c.RoutePrefix = "swagger"; // Swagger disponible sur /swagger
     });
 }
 

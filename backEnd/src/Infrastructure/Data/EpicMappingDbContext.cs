@@ -26,6 +26,12 @@ public class EpicMappingDbContext : DbContext
             entity.Property(e => e.Title).IsRequired().HasMaxLength(200);
             entity.Property(e => e.Description).HasMaxLength(1000);
             entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.Status).HasConversion<string>();
+            
+            entity.HasOne(e => e.Project)
+                  .WithMany(p => p.Epics)
+                  .HasForeignKey(e => e.ProjectId)
+                  .OnDelete(DeleteBehavior.Cascade);
         });
 
         // Configuration des entités Project
@@ -35,24 +41,20 @@ public class EpicMappingDbContext : DbContext
             entity.Property(p => p.Name).IsRequired().HasMaxLength(200);
             entity.Property(p => p.Description).HasMaxLength(1000);
             entity.Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
-            
-            entity.HasOne(p => p.Epic)
-                  .WithMany(e => e.Projects)
-                  .HasForeignKey(p => p.EpicId)
-                  .OnDelete(DeleteBehavior.Cascade);
         });
 
         // Configuration des entités Feature
         modelBuilder.Entity<Feature>(entity =>
         {
             entity.HasKey(f => f.Id);
-            entity.Property(f => f.Name).IsRequired().HasMaxLength(200);
+            entity.Property(f => f.Title).IsRequired().HasMaxLength(200);
             entity.Property(f => f.Description).HasMaxLength(1000);
             entity.Property(f => f.CreatedBy).IsRequired().HasMaxLength(100);
+            entity.Property(f => f.Status).HasConversion<string>();
             
-            entity.HasOne(f => f.Project)
-                  .WithMany(p => p.Features)
-                  .HasForeignKey(f => f.ProjectId)
+            entity.HasOne(f => f.Epic)
+                  .WithMany(e => e.Features)
+                  .HasForeignKey(f => f.EpicId)
                   .OnDelete(DeleteBehavior.Cascade);
         });
 
@@ -64,6 +66,7 @@ public class EpicMappingDbContext : DbContext
             entity.Property(s => s.Description).HasMaxLength(1000);
             entity.Property(s => s.AcceptanceCriteria).HasMaxLength(2000);
             entity.Property(s => s.CreatedBy).IsRequired().HasMaxLength(100);
+            entity.Property(s => s.Type).HasConversion<string>();
             
             entity.HasOne(s => s.Feature)
                   .WithMany(f => f.Scenarios)
