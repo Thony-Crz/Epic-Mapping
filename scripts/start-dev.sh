@@ -104,7 +104,9 @@ docker run -d \
   --name epicmapping-api \
   --network backend_epicmapping-network \
   -p 8080:8080 \
-  -e "ConnectionStrings__DefaultConnection=Host=postgres;Database=EPICMAPPING;Username=epicmapping_user;Password=epicmapping_password;Port=5432" \
+  -p 8081:8081 \
+  -e "ASPNETCORE_ENVIRONMENT=Development" \
+  -e "ConnectionStrings__DefaultConnection=Host=epicmapping-postgres;Database=EPICMAPPING;Username=epicmapping_user;Password=epicmapping_password;Port=5432" \
   -e "JWT_SECRET_KEY=CECI_EST_UNE_CLE_SECRETE_POUR_JWT_AU_MOINS_32_CARACTERES_LONG" \
   epicmapping-api
 
