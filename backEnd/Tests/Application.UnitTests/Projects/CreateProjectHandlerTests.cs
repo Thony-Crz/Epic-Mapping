@@ -42,7 +42,7 @@ public class CreateProjectHandlerTests
         };
 
         _projectRepositoryMock
-            .Setup(r => r.CreateAsync(It.IsAny<Project>()))
+            .Setup(r => r.CreateAsync(It.IsAny<Project>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(savedProject);
 
         // Act
@@ -56,6 +56,6 @@ public class CreateProjectHandlerTests
         Assert.That(result.Project.Color, Is.EqualTo("#3B82F6"));
         Assert.That(result.Project.Id, Is.EqualTo(1));
 
-        _projectRepositoryMock.Verify(r => r.CreateAsync(It.IsAny<Project>()), Times.Once);
+        _projectRepositoryMock.Verify(r => r.CreateAsync(It.IsAny<Project>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 }

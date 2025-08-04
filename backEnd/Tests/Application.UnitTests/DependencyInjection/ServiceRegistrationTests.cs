@@ -11,16 +11,26 @@ namespace Application.UnitTests.DependencyInjection;
 // Fake repository pour les tests
 public class FakeProjectRepository : IProjectRepository
 {
-    public Task<Project> CreateAsync(Project project)
+    public Task<Project> CreateAsync(Project project, CancellationToken cancellationToken = default)
     {
         project.Id = 1; // Simuler un ID généré
         return Task.FromResult(project);
     }
     
-    public Task<Project?> GetByIdAsync(int id) => Task.FromResult<Project?>(null);
-    public Task<IEnumerable<Project>> GetAllAsync() => Task.FromResult(Enumerable.Empty<Project>());
-    public Task<Project> UpdateAsync(Project project) => Task.FromResult(project);
-    public Task DeleteAsync(int id) => Task.CompletedTask;
+    public Task<Project?> GetByIdAsync(int id, CancellationToken cancellationToken = default) 
+        => Task.FromResult<Project?>(null);
+    
+    public Task<IEnumerable<Project>> GetAllAsync(CancellationToken cancellationToken = default) 
+        => Task.FromResult(Enumerable.Empty<Project>());
+    
+    public Task<Project> UpdateAsync(Project project, CancellationToken cancellationToken = default) 
+        => Task.FromResult(project);
+    
+    public Task DeleteAsync(int id, CancellationToken cancellationToken = default) 
+        => Task.CompletedTask;
+    
+    public Task<bool> ExistsAsync(int id, CancellationToken cancellationToken = default) 
+        => Task.FromResult(false);
 }
 
 [TestFixture]
