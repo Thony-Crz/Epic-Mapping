@@ -6,6 +6,24 @@
   <h1>🧭 Epic Mapping - Example Mapping + Intégration Azure DevOps</h1>
 </div>
 
+## 🚀 Démarrage Rapide
+
+```bash
+# Démarrer l'environnement de développement complet
+./scripts/start-dev.sh
+
+# Vérifier l'état des services
+./scripts/check-dev.sh
+
+# Arrêter l'environnement
+./scripts/stop-dev.sh
+```
+
+**URLs disponibles :**
+- 🎨 **Frontend**: http://localhost:5173
+- 🔧 **API**: http://localhost:8080
+- 🏥 **Health Check**: http://localhost:8080/api/Database/health
+
 ## 🎯 Objectif
 
 Cette application web permet de **modéliser des User Story Maps à l'aide de l'Example Mapping**, et de **générer automatiquement l'arborescence correspondante (Epic, Features, Scenarios) dans un backlog Azure DevOps** une fois le travail d'analyse complété.

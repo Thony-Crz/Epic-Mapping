@@ -13,6 +13,12 @@ services:
     networks:
       - epicmapping-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U epicmapping_user -d EPICMAPPING"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -43,10 +49,17 @@ services:
       - "8080:8080"
       - "8081:8081"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     networks:
       - epicmapping-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "dotnet --version > /dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
 volumes:
   postgres_data:
