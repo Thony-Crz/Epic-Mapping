@@ -83,18 +83,25 @@
 			on:click={handleStartSession}
 			class="btn-start-session"
 		>
-			🕐 Démarrer une session
+			🕐 Démarrer une session (30 min)
 		</button>
+		<div class="session-info">
+			⚠️ Vous devez démarrer une session pour modifier les éléments
+		</div>
 	{:else}
 		<div class="session-active">
 			<div class="session-timer">
-				⏰ Session active: {timeDisplay}
+				<div class="timer-icon">⏰</div>
+				<div class="timer-content">
+					<div class="timer-label">Session active</div>
+					<div class="timer-display">{timeDisplay}</div>
+				</div>
 			</div>
 			<button
 				on:click={handleTerminateSession}
 				class="btn-terminate-session"
 			>
-				⏹️ Terminer la session
+				Terminer
 			</button>
 		</div>
 	{/if}
@@ -104,55 +111,135 @@
 	.session-controls {
 		display: flex;
 		align-items: center;
+		justify-content: space-between;
 		gap: 1rem;
-		padding: 1rem;
-		background: rgba(255, 255, 255, 0.9);
-		border-radius: 0.5rem;
-		border: 1px solid #e5e7eb;
-		margin-bottom: 1rem;
+		padding: 1.5rem;
+		background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+		border-radius: 1rem;
+		border: 2px solid #0ea5e9;
+		margin-bottom: 1.5rem;
+		box-shadow: 0 4px 20px rgba(14, 165, 233, 0.1);
 	}
 
 	.session-active {
 		display: flex;
 		align-items: center;
-		gap: 1rem;
+		justify-content: space-between;
 		width: 100%;
+		gap: 1rem;
 	}
 
 	.session-timer {
-		font-weight: 600;
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		background: white;
+		padding: 1rem 1.5rem;
+		border-radius: 0.75rem;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		border: 1px solid #e0f2fe;
+	}
+
+	.timer-icon {
+		font-size: 2rem;
+		animation: pulse 2s infinite;
+	}
+
+	@keyframes pulse {
+		0%, 100% {
+			transform: scale(1);
+		}
+		50% {
+			transform: scale(1.1);
+		}
+	}
+
+	.timer-content {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	.timer-label {
+		font-size: 0.875rem;
+		font-weight: 500;
+		color: #0369a1;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+	}
+
+	.timer-display {
+		font-size: 2rem;
+		font-weight: 700;
 		color: #059669;
-		font-size: 1.1rem;
+		font-family: 'Courier New', monospace;
+		text-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
+		animation: glow 2s ease-in-out infinite alternate;
+	}
+
+	@keyframes glow {
+		from {
+			text-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
+		}
+		to {
+			text-shadow: 0 2px 8px rgba(5, 150, 105, 0.4), 0 0 12px rgba(5, 150, 105, 0.2);
+		}
+	}
+
+	.session-info {
+		background: #fef3c7;
+		color: #92400e;
+		padding: 0.75rem 1rem;
+		border-radius: 0.5rem;
+		font-size: 0.875rem;
+		font-weight: 500;
+		border: 1px solid #fbbf24;
 	}
 
 	.btn-start-session {
-		background: #10b981;
+		background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+		color: white;
+		border: none;
+		padding: 1rem 2rem;
+		border-radius: 0.75rem;
+		font-weight: 600;
+		font-size: 1.1rem;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+		transform: translateY(0);
+	}
+
+	.btn-start-session:hover {
+		background: linear-gradient(135deg, #059669 0%, #047857 100%);
+		transform: translateY(-2px);
+		box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+	}
+
+	.btn-start-session:active {
+		transform: translateY(0);
+	}
+
+	.btn-terminate-session {
+		background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
 		color: white;
 		border: none;
 		padding: 0.75rem 1.5rem;
 		border-radius: 0.5rem;
 		font-weight: 600;
 		cursor: pointer;
-		transition: background-color 0.2s;
-	}
-
-	.btn-start-session:hover {
-		background: #059669;
-	}
-
-	.btn-terminate-session {
-		background: #ef4444;
-		color: white;
-		border: none;
-		padding: 0.5rem 1rem;
-		border-radius: 0.375rem;
-		font-weight: 500;
-		cursor: pointer;
-		transition: background-color 0.2s;
-		margin-left: auto;
+		transition: all 0.3s ease;
+		box-shadow: 0 2px 10px rgba(239, 68, 68, 0.3);
+		transform: translateY(0);
 	}
 
 	.btn-terminate-session:hover {
-		background: #dc2626;
+		background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+		transform: translateY(-1px);
+		box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+	}
+
+	.btn-terminate-session:active {
+		transform: translateY(0);
 	}
 </style>

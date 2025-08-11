@@ -1,4 +1,4 @@
-// src/routes/epic/[id]/__tests__/+page.test.ts
+// src/routes/epic/[id]/__tests__/page.test.ts
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { get } from 'svelte/store';

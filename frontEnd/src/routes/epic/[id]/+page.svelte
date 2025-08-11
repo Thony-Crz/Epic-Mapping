@@ -2,11 +2,6 @@
 	import { page } from '$app/stores';
 	import {
 		epicsDisplayStore,
-		updateFeature,
-		updateScenario,
-		updateEpicTitle,
-		updateFeatureStatus,
-		addScenarioToFeatureById,
 		reorderFeatures,
 		reorderScenarios,
 		deleteFeature,
@@ -21,6 +16,14 @@
 	import GreyCard from '$ui/components/cards/GreyCard.svelte';
 	import AddFeatureForm from '$ui/components/forms/AddFeatureForm.svelte';
 	import AddFeatureContentForm from '$ui/components/forms/AddFeatureContentForm.svelte';
+	import SessionControls from '$ui/components/SessionControls.svelte';
+	import { 
+		safeUpdateEpicTitle, 
+		safeUpdateFeature, 
+		safeUpdateFeatureStatus,
+		safeUpdateScenario,
+		safeAddScenarioToFeature
+	} from './sessionGuards';
 
 	$: id = $page.params.id;
 	$: epic = $epicsDisplayStore.find((e) => e.id === id);
@@ -46,31 +49,51 @@
 	// Effet réactif pour gérer les transitions automatiques de statut
 	// TODO: Implémenter la logique de transition automatique si nécessaire
 
-	function handleEpicTitleUpdate(newTitle: string) {
-		updateEpicTitle(id, newTitle);
+	async function handleEpicTitleUpdate(newTitle: string) {
+		try {
+			await safeUpdateEpicTitle(id, newTitle);
+		} catch (error) {
+			alert('Erreur: ' + (error as Error).message);
+		}
 	}
 
-	function handleFeatureUpdate(featureId: string, newTitle: string) {
-		updateFeature(id, featureId, newTitle);
+	async function handleFeatureUpdate(featureId: string, newTitle: string) {
+		try {
+			await safeUpdateFeature(id, featureId, newTitle);
+		} catch (error) {
+			alert('Erreur: ' + (error as Error).message);
+		}
 	}
 
-	function handleFeatureStatusUpdate(
+	async function handleFeatureStatusUpdate(
 		featureId: string,
 		newStatus: 'ready' | 'in-progress' | 'todo'
 	) {
-		updateFeatureStatus(id, featureId, newStatus);
+		try {
+			await safeUpdateFeatureStatus(id, featureId, newStatus);
+		} catch (error) {
+			alert('Erreur: ' + (error as Error).message);
+		}
 	}
 
-	function handleScenarioUpdate(featureId: string, scenarioIndex: number, newTitle: string) {
-		updateScenario(id, featureId, scenarioIndex, newTitle);
+	async function handleScenarioUpdate(featureId: string, scenarioIndex: number, newTitle: string) {
+		try {
+			await safeUpdateScenario(id, featureId, scenarioIndex, newTitle);
+		} catch (error) {
+			alert('Erreur: ' + (error as Error).message);
+		}
 	}
 
-	function handleAddScenario(
+	async function handleAddScenario(
 		featureId: string,
 		event: CustomEvent<{ title: string; type: 'green' | 'grey' }>
 	) {
-		const { title, type } = event.detail;
-		addScenarioToFeatureById(id, featureId, title, type);
+		try {
+			const { title, type } = event.detail;
+			await safeAddScenarioToFeature(id, featureId, title, type);
+		} catch (error) {
+			alert('Erreur: ' + (error as Error).message);
+		}
 	}
 
 	function handleDeleteFeature(featureId: string) {
@@ -156,6 +179,9 @@
 </script>
 
 {#if epic}
+	<!-- Contrôles de session avec belle horloge -->
+	<SessionControls />
+
 	<!-- Bouton de retour et sauvegarde -->
 	<div class="mb-6 flex items-center gap-4">
 		<button

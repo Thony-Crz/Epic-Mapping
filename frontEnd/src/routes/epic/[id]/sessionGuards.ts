@@ -2,7 +2,13 @@
 
 import { get } from 'svelte/store';
 import { sessionStore } from '../../../lib/stores/sessionStore';
-import { updateEpicTitle, updateFeature, addScenarioToFeatureById } from '../../../lib/stores/epicsStore';
+import { 
+	updateEpicTitle, 
+	updateFeature, 
+	updateFeatureStatus,
+	updateScenario,
+	addScenarioToFeatureById 
+} from '../../../lib/stores/epicsStore';
 
 /**
  * Vérifie qu'une session est active avant d'autoriser une modification
@@ -50,4 +56,37 @@ export async function safeAddScenarioToFeature(
 ): Promise<void> {
 	checkActiveSession();
 	addScenarioToFeatureById(epicId, featureId, title, type);
+}
+
+/**
+ * Met à jour le statut d'une feature seulement si une session est active
+ */
+export async function safeUpdateFeatureStatus(
+	epicId: string, 
+	featureId: string, 
+	newStatus: 'ready' | 'in-progress' | 'todo'
+): Promise<void> {
+	checkActiveSession();
+	try {
+		updateFeatureStatus(epicId, featureId, newStatus);
+	} catch (error) {
+		throw error;
+	}
+}
+
+/**
+ * Met à jour un scénario seulement si une session est active
+ */
+export async function safeUpdateScenario(
+	epicId: string, 
+	featureId: string, 
+	scenarioIndex: number, 
+	newTitle: string
+): Promise<void> {
+	checkActiveSession();
+	try {
+		updateScenario(epicId, featureId, scenarioIndex, newTitle);
+	} catch (error) {
+		throw error;
+	}
 }
