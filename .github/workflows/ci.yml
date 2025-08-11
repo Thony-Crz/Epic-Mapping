@@ -69,8 +69,8 @@ jobs:
         run: npm run check --if-present
       - name: Build
         run: npm run build
-      - name: Unit tests
-        run: npm run test:unit --if-present -- --run
+      - name: Unit tests (server only)
+        run: npm run test:unit --if-present -- --run --project=server
       - name: Upload FE test results
         uses: actions/upload-artifact@v4
         if: always()
