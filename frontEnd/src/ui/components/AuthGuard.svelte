@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { base } from '$app/paths';
 
 	let isReady = false;
 	let shouldShowContent = false;
@@ -26,15 +27,20 @@
 			console.log('🔐 Auth state after init:', currentAuth);
 			console.log('🔐 Is authenticated:', currentAuth.isAuthenticated);
 			console.log('🔐 Current route:', currentRoute);
+			console.log('🔐 Base path:', base);
 
 			if (!currentAuth.isAuthenticated && currentRoute !== '/login') {
 				console.log('🔐 Not authenticated, redirecting to login');
-				// Pas connecté et pas sur la page de login -> rediriger
-				await goto('/login', { replaceState: true });
+				// Utiliser le base path pour les redirections
+				const loginUrl = `${base}/login`;
+				console.log('🔐 Redirecting to:', loginUrl);
+				await goto(loginUrl, { replaceState: true });
 			} else if (currentAuth.isAuthenticated && currentRoute === '/login') {
 				console.log('🔐 Authenticated but on login page, redirecting to home');
-				// Connecté mais sur la page de login -> rediriger vers l'accueil
-				await goto('/', { replaceState: true });
+				// Utiliser le base path pour les redirections
+				const homeUrl = base || '/';
+				console.log('🔐 Redirecting to:', homeUrl);
+				await goto(homeUrl, { replaceState: true });
 			} else {
 				console.log('🔐 Auth state is correct, showing content');
 				// État correct -> afficher le contenu
@@ -56,10 +62,14 @@
 		const currentRoute = $page.route.id;
 
 		if (!currentAuth.isAuthenticated && currentRoute !== '/login' && shouldShowContent) {
-			goto('/login', { replaceState: true });
+			const loginUrl = `${base}/login`;
+			console.log('🔐 Reactive: Redirecting to login:', loginUrl);
+			goto(loginUrl, { replaceState: true });
 			shouldShowContent = false;
 		} else if (currentAuth.isAuthenticated && currentRoute === '/login' && shouldShowContent) {
-			goto('/', { replaceState: true });
+			const homeUrl = base || '/';
+			console.log('🔐 Reactive: Redirecting to home:', homeUrl);
+			goto(homeUrl, { replaceState: true });
 			shouldShowContent = false;
 		} else if (
 			(currentAuth.isAuthenticated && currentRoute !== '/login') ||

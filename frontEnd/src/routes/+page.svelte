@@ -4,6 +4,7 @@
 	import { projectsStore, loadProjects } from '$lib/stores/projectsStore';
 	import { serviceContainer } from '../services/ServiceContainer';
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 	import type { Epic } from '$domain/entities/Epic';
 	import type { Feature } from '$domain/entities/Feature';
 	import type { Scenario } from '$domain/entities/Scenario';
@@ -92,7 +93,9 @@
 	function handleNavigateToEpic(epicId: string) {
 		try {
 			console.log('🧭 Navigation vers épic:', epicId);
-			goto(`/epic/${epicId}`);
+			const epicUrl = `${base}/epic/${epicId}`;
+			console.log('🧭 URL complète:', epicUrl);
+			goto(epicUrl);
 		} catch (error) {
 			console.error('❌ Erreur de navigation:', error);
 		}

@@ -4,9 +4,19 @@
 	import Logo from '$ui/components/Logo.svelte';
 	import { authStore } from '$lib/stores/authStore';
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 
 	function handleLogout() {
+		console.log('🔐 Layout: Logout clicked');
 		authStore.logout();
+	}
+
+	function handleLoginClick() {
+		console.log('🔐 Layout: Login button clicked');
+		const loginUrl = `${base}/login`;
+		console.log('🔐 Layout: Navigating to:', loginUrl);
+		goto(loginUrl);
 	}
 </script>
 
@@ -45,6 +55,7 @@
 				{:else if $page.route.id !== '/login'}
 					<!-- Bouton d'authentification -->
 					<button
+						on:click={handleLoginClick}
 						class="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors duration-200 hover:bg-blue-700"
 					>
 						<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

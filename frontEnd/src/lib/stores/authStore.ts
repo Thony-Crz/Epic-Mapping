@@ -1,4 +1,6 @@
 import { writable } from 'svelte/store';
+import { goto } from '$app/navigation';
+import { base } from '$app/paths';
 
 export interface User {
 	id: string;
@@ -47,6 +49,12 @@ function createAuthStore() {
 
 			// Sauvegarder dans le localStorage pour persister la session
 			localStorage.setItem('auth', JSON.stringify({ isAuthenticated: true, user }));
+			
+			// Rediriger vers l'accueil après connexion
+			console.log('🔐 AuthStore: Login successful, redirecting to home');
+			const homeUrl = base || '/';
+			console.log('🔐 AuthStore: Redirecting to:', homeUrl);
+			goto(homeUrl);
 		},
 
 		// Connexion avec un provider externe (fake pour l'instant)
@@ -71,12 +79,20 @@ function createAuthStore() {
 
 			// Sauvegarder dans le localStorage
 			localStorage.setItem('auth', JSON.stringify({ isAuthenticated: true, user }));
+			
+			// Rediriger vers l'accueil après connexion
+			console.log('🔐 AuthStore: Provider login successful, redirecting to home');
+			const homeUrl = base || '/';
+			console.log('🔐 AuthStore: Redirecting to:', homeUrl);
+			goto(homeUrl);
 		},
 
 		// Déconnexion
 		logout: () => {
+			console.log('🔐 AuthStore: Logout requested');
 			set(initialState);
 			localStorage.removeItem('auth');
+			console.log('🔐 AuthStore: Logout complete, auth state reset');
 		},
 
 		// Initialiser l'état depuis le localStorage
