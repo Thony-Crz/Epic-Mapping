@@ -8,25 +8,46 @@
 	let shouldShowContent = false;
 
 	onMount(async () => {
-		// Initialiser l'authentification de manière synchrone
-		authStore.init();
+		console.log('🔐 AuthGuard: Starting initialization');
+		console.log('🔐 Current page route:', $page.route.id);
+		console.log('🔐 Current page URL:', $page.url.pathname);
+		
+		try {
+			// Initialiser l'authentification de manière synchrone
+			authStore.init();
+			
+			// Attendre une micro-tâche pour que le store se mette à jour
+			await new Promise(resolve => setTimeout(resolve, 0));
 
-		// Vérifier immédiatement l'état d'authentification
-		const currentAuth = $authStore;
-		const currentRoute = $page.route.id;
+			// Vérifier l'état d'authentification
+			const currentAuth = $authStore;
+			const currentRoute = $page.route.id;
+			
+			console.log('🔐 Auth state after init:', currentAuth);
+			console.log('🔐 Is authenticated:', currentAuth.isAuthenticated);
+			console.log('🔐 Current route:', currentRoute);
 
-		if (!currentAuth.isAuthenticated && currentRoute !== '/login') {
-			// Pas connecté et pas sur la page de login -> rediriger immédiatement
-			goto('/login', { replaceState: true });
-		} else if (currentAuth.isAuthenticated && currentRoute === '/login') {
-			// Connecté mais sur la page de login -> rediriger vers l'accueil
-			goto('/', { replaceState: true });
-		} else {
-			// État correct -> afficher le contenu
+			if (!currentAuth.isAuthenticated && currentRoute !== '/login') {
+				console.log('🔐 Not authenticated, redirecting to login');
+				// Pas connecté et pas sur la page de login -> rediriger
+				await goto('/login', { replaceState: true });
+			} else if (currentAuth.isAuthenticated && currentRoute === '/login') {
+				console.log('🔐 Authenticated but on login page, redirecting to home');
+				// Connecté mais sur la page de login -> rediriger vers l'accueil
+				await goto('/', { replaceState: true });
+			} else {
+				console.log('🔐 Auth state is correct, showing content');
+				// État correct -> afficher le contenu
+				shouldShowContent = true;
+			}
+		} catch (error) {
+			console.error('🔐 AuthGuard error:', error);
+			// En cas d'erreur, afficher quand même le contenu pour éviter un blocage
 			shouldShowContent = true;
 		}
 
 		isReady = true;
+		console.log('🔐 AuthGuard initialization complete, isReady:', true, 'shouldShowContent:', shouldShowContent);
 	});
 
 	// Réactions pour les changements d'état après l'initialisation

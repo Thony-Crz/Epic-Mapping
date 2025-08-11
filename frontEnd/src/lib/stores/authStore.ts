@@ -81,20 +81,30 @@ function createAuthStore() {
 
 		// Initialiser l'état depuis le localStorage
 		init: () => {
-			const stored = localStorage.getItem('auth');
-			if (stored) {
-				try {
+			console.log('🔐 AuthStore: Initializing...');
+			try {
+				const stored = localStorage.getItem('auth');
+				console.log('🔐 AuthStore: localStorage auth data:', stored);
+				
+				if (stored) {
 					const parsed = JSON.parse(stored);
+					console.log('🔐 AuthStore: Parsed auth data:', parsed);
+					
 					if (parsed.isAuthenticated && parsed.user) {
+						console.log('🔐 AuthStore: Restoring authenticated session for user:', parsed.user.email);
 						set({
 							isAuthenticated: true,
 							user: parsed.user,
 							loading: false
 						});
+					} else {
+						console.log('🔐 AuthStore: Invalid stored data, staying unauthenticated');
 					}
-				} catch (error) {
-					console.error("Erreur lors du parsing de l'auth depuis localStorage:", error);
+				} else {
+					console.log('🔐 AuthStore: No stored auth data found, user not authenticated');
 				}
+			} catch (error) {
+				console.error("🔐 AuthStore: Error parsing auth from localStorage:", error);
 			}
 		}
 	};
