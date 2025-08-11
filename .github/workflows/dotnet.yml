@@ -51,8 +51,8 @@ jobs:
         path: ./backEnd/TestResults/**/coverage.cobertura.xml
         retention-days: 30
 
-  # Job séparé pour vérifier la structure du frontend (optionnel)
-  frontend-check:
+  # Job pour valider le frontend (lint, build, tests)
+  frontend-validate:
     runs-on: ubuntu-latest
     
     defaults:
@@ -65,7 +65,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'
         cache: 'npm'
         cache-dependency-path: './frontEnd/package-lock.json'
         
@@ -73,10 +73,29 @@ jobs:
       run: npm ci
       
     - name: Lint
-      run: npm run lint --if-present
+      run: npm run lint
+      
+    - name: Type checking
+      run: npm run check
       
     - name: Build
-      run: npm run build --if-present
+      run: npm run build
       
-       # - name: Test
-         # run: npm test --if-present
+    - name: Run unit tests
+      run: npm run test:unit -- --run
+      
+    - name: Install Playwright browsers
+      run: npx playwright install --with-deps
+      
+    - name: Run E2E tests
+      run: npm run test:e2e
+      
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: frontend-test-results
+        path: |
+          ./frontEnd/test-results/
+          ./frontEnd/playwright-report/
+        retention-days: 30
