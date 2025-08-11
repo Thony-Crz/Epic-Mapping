@@ -4,7 +4,6 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { get } from 'svelte/store';
 import { sessionStore, startSession } from '../../../../lib/stores/sessionStore';
 import { safeUpdateEpicTitle, safeUpdateFeature } from '../sessionGuards';
-import { addNewEpic, addFeatureToEpic } from '../../../../lib/stores/epicsStore';
 import { createProject } from '../../../../lib/stores/projectsStore';
 import { serviceContainer } from '../../../../services/ServiceContainer';
 
@@ -16,7 +15,7 @@ describe('Epic Page with Session Guards', () => {
 		vi.useFakeTimers();
 		sessionStore.set(null); // Reset du store
 		vi.clearAllMocks();
-		
+
 		// Créer un projet et un epic pour les tests
 		await createProject({
 			id: 'project-1',
@@ -24,14 +23,14 @@ describe('Epic Page with Session Guards', () => {
 			description: 'Project for testing',
 			color: '#3B82F6'
 		});
-		
+
 		// Créer l'epic et récupérer son ID
 		const { epic } = await serviceContainer.getEpicService().createNewEpic({
 			title: 'Test Epic',
 			projectId: 'project-1'
 		});
 		epicId = epic.id;
-		
+
 		// Ajouter une feature et récupérer son ID
 		const { feature } = await serviceContainer.getEpicService().addFeature({
 			epicId: epic.id,
