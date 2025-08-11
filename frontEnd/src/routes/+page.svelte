@@ -30,6 +30,8 @@
 	onMount(async () => {
 		try {
 			console.log("🚀 Initialisation de l'application...");
+			console.log("🔍 Debug - Base URL:", window.location.href);
+			console.log("🔍 Debug - User Agent:", navigator.userAgent);
 
 			// Vider complètement le localStorage et réinitialiser toutes les données
 			await serviceContainer.clearAllData();
@@ -42,8 +44,11 @@
 			// Réinitialiser les données épics avec les nouvelles données d'exemple
 			serviceContainer.reinitializeEpicsData();
 			console.log('📝 Épics réinitialisées');
+			console.log('✅ Initialisation terminée avec succès');
 		} catch (error) {
 			console.error('❌ Erreur lors du chargement initial:', error);
+			console.error('❌ Stack trace:', error.stack);
+			// Ne pas faire de goto() en cas d'erreur, laisser l'app se charger quand même
 		}
 	});
 
@@ -75,9 +80,21 @@
 	async function handleArchiveEpic(epicId: string, event: Event) {
 		event.stopPropagation(); // Empêcher la navigation
 		try {
+			console.log('🗄️ Archivage de l\'épic:', epicId);
 			await archiveEpic(epicId);
+			console.log('✅ Épic archivée avec succès');
 		} catch (error) {
-			console.error("Erreur lors de l'archivage:", error);
+			console.error("❌ Erreur lors de l'archivage:", error);
+		}
+	}
+
+	// Fonction de navigation sécurisée
+	function handleNavigateToEpic(epicId: string) {
+		try {
+			console.log('🧭 Navigation vers épic:', epicId);
+			goto(`/epic/${epicId}`);
+		} catch (error) {
+			console.error('❌ Erreur de navigation:', error);
 		}
 	}
 
@@ -304,7 +321,7 @@
 						{#each projectReadyEpics as card (card.id)}
 							<div class="relative">
 								<button
-									on:click={() => goto(`/epic/${card.id}`)}
+									on:click={() => handleNavigateToEpic(card.id)}
 									class="post-it-card w-60 rotate-1 transform cursor-pointer rounded-lg border-l-4 border-green-500 bg-green-200 p-4 text-green-900 shadow-lg transition-all duration-300 hover:scale-105 hover:rotate-0 hover:bg-green-100"
 									style="box-shadow: 4px 4px 8px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.5);"
 								>
@@ -347,7 +364,7 @@
 						{#each projectOpenEpics as card (card.id)}
 							<div class="relative">
 								<button
-									on:click={() => goto(`/epic/${card.id}`)}
+									on:click={() => handleNavigateToEpic(card.id)}
 									class="post-it-card w-60 -rotate-1 transform cursor-pointer rounded-lg border-l-4 border-blue-500 bg-blue-200 p-4 text-blue-900 shadow-lg transition-all duration-300 hover:scale-105 hover:rotate-0 hover:bg-blue-100"
 									style="box-shadow: 4px 4px 8px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.5);"
 								>
@@ -389,7 +406,7 @@
 					<div class="flex flex-wrap gap-4">
 						{#each projectArchivedEpics as card (card.id)}
 							<button
-								on:click={() => goto(`/epic/${card.id}`)}
+								on:click={() => handleNavigateToEpic(card.id)}
 								class="post-it-card w-60 rotate-2 transform cursor-pointer rounded-lg border-l-4 border-gray-500 bg-gray-200 p-4 text-gray-700 opacity-75 shadow-lg transition-all duration-300 hover:scale-105 hover:rotate-0 hover:bg-gray-100 hover:opacity-100"
 								style="box-shadow: 4px 4px 8px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.5);"
 							>
