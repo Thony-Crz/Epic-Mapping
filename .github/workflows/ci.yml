@@ -106,6 +106,8 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
       - name: Copy index.html to 404.html for SPA routing
         run: cp build/index.html build/404.html
+      - name: Add .nojekyll file to disable Jekyll processing
+        run: touch build/.nojekyll
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact
