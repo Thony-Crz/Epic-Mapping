@@ -1,5 +1,4 @@
-[![.NET](https://github.com/Thony-Crz/Epic-Mapping/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/Thony-Crz/Epic-Mapping/actions/workflows/dotnet.yml)
-
+[![CI/CD Pipeline](https://github.com/Thony-Crz/Epic-Mapping/actions/workflows/ci.yml/badge.svg)](https://github.com/Thony-Crz/Epic-Mapping/actions/workflows/ci.yml)
 
 <div align="center">
   <img src="logo.svg" alt="Epic Mapping Logo" width="300"/>
