@@ -4,12 +4,40 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { get } from 'svelte/store';
 import { sessionStore, startSession } from '../../../../lib/stores/sessionStore';
 import { safeUpdateEpicTitle, safeUpdateFeature } from '../sessionGuards';
+import { addNewEpic, addFeatureToEpic } from '../../../../lib/stores/epicsStore';
+import { createProject } from '../../../../lib/stores/projectsStore';
+import { serviceContainer } from '../../../../services/ServiceContainer';
 
 describe('Epic Page with Session Guards', () => {
-	beforeEach(() => {
+	let epicId: string;
+	let featureId: string;
+
+	beforeEach(async () => {
 		vi.useFakeTimers();
 		sessionStore.set(null); // Reset du store
 		vi.clearAllMocks();
+		
+		// Créer un projet et un epic pour les tests
+		await createProject({
+			id: 'project-1',
+			name: 'Test Project',
+			description: 'Project for testing',
+			color: '#3B82F6'
+		});
+		
+		// Créer l'epic et récupérer son ID
+		const { epic } = await serviceContainer.getEpicService().createNewEpic({
+			title: 'Test Epic',
+			projectId: 'project-1'
+		});
+		epicId = epic.id;
+		
+		// Ajouter une feature et récupérer son ID
+		const { feature } = await serviceContainer.getEpicService().addFeature({
+			epicId: epic.id,
+			title: 'Test Feature'
+		});
+		featureId = feature.id;
 	});
 
 	afterEach(() => {
@@ -22,7 +50,7 @@ describe('Epic Page with Session Guards', () => {
 		expect(session).toBeNull();
 
 		// Act & Assert - Tenter de modifier le titre doit lever une erreur
-		await expect(safeUpdateEpicTitle('epic-1', 'New Title')).rejects.toThrow(
+		await expect(safeUpdateEpicTitle(epicId, 'New Title')).rejects.toThrow(
 			'Cannot modify epic: no active session'
 		);
 	});
@@ -34,7 +62,7 @@ describe('Epic Page with Session Guards', () => {
 		expect(session?.isActive()).toBe(true);
 
 		// Act - Modifier le titre ne doit pas lever d'erreur
-		await expect(safeUpdateEpicTitle('epic-1', 'New Title')).resolves.not.toThrow();
+		await expect(safeUpdateEpicTitle(epicId, 'New Title')).resolves.not.toThrow();
 	});
 
 	it('should prevent feature update when session expires', async () => {
@@ -49,7 +77,7 @@ describe('Epic Page with Session Guards', () => {
 		expect(session?.isActive()).toBe(false);
 
 		// Assert - La modification doit être empêchée
-		await expect(safeUpdateFeature('epic-1', 'feature-1', 'New Feature Title')).rejects.toThrow(
+		await expect(safeUpdateFeature(epicId, featureId, 'New Feature Title')).rejects.toThrow(
 			'Cannot modify epic: no active session'
 		);
 	});
