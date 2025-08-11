@@ -1,6 +1,3 @@
-# This workflow will build and test the Epic-Mapping project (Backend .NET + Frontend)
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
 name: CI/CD Pipeline
 
 on:
@@ -9,89 +6,111 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
-    # Définir le répertoire de travail pour toutes les étapes
     defaults:
       run:
         working-directory: ./backEnd
-
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 9.0.x
-        
-    - name: Restore dependencies
-      run: dotnet restore EpicMapping.sln
-      
-    - name: Build
-      run: dotnet build EpicMapping.sln --no-restore --configuration Release
-      
-    - name: Test
-      run: dotnet test EpicMapping.sln --no-build --verbosity normal --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
-      
-    - name: Upload test results
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: test-results
-        path: ./backEnd/TestResults
-        retention-days: 30
-        
-    - name: Upload code coverage
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: code-coverage
-        path: ./backEnd/TestResults/**/coverage.cobertura.xml
-        retention-days: 30
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - name: Restore dependencies
+        run: dotnet restore EpicMapping.sln
+      - name: Build
+        run: dotnet build EpicMapping.sln --no-restore --configuration Release
+      - name: Test
+        run: dotnet test EpicMapping.sln --no-build --verbosity normal --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: ./backEnd/TestResults
+          retention-days: 30
+      - name: Upload code coverage
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: code-coverage
+          path: ./backEnd/TestResults/**/coverage.cobertura.xml
+          retention-days: 30
 
-  # Job pour valider le frontend (lint, build, tests)
   frontend-validate:
     runs-on: ubuntu-latest
-    
     defaults:
       run:
         working-directory: ./frontEnd
-
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'npm'
-        cache-dependency-path: './frontEnd/package-lock.json'
-        
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Install Playwright browsers (for Vitest browser tests)
-      run: npx playwright install chromium
-      
-    - name: Lint
-      run: npm run lint
-      
-    - name: Type checking
-      run: npm run check
-      
-    - name: Build
-      run: npm run build
-      
-    - name: Run unit tests
-      run: npm run test:unit -- --run
-      
-    - name: Upload test results
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: frontend-test-results
-        path: |
-          ./frontEnd/test-results/
-        retention-days: 30
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: './frontEnd/package-lock.json'
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint
+        run: npm run lint --if-present
+      - name: Type check
+        run: npm run check --if-present
+      - name: Build
+        run: npm run build
+      - name: Unit tests
+        run: npm run test:unit --if-present -- --run
+      - name: Upload FE test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frontend-test-results
+          path: ./frontEnd/test-results/
+          retention-days: 30
+
+  deploy-frontend-prod:
+    if: github.event_name == 'push'
+    needs: [frontend-validate]
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.page_url }}
+    defaults:
+      run:
+        working-directory: ./frontEnd
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: './frontEnd/package-lock.json'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build SvelteKit
+        run: npm run build
+      - name: SPA fallback & .nojekyll
+        run: |
+          cp build/index.html build/404.html || true
+          touch build/.nojekyll
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./frontEnd/build
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
