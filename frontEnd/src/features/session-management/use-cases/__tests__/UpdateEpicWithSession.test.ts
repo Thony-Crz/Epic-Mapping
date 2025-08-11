@@ -54,14 +54,16 @@ describe('UpdateEpicWithSession', () => {
 	it('should throw error when session is not active', async () => {
 		// Arrange
 		const inactiveSession = Session.create(30).terminate();
-		
+
 		const updateEpicWithSession = new UpdateEpicWithSession(mockEpicRepository);
 
 		// Act & Assert
-		await expect(updateEpicWithSession.execute({
-			epicId: 'epic-1',
-			title: 'Updated Title',
-			session: inactiveSession
-		})).rejects.toThrow('Cannot modify epic: session is not active');
+		await expect(
+			updateEpicWithSession.execute({
+				epicId: 'epic-1',
+				title: 'Updated Title',
+				session: inactiveSession
+			})
+		).rejects.toThrow('Cannot modify epic: session is not active');
 	});
 });

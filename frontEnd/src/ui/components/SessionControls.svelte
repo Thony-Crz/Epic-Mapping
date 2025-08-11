@@ -44,7 +44,7 @@
 	// Démarrer une session
 	function handleStartSession() {
 		let duration = selectedDuration;
-		
+
 		// Si l'option personnalisée est sélectionnée, utiliser la valeur saisie
 		if (selectedDuration === 'custom') {
 			const customValue = parseInt(customDuration);
@@ -54,7 +54,7 @@
 			}
 			duration = customValue;
 		}
-		
+
 		startSession(duration);
 		startTimer();
 	}
@@ -109,7 +109,7 @@
 	}
 
 	// Réactivité pour l'affichage du champ personnalisé
-	$: handleDurationChange(), selectedDuration;
+	$: if (selectedDuration) handleDurationChange();
 </script>
 
 <div class="session-controls">
@@ -117,16 +117,12 @@
 		<div class="session-config">
 			<div class="duration-selector">
 				<label for="duration-select" class="duration-label">Durée de la session :</label>
-				<select 
-					id="duration-select"
-					bind:value={selectedDuration}
-					class="duration-select"
-				>
-					{#each durationOptions as option}
+				<select id="duration-select" bind:value={selectedDuration} class="duration-select">
+					{#each durationOptions as option (option.value)}
 						<option value={option.value}>{option.label}</option>
 					{/each}
 				</select>
-				
+
 				{#if showCustomInput}
 					<div class="custom-duration">
 						<input
@@ -141,18 +137,13 @@
 					</div>
 				{/if}
 			</div>
-			
-			<button
-				on:click={handleStartSession}
-				class="btn-start-session"
-			>
+
+			<button on:click={handleStartSession} class="btn-start-session">
 				🕐 Démarrer la session
 			</button>
 		</div>
-		
-		<div class="session-info">
-			⚠️ Vous devez démarrer une session pour modifier les éléments
-		</div>
+
+		<div class="session-info">⚠️ Vous devez démarrer une session pour modifier les éléments</div>
 	{:else}
 		<div class="session-active">
 			<div class="session-timer">
@@ -162,12 +153,7 @@
 					<div class="timer-display">{timeDisplay}</div>
 				</div>
 			</div>
-			<button
-				on:click={handleTerminateSession}
-				class="btn-terminate-session"
-			>
-				Terminer
-			</button>
+			<button on:click={handleTerminateSession} class="btn-terminate-session"> Terminer </button>
 		</div>
 	{/if}
 </div>
@@ -288,7 +274,8 @@
 	}
 
 	@keyframes pulse {
-		0%, 100% {
+		0%,
+		100% {
 			transform: scale(1);
 		}
 		50% {
@@ -324,7 +311,9 @@
 			text-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
 		}
 		to {
-			text-shadow: 0 2px 8px rgba(5, 150, 105, 0.4), 0 0 12px rgba(5, 150, 105, 0.2);
+			text-shadow:
+				0 2px 8px rgba(5, 150, 105, 0.4),
+				0 0 12px rgba(5, 150, 105, 0.2);
 		}
 	}
 

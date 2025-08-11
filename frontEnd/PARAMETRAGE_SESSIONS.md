@@ -9,7 +9,7 @@ Le composant `SessionControls` permet maintenant de configurer la durée des ses
 1. **Durées prédéfinies** :
    - 15 minutes
    - 30 minutes (par défaut)
-   - 45 minutes  
+   - 45 minutes
    - 1 heure (60 minutes)
 
 2. **Durée personnalisée** :
@@ -45,6 +45,7 @@ Le composant `SessionControls` permet maintenant de configurer la durée des ses
 ### Architecture technique
 
 Le système utilise :
+
 - **Store Svelte** (`sessionStore`) pour la gestion d'état
 - **Entité Session** pour la logique métier
 - **Composant SessionControls** pour l'interface utilisateur
@@ -53,6 +54,7 @@ Le système utilise :
 ### Tests
 
 Tous les scénarios sont couverts par des tests automatisés :
+
 - Création de session avec durée par défaut
 - Création de session avec durées personnalisées (15, 45, 75 minutes)
 - Validation des valeurs

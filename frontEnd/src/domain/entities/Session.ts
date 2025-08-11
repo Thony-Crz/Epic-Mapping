@@ -13,7 +13,7 @@ export class Session {
 	static create(durationInMinutes: number = 30): Session {
 		const id = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 		const startTime = Date.now();
-		
+
 		return new Session({
 			id,
 			startTime,
@@ -34,11 +34,11 @@ export class Session {
 		if (!this.props.isActive) {
 			return false;
 		}
-		
+
 		const now = Date.now();
 		const elapsedTime = now - this.props.startTime;
 		const durationInMs = this.props.durationInMinutes * 60 * 1000;
-		
+
 		return elapsedTime < durationInMs;
 	}
 
@@ -50,12 +50,12 @@ export class Session {
 		if (!this.props.isActive) {
 			return 0;
 		}
-		
+
 		const now = Date.now();
 		const elapsedTime = now - this.props.startTime;
 		const durationInMs = this.props.durationInMinutes * 60 * 1000;
 		const remaining = durationInMs - elapsedTime;
-		
+
 		return Math.max(0, remaining);
 	}
 

@@ -17,9 +17,9 @@
 	import AddFeatureForm from '$ui/components/forms/AddFeatureForm.svelte';
 	import AddFeatureContentForm from '$ui/components/forms/AddFeatureContentForm.svelte';
 	import SessionControls from '$ui/components/SessionControls.svelte';
-	import { 
-		safeUpdateEpicTitle, 
-		safeUpdateFeature, 
+	import {
+		safeUpdateEpicTitle,
+		safeUpdateFeature,
 		safeUpdateFeatureStatus,
 		safeUpdateScenario,
 		safeAddScenarioToFeature

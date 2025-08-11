@@ -20,7 +20,7 @@ describe('SessionStore', () => {
 
 	it('should start a new session', () => {
 		startSession(30);
-		
+
 		const session = get(sessionStore);
 		expect(session).not.toBeNull();
 		expect(session?.isActive()).toBe(true);
@@ -39,10 +39,10 @@ describe('SessionStore', () => {
 
 	it('should check if session is active with helper function', () => {
 		expect(isSessionActive()).toBe(false);
-		
+
 		startSession(30);
 		expect(isSessionActive()).toBe(true);
-		
+
 		terminateSession();
 		expect(isSessionActive()).toBe(false);
 	});

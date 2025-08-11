@@ -2,7 +2,7 @@
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { get } from 'svelte/store';
-import { sessionStore, startSession, terminateSession } from '../../../../lib/stores/sessionStore';
+import { sessionStore, startSession } from '../../../../lib/stores/sessionStore';
 import { safeUpdateEpicTitle, safeUpdateFeature } from '../sessionGuards';
 
 describe('Epic Page with Session Guards', () => {
@@ -22,7 +22,9 @@ describe('Epic Page with Session Guards', () => {
 		expect(session).toBeNull();
 
 		// Act & Assert - Tenter de modifier le titre doit lever une erreur
-		await expect(safeUpdateEpicTitle('epic-1', 'New Title')).rejects.toThrow('Cannot modify epic: no active session');
+		await expect(safeUpdateEpicTitle('epic-1', 'New Title')).rejects.toThrow(
+			'Cannot modify epic: no active session'
+		);
 	});
 
 	it('should allow epic title update when session is active', async () => {
@@ -47,6 +49,8 @@ describe('Epic Page with Session Guards', () => {
 		expect(session?.isActive()).toBe(false);
 
 		// Assert - La modification doit être empêchée
-		await expect(safeUpdateFeature('epic-1', 'feature-1', 'New Feature Title')).rejects.toThrow('Cannot modify epic: no active session');
+		await expect(safeUpdateFeature('epic-1', 'feature-1', 'New Feature Title')).rejects.toThrow(
+			'Cannot modify epic: no active session'
+		);
 	});
 });

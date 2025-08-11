@@ -2,12 +2,12 @@
 
 import { get } from 'svelte/store';
 import { sessionStore } from '../../../lib/stores/sessionStore';
-import { 
-	updateEpicTitle, 
-	updateFeature, 
+import {
+	updateEpicTitle,
+	updateFeature,
 	updateFeatureStatus,
 	updateScenario,
-	addScenarioToFeatureById 
+	addScenarioToFeatureById
 } from '../../../lib/stores/epicsStore';
 
 /**
@@ -25,33 +25,28 @@ function checkActiveSession(): void {
  */
 export async function safeUpdateEpicTitle(epicId: string, newTitle: string): Promise<void> {
 	checkActiveSession();
-	try {
-		updateEpicTitle(epicId, newTitle);
-	} catch (error) {
-		// L'erreur sera gérée par l'appelant - nous avons juste vérifié la session
-		throw error;
-	}
+	updateEpicTitle(epicId, newTitle);
 }
 
 /**
  * Met à jour une feature seulement si une session est active
  */
-export async function safeUpdateFeature(epicId: string, featureId: string, newTitle: string): Promise<void> {
+export async function safeUpdateFeature(
+	epicId: string,
+	featureId: string,
+	newTitle: string
+): Promise<void> {
 	checkActiveSession();
-	try {
-		updateFeature(epicId, featureId, newTitle);
-	} catch (error) {
-		throw error;
-	}
+	updateFeature(epicId, featureId, newTitle);
 }
 
 /**
  * Ajoute un scénario à une feature seulement si une session est active
  */
 export async function safeAddScenarioToFeature(
-	epicId: string, 
-	featureId: string, 
-	title: string, 
+	epicId: string,
+	featureId: string,
+	title: string,
 	type: 'green' | 'grey'
 ): Promise<void> {
 	checkActiveSession();
@@ -62,31 +57,23 @@ export async function safeAddScenarioToFeature(
  * Met à jour le statut d'une feature seulement si une session est active
  */
 export async function safeUpdateFeatureStatus(
-	epicId: string, 
-	featureId: string, 
+	epicId: string,
+	featureId: string,
 	newStatus: 'ready' | 'in-progress' | 'todo'
 ): Promise<void> {
 	checkActiveSession();
-	try {
-		updateFeatureStatus(epicId, featureId, newStatus);
-	} catch (error) {
-		throw error;
-	}
+	updateFeatureStatus(epicId, featureId, newStatus);
 }
 
 /**
  * Met à jour un scénario seulement si une session est active
  */
 export async function safeUpdateScenario(
-	epicId: string, 
-	featureId: string, 
-	scenarioIndex: number, 
+	epicId: string,
+	featureId: string,
+	scenarioIndex: number,
 	newTitle: string
 ): Promise<void> {
 	checkActiveSession();
-	try {
-		updateScenario(epicId, featureId, scenarioIndex, newTitle);
-	} catch (error) {
-		throw error;
-	}
+	updateScenario(epicId, featureId, scenarioIndex, newTitle);
 }

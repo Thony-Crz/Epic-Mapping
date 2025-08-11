@@ -18,7 +18,7 @@ export function startSession(durationInMinutes: number = 30): void {
  * Termine la session courante
  */
 export function terminateSession(): void {
-	sessionStore.update(currentSession => {
+	sessionStore.update((currentSession) => {
 		if (currentSession) {
 			return currentSession.terminate();
 		}
@@ -31,7 +31,7 @@ export function terminateSession(): void {
  */
 export function isSessionActive(): boolean {
 	let isActive = false;
-	sessionStore.subscribe(session => {
+	sessionStore.subscribe((session) => {
 		isActive = session?.isActive() ?? false;
 	})();
 	return isActive;
