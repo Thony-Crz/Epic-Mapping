@@ -13,16 +13,18 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
-		// Génère un fallback 404.html pour la navigation client-side
-		adapter: adapter({ fallback: '404.html' }),
+		// Configuration SPA pour GitHub Pages
+		adapter: adapter({
+			fallback: 'index.html' // SPA fallback
+		}),
 		// IMPORTANT: base vide pour site user/org, sinon "/REPO" pour project pages
 		paths: {
 			base: isDev ? '' : repo ? `/${repo}` : ''
 			// si ton site est https://USERNAME.github.io/REPO => base = "/REPO"
 			// si ton site est https://USERNAME.github.io        => base = ""
 		},
-		// Tout est statique (SvelteKit générera build/)
-		prerender: { entries: ['*'] },
+		// Tout est statique (SPA mode - pas de prerender avec fallback)
+		// prerender: { entries: ['*'] },
 		alias: {
 			$ui: path.resolve('./src/ui')
 		}
