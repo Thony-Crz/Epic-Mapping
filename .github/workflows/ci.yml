@@ -101,10 +101,6 @@ jobs:
         run: npm ci
       - name: Build SvelteKit
         run: npm run build
-      - name: SPA fallback & .nojekyll
-        run: |
-          cp build/index.html build/404.html || true
-          touch build/.nojekyll
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact

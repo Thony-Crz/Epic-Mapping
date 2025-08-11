@@ -2,8 +2,9 @@ import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import path from 'path';
 
-const dev = process.argv.includes('dev');
-const repoName = process.env.GITHUB_REPOSITORY?.split('/')[1] || '';
+const isDev = process.argv.includes('dev');
+// Nom du repo pour Pages de type "Project": https://USERNAME.github.io/REPO
+const repo = process.env.GITHUB_REPOSITORY?.split('/')[1] ?? '';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -12,13 +13,16 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
-		// adapter-static pour GitHub Pages
-		adapter: adapter({
-			fallback: 'index.html' // Mode SPA pour GitHub Pages
-		}),
+		// Génère un fallback 404.html pour la navigation client-side
+		adapter: adapter({ fallback: '404.html' }),
+		// IMPORTANT: base vide pour site user/org, sinon "/REPO" pour project pages
 		paths: {
-			base: dev || !repoName ? '' : `/${repoName}`
+			base: isDev ? '' : (repo ? `/${repo}` : '')
+			// si ton site est https://USERNAME.github.io/REPO => base = "/REPO"
+			// si ton site est https://USERNAME.github.io        => base = ""
 		},
+		// Tout est statique (SvelteKit générera build/)
+		prerender: { entries: ['*'] },
 		alias: {
 			$ui: path.resolve('./src/ui')
 		}
