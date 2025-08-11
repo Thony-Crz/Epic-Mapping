@@ -1,5 +1,7 @@
 [![CI/CD Pipeline](https://github.com/Thony-Crz/Epic-Mapping/actions/workflows/ci.yml/badge.svg)](https://github.com/Thony-Crz/Epic-Mapping/actions/workflows/ci.yml)
 
+[Recette-Front](https://thony-crz.github.io/Epic-Mapping/)
+
 <div align="center">
   <img src="logo.svg" alt="Epic Mapping Logo" width="300"/>
   <h1>🧭 Epic Mapping - Example Mapping + Intégration Azure DevOps</h1>
