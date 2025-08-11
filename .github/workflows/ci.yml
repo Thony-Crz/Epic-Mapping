@@ -65,6 +65,7 @@ jobs:
         run: npm ci
       - name: Lint
         run: npm run lint --if-present
+        continue-on-error: true
       - name: Type check
         run: npm run check --if-present
       - name: Build

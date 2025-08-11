@@ -17,7 +17,7 @@ const config = {
 		adapter: adapter({ fallback: '404.html' }),
 		// IMPORTANT: base vide pour site user/org, sinon "/REPO" pour project pages
 		paths: {
-			base: isDev ? '' : (repo ? `/${repo}` : '')
+			base: isDev ? '' : repo ? `/${repo}` : ''
 			// si ton site est https://USERNAME.github.io/REPO => base = "/REPO"
 			// si ton site est https://USERNAME.github.io        => base = ""
 		},
