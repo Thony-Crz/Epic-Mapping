@@ -84,8 +84,12 @@ jobs:
     if: github.event_name == 'push'
     needs: [frontend-validate]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     environment:
-      name: production
+      name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     defaults:
       run:
