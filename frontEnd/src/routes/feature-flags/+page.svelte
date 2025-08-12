@@ -14,10 +14,6 @@
 	function goToHome() {
 		goto(`${base}/`);
 	}
-
-	function goToDemo() {
-		goto(`${base}/epic-demo`);
-	}
 </script>
 
 <svelte:head>
@@ -29,16 +25,6 @@
 	<div class="flex items-center justify-between">
 		<h1 class="text-2xl font-bold text-gray-900">Configuration des Feature Flags</h1>
 		<div class="flex space-x-3">
-			<button 
-				on:click={goToDemo}
-				class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-			>
-				<svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-					<path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
-					<path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 102 0V3h4v1a1 1 0 102 0V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
-				</svg>
-				Tester la démo
-			</button>
 			<button 
 				on:click={goToHome}
 				class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -62,10 +48,8 @@
 			<div class="ml-3">
 				<p class="text-sm text-blue-700">
 					<strong>Info :</strong> Les changements sont automatiquement sauvegardés localement. 
-					Activez la fonctionnalité d'export et testez-la dans la 
-					<a href="{base}/epic-demo" class="underline font-medium">page de démonstration</a> 
-					ou retournez à l'<a href="{base}/" class="underline font-medium">accueil</a> 
-					pour voir les nouvelles fonctionnalités.
+					Activez la fonctionnalité d'export et retournez à l'<a href="{base}/" class="underline font-medium">accueil</a> 
+					pour voir les nouvelles fonctionnalités disponibles sur les épics.
 				</p>
 			</div>
 		</div>

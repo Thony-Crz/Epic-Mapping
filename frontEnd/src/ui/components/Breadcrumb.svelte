@@ -20,9 +20,6 @@
 				case 'feature-flags':
 					label = 'Feature Flags';
 					break;
-				case 'epic-demo':
-					label = 'Démo Export';
-					break;
 				case 'epic':
 					label = 'Epic';
 					break;

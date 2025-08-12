@@ -6,7 +6,7 @@ import FeatureFlagsManager from './FeatureFlagsManager.svelte';
 describe('FeatureFlagsManager', () => {
 	it('should render the feature flags manager title', async () => {
 		render(FeatureFlagsManager);
-		const heading = page.getByText('Gestion des Feature Flags');
+		const heading = page.getByText('Gestion des fonctionnalités');
 		await expect.element(heading).toBeInTheDocument();
 	});
 
