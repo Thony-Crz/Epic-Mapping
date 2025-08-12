@@ -2,6 +2,7 @@
 	import '../app.css';
 	import AuthGuard from '$ui/components/AuthGuard.svelte';
 	import Logo from '$ui/components/Logo.svelte';
+	import Breadcrumb from '$ui/components/Breadcrumb.svelte';
 	import { authStore } from '$lib/stores/authStore';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
@@ -21,14 +22,44 @@
 <header class="z-10 border-b border-gray-200 bg-white shadow-sm">
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="flex h-16 items-center justify-between">
-			<!-- Logo/Titre -->
+			<!-- Logo/Titre cliquable -->
 			<div class="flex items-center">
 				<div class="flex-shrink-0">
-					<Logo size="md" />
+					<a href="{base}/" class="hover:opacity-80 transition-opacity">
+						<Logo size="md" />
+					</a>
 				</div>
 			</div>
 
-			<!-- Navigation et actions -->
+			<!-- Navigation principale -->
+			{#if $authStore.isAuthenticated && $page.route.id !== '/login'}
+				<nav class="flex items-center space-x-6">
+					<a 
+						href="{base}/" 
+						class="text-gray-600 hover:text-blue-600 font-medium transition-colors"
+						class:text-blue-600={$page.route.id === '/'}
+						class:text-gray-900={$page.route.id === '/'}
+					>
+						<svg class="inline-block w-4 h-4 mr-1 mb-1" fill="currentColor" viewBox="0 0 20 20">
+							<path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+						</svg>
+						Accueil
+					</a>
+					<a 
+						href="{base}/feature-flags" 
+						class="text-gray-600 hover:text-blue-600 font-medium transition-colors"
+						class:text-blue-600={$page.route.id === '/feature-flags'}
+						class:text-gray-900={$page.route.id === '/feature-flags'}
+					>
+						<svg class="inline-block w-4 h-4 mr-1 mb-1" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15.586 13H14a1 1 0 01-1-1z" clip-rule="evenodd"/>
+						</svg>
+						Feature Flags
+					</a>
+				</nav>
+			{/if}
+
+			<!-- Actions utilisateur -->
 			<div class="flex items-center space-x-4">
 				{#if $authStore.isAuthenticated && $page.route.id !== '/login'}
 					<!-- Utilisateur connecté -->
@@ -88,6 +119,10 @@
 				<slot />
 			{:else}
 				<div class="container mx-auto px-4 py-8">
+					<!-- Breadcrumb pour la navigation -->
+					{#if $authStore.isAuthenticated}
+						<Breadcrumb />
+					{/if}
 					<slot />
 				</div>
 			{/if}
