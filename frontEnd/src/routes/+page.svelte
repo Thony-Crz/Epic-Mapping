@@ -173,7 +173,6 @@
 
 	<div class="flex gap-3">
 		<AddProjectForm />
-		<AddEpicForm />
 	</div>
 </div>
 
@@ -300,22 +299,28 @@
 						<p class="mt-1 text-gray-600">{project.description}</p>
 					{/if}
 				</div>
-				<div class="flex gap-2">
-					{#if projectReadyEpics.length > 0}
-						<span class="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
-							{projectReadyEpics.length} ready
-						</span>
-					{/if}
-					{#if projectOpenEpics.length > 0}
-						<span class="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">
-							{projectOpenEpics.length} en cours
-						</span>
-					{/if}
-					{#if projectArchivedEpics.length > 0}
-						<span class="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700">
-							{projectArchivedEpics.length} archivée{projectArchivedEpics.length > 1 ? 's' : ''}
-						</span>
-					{/if}
+				<div class="flex items-center gap-3">
+					<!-- Bouton Nouvelle Epic pour ce projet -->
+					<AddEpicForm preselectedProjectId={project.id} />
+					
+					<!-- Badges de statut -->
+					<div class="flex gap-2">
+						{#if projectReadyEpics.length > 0}
+							<span class="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
+								{projectReadyEpics.length} ready
+							</span>
+						{/if}
+						{#if projectOpenEpics.length > 0}
+							<span class="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">
+								{projectOpenEpics.length} en cours
+							</span>
+						{/if}
+						{#if projectArchivedEpics.length > 0}
+							<span class="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700">
+								{projectArchivedEpics.length} archivée{projectArchivedEpics.length > 1 ? 's' : ''}
+							</span>
+						{/if}
+					</div>
 				</div>
 			</div>
 
@@ -471,7 +476,14 @@
 			<p class="mb-6 text-gray-500">Créez une épic pour ce projet ou changez de filtre</p>
 		{/if}
 		<div class="flex justify-center gap-3">
-			<AddEpicForm />
+			{#if selectedProjectFilter !== 'all'}
+				{@const selectedProject = $projectsStore.find((p) => p.id === selectedProjectFilter)}
+				{#if selectedProject}
+					<AddEpicForm preselectedProjectId={selectedProject.id} />
+				{/if}
+			{:else}
+				<AddEpicForm />
+			{/if}
 			{#if selectedProjectFilter !== 'all'}
 				<button
 					on:click={() => (selectedProjectFilter = 'all')}

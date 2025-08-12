@@ -6,20 +6,28 @@
 
 	const dispatch = createEventDispatcher();
 
+	// Prop optionnelle pour pré-sélectionner un projet
+	export let preselectedProjectId: string | null = null;
+
 	let showForm = false;
 	let epicTitle = '';
 	let selectedProjectId = '';
 
 	// S'assurer qu'un projet est sélectionné par défaut
 	$: if ($projectsStore.length > 0 && !selectedProjectId) {
-		selectedProjectId = $projectsStore[0].id;
+		selectedProjectId = preselectedProjectId || $projectsStore[0].id;
+	}
+
+	// Mettre à jour la sélection si le projet prédéfini change
+	$: if (preselectedProjectId && selectedProjectId !== preselectedProjectId) {
+		selectedProjectId = preselectedProjectId;
 	}
 
 	function handleSubmit() {
 		if (epicTitle.trim() && selectedProjectId) {
 			addNewEpic(epicTitle.trim(), selectedProjectId);
 			epicTitle = '';
-			selectedProjectId = $projectsStore.length > 0 ? $projectsStore[0].id : '';
+			selectedProjectId = preselectedProjectId || ($projectsStore.length > 0 ? $projectsStore[0].id : '');
 			showForm = false;
 			dispatch('epicAdded');
 		}
@@ -27,7 +35,7 @@
 
 	function handleCancel() {
 		epicTitle = '';
-		selectedProjectId = $projectsStore.length > 0 ? $projectsStore[0].id : '';
+		selectedProjectId = preselectedProjectId || ($projectsStore.length > 0 ? $projectsStore[0].id : '');
 		showForm = false;
 	}
 </script>
@@ -57,23 +65,35 @@
 					<label for="projectSelect" class="mb-2 block text-sm font-medium text-gray-700">
 						Projet
 					</label>
-					<select
-						id="projectSelect"
-						bind:value={selectedProjectId}
-						class="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-						required
-					>
-						{#each $projectsStore as project (project.id)}
-							<option value={project.id}>
-								● {project.name}
-							</option>
-						{/each}
-					</select>
+					{#if preselectedProjectId}
+						{@const selectedProject = $projectsStore.find(p => p.id === preselectedProjectId)}
+						<div class="flex items-center gap-2 rounded-md border border-gray-300 bg-gray-50 px-3 py-2">
+							<div 
+								class="h-4 w-4 rounded-full border border-white shadow-sm" 
+								style="background-color: {selectedProject?.color || '#6B7280'}"
+							></div>
+							<span class="text-gray-700">{selectedProject?.name || 'Projet inconnu'}</span>
+						</div>
+						<input type="hidden" bind:value={selectedProjectId} />
+					{:else}
+						<select
+							id="projectSelect"
+							bind:value={selectedProjectId}
+							class="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
+							required
+						>
+							{#each $projectsStore as project (project.id)}
+								<option value={project.id}>
+									● {project.name}
+								</option>
+							{/each}
+						</select>
 
-					{#if $projectsStore.length === 0}
-						<p class="mt-1 text-sm text-red-600">
-							Aucun projet disponible. Créez d'abord un projet.
-						</p>
+						{#if $projectsStore.length === 0}
+							<p class="mt-1 text-sm text-red-600">
+								Aucun projet disponible. Créez d'abord un projet.
+							</p>
+						{/if}
 					{/if}
 				</div>
 
