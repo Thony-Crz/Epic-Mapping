@@ -200,11 +200,9 @@
 					{#each $projectsStore as project (project.id)}
 						{@const stats = projectStats[project.id]}
 						{@const totalEpics = stats.ready + stats.open + stats.archived}
-						{#if totalEpics > 0}
-							<option value={project.id}>
-								{project.name} ({totalEpics} épic{totalEpics > 1 ? 's' : ''})
-							</option>
-						{/if}
+						<option value={project.id}>
+							{project.name} ({totalEpics} épic{totalEpics > 1 ? 's' : ''})
+						</option>
 					{/each}
 				</select>
 			</div>
@@ -283,10 +281,9 @@
 	{@const totalEpics =
 		projectReadyEpics.length + projectOpenEpics.length + projectArchivedEpics.length}
 
-	{#if totalEpics > 0}
-		<section
-			class="mb-8 rounded-2xl border border-gray-200 bg-white/60 p-6 shadow-lg backdrop-blur-sm"
-		>
+	<section
+		class="mb-8 rounded-2xl border border-gray-200 bg-white/60 p-6 shadow-lg backdrop-blur-sm"
+	>
 			<!-- En-tête du projet -->
 			<div class="mb-6 flex items-center gap-4 border-b border-gray-200 pb-4">
 				<div
@@ -430,8 +427,23 @@
 					</div>
 				</div>
 			{/if}
+
+			<!-- État vide si aucune épic dans le projet -->
+			{#if totalEpics === 0}
+				<div class="flex flex-col items-center justify-center py-12 text-center">
+					<!-- Icône simple et élégante -->
+					<div class="mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-indigo-100">
+						<div class="text-4xl animate-bounce">🚀</div>
+					</div>
+					
+					<h3 class="mb-2 text-xl font-semibold text-gray-700">Prêt à décoller !</h3>
+					<p class="mb-4 text-gray-500">Ce projet n'a pas encore d'épics. Créez-en une pour commencer !</p>
+					
+					<!-- Bouton pour créer une épic pour ce projet -->
+					<AddEpicForm preselectedProjectId={project.id} />
+				</div>
+			{/if}
 		</section>
-	{/if}
 {/each}
 
 <!-- Message si aucun projet ou épic -->

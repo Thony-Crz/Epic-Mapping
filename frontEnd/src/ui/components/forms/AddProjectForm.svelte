@@ -41,6 +41,7 @@
 		}
 
 		isCreating = true;
+		console.log('🚀 Début création projet:', { name: name.trim(), description: description.trim(), color });
 
 		try {
 			const request: CreateProjectRequest = {
@@ -49,9 +50,12 @@
 				color
 			};
 
-			await createProject(request);
+			console.log('📋 Requête de création:', request);
+			const newProject = await createProject(request);
+			console.log('✅ Projet créé avec succès:', newProject);
 			closeModal();
 		} catch (error) {
+			console.error('❌ Erreur lors de la création du projet:', error);
 			alert(`Erreur lors de la création du projet: ${error.message}`);
 		} finally {
 			isCreating = false;

@@ -46,14 +46,21 @@ export async function loadProjects() {
 
 export async function createProject(request: CreateProjectRequest) {
 	try {
+		console.log('🔧 Store createProject appelé avec:', request);
 		const newProject = await projectService.createProject(request);
+		console.log('📋 Nouveau projet reçu du service:', newProject);
 
 		// Mettre à jour le store
-		projectsStore.update((projects) => [...projects, newProject]);
+		projectsStore.update((projects) => {
+			const updatedProjects = [...projects, newProject];
+			console.log('🔄 Store mis à jour, nouveaux projets:', updatedProjects.length);
+			return updatedProjects;
+		});
 
+		console.log('✅ Projet créé et store mis à jour');
 		return newProject;
 	} catch (error) {
-		console.error('Erreur lors de la création du projet:', error);
+		console.error('❌ Erreur lors de la création du projet dans le store:', error);
 		throw error;
 	}
 }
