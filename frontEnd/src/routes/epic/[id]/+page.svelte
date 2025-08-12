@@ -121,8 +121,6 @@
 	function handleSaveChanges() {
 		// Ici vous pouvez ajouter la logique de sauvegarde
 		// Par exemple : envoyer les données à une API, localStorage, etc.
-		console.log("Sauvegarde des changements pour l'épic:", epic?.title);
-		console.log('Données à sauvegarder:', epic);
 
 		// Exemple de notification (vous pouvez personnaliser cela)
 		alert('Changements sauvegardés avec succès !');

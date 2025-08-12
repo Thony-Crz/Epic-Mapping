@@ -14,13 +14,10 @@ export const projectsStore = writable<Project[]>([]);
 // Actions pour gérer les projets
 export async function loadProjects() {
 	try {
-		console.log('🔍 Chargement des projets...');
 		let projects = await projectService.getAllProjects();
-		console.log(`📋 Projets existants trouvés: ${projects.length}`);
 
 		// Si aucun projet n'existe, initialiser avec les projets d'exemple
 		if (projects.length === 0) {
-			console.log('🏗️ Initialisation des projets par défaut...');
 			for (const projectData of exampleProjects) {
 				const request: CreateProjectRequest = {
 					id: projectData.id, // Utiliser l'ID prédéfini
@@ -29,14 +26,11 @@ export async function loadProjects() {
 					color: projectData.color
 				};
 				await projectService.createProject(request);
-				console.log(`✅ Projet créé: ${projectData.name} avec ID: ${projectData.id}`);
 			}
 			projects = await projectService.getAllProjects();
-			console.log(`🎯 Total projets après initialisation: ${projects.length}`);
 		}
 
 		projectsStore.set(projects);
-		console.log('💾 Store des projets mis à jour');
 		return projects;
 	} catch (error) {
 		console.error('Erreur lors du chargement des projets:', error);
@@ -44,20 +38,15 @@ export async function loadProjects() {
 	}
 }
 
-export async function createProject(request: CreateProjectRequest) {
+export async function createProject(request: CreateProjectRequest): Promise<Project> {
 	try {
-		console.log('🔧 Store createProject appelé avec:', request);
 		const newProject = await projectService.createProject(request);
-		console.log('📋 Nouveau projet reçu du service:', newProject);
 
-		// Mettre à jour le store
 		projectsStore.update((projects) => {
 			const updatedProjects = [...projects, newProject];
-			console.log('🔄 Store mis à jour, nouveaux projets:', updatedProjects.length);
 			return updatedProjects;
 		});
 
-		console.log('✅ Projet créé et store mis à jour');
 		return newProject;
 	} catch (error) {
 		console.error('❌ Erreur lors de la création du projet dans le store:', error);

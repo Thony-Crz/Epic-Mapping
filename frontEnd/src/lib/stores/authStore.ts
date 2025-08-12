@@ -51,9 +51,7 @@ function createAuthStore() {
 			localStorage.setItem('auth', JSON.stringify({ isAuthenticated: true, user }));
 			
 			// Rediriger vers l'accueil après connexion
-			console.log('🔐 AuthStore: Login successful, redirecting to home');
 			const homeUrl = base || '/';
-			console.log('🔐 AuthStore: Redirecting to:', homeUrl);
 			goto(homeUrl);
 		},
 
@@ -81,43 +79,31 @@ function createAuthStore() {
 			localStorage.setItem('auth', JSON.stringify({ isAuthenticated: true, user }));
 			
 			// Rediriger vers l'accueil après connexion
-			console.log('🔐 AuthStore: Provider login successful, redirecting to home');
 			const homeUrl = base || '/';
-			console.log('🔐 AuthStore: Redirecting to:', homeUrl);
 			goto(homeUrl);
 		},
 
 		// Déconnexion
 		logout: () => {
-			console.log('🔐 AuthStore: Logout requested');
 			set(initialState);
 			localStorage.removeItem('auth');
-			console.log('🔐 AuthStore: Logout complete, auth state reset');
 		},
 
 		// Initialiser l'état depuis le localStorage
 		init: () => {
-			console.log('🔐 AuthStore: Initializing...');
 			try {
 				const stored = localStorage.getItem('auth');
-				console.log('🔐 AuthStore: localStorage auth data:', stored);
 				
 				if (stored) {
 					const parsed = JSON.parse(stored);
-					console.log('🔐 AuthStore: Parsed auth data:', parsed);
 					
 					if (parsed.isAuthenticated && parsed.user) {
-						console.log('🔐 AuthStore: Restoring authenticated session for user:', parsed.user.email);
 						set({
 							isAuthenticated: true,
 							user: parsed.user,
 							loading: false
 						});
-					} else {
-						console.log('🔐 AuthStore: Invalid stored data, staying unauthenticated');
 					}
-				} else {
-					console.log('🔐 AuthStore: No stored auth data found, user not authenticated');
 				}
 			} catch (error) {
 				console.error("🔐 AuthStore: Error parsing auth from localStorage:", error);

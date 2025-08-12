@@ -9,10 +9,6 @@
 	let shouldShowContent = false;
 
 	onMount(async () => {
-		console.log('🔐 AuthGuard: Starting initialization');
-		console.log('🔐 Current page route:', $page.route.id);
-		console.log('🔐 Current page URL:', $page.url.pathname);
-		
 		try {
 			// Initialiser l'authentification de manière synchrone
 			authStore.init();
@@ -23,26 +19,16 @@
 			// Vérifier l'état d'authentification
 			const currentAuth = $authStore;
 			const currentRoute = $page.route.id;
-			
-			console.log('🔐 Auth state after init:', currentAuth);
-			console.log('🔐 Is authenticated:', currentAuth.isAuthenticated);
-			console.log('🔐 Current route:', currentRoute);
-			console.log('🔐 Base path:', base);
 
 			if (!currentAuth.isAuthenticated && currentRoute !== '/login') {
-				console.log('🔐 Not authenticated, redirecting to login');
 				// Utiliser le base path pour les redirections
 				const loginUrl = `${base}/login`;
-				console.log('🔐 Redirecting to:', loginUrl);
 				await goto(loginUrl, { replaceState: true });
 			} else if (currentAuth.isAuthenticated && currentRoute === '/login') {
-				console.log('🔐 Authenticated but on login page, redirecting to home');
 				// Utiliser le base path pour les redirections
 				const homeUrl = base || '/';
-				console.log('🔐 Redirecting to:', homeUrl);
 				await goto(homeUrl, { replaceState: true });
 			} else {
-				console.log('🔐 Auth state is correct, showing content');
 				// État correct -> afficher le contenu
 				shouldShowContent = true;
 			}
@@ -53,7 +39,6 @@
 		}
 
 		isReady = true;
-		console.log('🔐 AuthGuard initialization complete, isReady:', true, 'shouldShowContent:', shouldShowContent);
 	});
 
 	// Réactions pour les changements d'état après l'initialisation
@@ -63,12 +48,11 @@
 
 		if (!currentAuth.isAuthenticated && currentRoute !== '/login' && shouldShowContent) {
 			const loginUrl = `${base}/login`;
-			console.log('🔐 Reactive: Redirecting to login:', loginUrl);
 			goto(loginUrl, { replaceState: true });
 			shouldShowContent = false;
 		} else if (currentAuth.isAuthenticated && currentRoute === '/login' && shouldShowContent) {
 			const homeUrl = base || '/';
-			console.log('🔐 Reactive: Redirecting to home:', homeUrl);
+			goto(homeUrl, { replaceState: true });
 			goto(homeUrl, { replaceState: true });
 			shouldShowContent = false;
 		} else if (

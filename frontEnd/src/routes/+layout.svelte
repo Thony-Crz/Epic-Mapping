@@ -8,14 +8,11 @@
 	import { base } from '$app/paths';
 
 	function handleLogout() {
-		console.log('🔐 Layout: Logout clicked');
 		authStore.logout();
 	}
 
 	function handleLoginClick() {
-		console.log('🔐 Layout: Login button clicked');
 		const loginUrl = `${base}/login`;
-		console.log('🔐 Layout: Navigating to:', loginUrl);
 		goto(loginUrl);
 	}
 </script>

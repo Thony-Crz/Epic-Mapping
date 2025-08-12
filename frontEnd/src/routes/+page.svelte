@@ -27,29 +27,25 @@
 	import AddProjectForm from '$ui/components/forms/AddProjectForm.svelte';
 	import ExportEpicsForm from '$ui/components/forms/ExportEpicsForm.svelte';
 	import SessionControls from '$ui/components/SessionControls.svelte';
+	import { FeatureFlagService } from '../services/feature-flags/FeatureFlagService.js';
+	import { featureFlagsStore, initializeFeatureFlags, isFeatureEnabled } from '../services/feature-flags/featureFlagsStore.js';
 
 	// Charger les données au démarrage
 	onMount(async () => {
 		try {
-			console.log("🚀 Initialisation de l'application...");
-			console.log("🔍 Debug - Base URL:", window.location.href);
-			console.log("🔍 Debug - User Agent:", navigator.userAgent);
+			// Initialiser les feature flags
+			initializeFeatureFlags();
 
 			// Vider complètement le localStorage et réinitialiser toutes les données
 			await serviceContainer.clearAllData();
-			console.log('🧹 localStorage vidé et données réinitialisées');
 
 			// Charger/initialiser les projets
 			await loadProjects();
-			console.log('📋 Projets chargés');
 
 			// Réinitialiser les données épics avec les nouvelles données d'exemple
 			serviceContainer.reinitializeEpicsData();
-			console.log('📝 Épics réinitialisées');
-			console.log('✅ Initialisation terminée avec succès');
 		} catch (error) {
 			console.error('❌ Erreur lors du chargement initial:', error);
-			console.error('❌ Stack trace:', error.stack);
 			// Ne pas faire de goto() en cas d'erreur, laisser l'app se charger quand même
 		}
 	});
@@ -82,9 +78,7 @@
 	async function handleArchiveEpic(epicId: string, event: Event) {
 		event.stopPropagation(); // Empêcher la navigation
 		try {
-			console.log('🗄️ Archivage de l\'épic:', epicId);
 			await archiveEpic(epicId);
-			console.log('✅ Épic archivée avec succès');
 		} catch (error) {
 			console.error("❌ Erreur lors de l'archivage:", error);
 		}
@@ -93,9 +87,8 @@
 	// Fonction de navigation sécurisée
 	function handleNavigateToEpic(epicId: string) {
 		try {
-			console.log('🧭 Navigation vers épic:', epicId);
 			const epicUrl = `${base}/epic/${epicId}`;
-			console.log('🧭 URL complète:', epicUrl);
+			goto(epicUrl);
 			goto(epicUrl);
 		} catch (error) {
 			console.error('❌ Erreur de navigation:', error);
@@ -115,6 +108,9 @@
 		$projectsStore.length > 0
 			? $epicsDisplayStore.filter((epic) => epic.status === 'archived')
 			: [];
+
+	// Initialiser le service de feature flags avec le store réactif
+	$: isExportEnabled = $featureFlagsStore.find(flag => flag.name === 'epic-export')?.enabled || false;
 
 	// Regrouper les épics par projet avec filtre
 	$: filteredProjects =
@@ -172,6 +168,17 @@
 	<h1 class="text-3xl font-bold text-gray-900">Gestion des Epics</h1>
 
 	<div class="flex gap-3">
+		<a 
+			href="/feature-flags" 
+			class="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-purple-700"
+			title="Gérer les fonctionnalités de l'application"
+		>
+			<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+			</svg>
+			Feature Flags
+		</a>
 		<AddProjectForm />
 	</div>
 </div>
@@ -251,7 +258,7 @@
 {/if}
 
 <!-- Bouton Export global pour toutes les épics ready -->
-{#if readyEpics.length > 0}
+{#if readyEpics.length > 0 && isExportEnabled}
 	<div class="mb-6 flex justify-end">
 		<button
 			on:click={openExportModal}

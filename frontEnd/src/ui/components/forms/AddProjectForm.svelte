@@ -35,34 +35,34 @@
 	}
 
 	async function handleSubmit() {
-		if (!name.trim()) {
-			alert('Veuillez saisir un nom pour le projet');
-			return;
-		}
+		if (!name.trim()) return;
 
-		isCreating = true;
-		console.log('🚀 Début création projet:', { name: name.trim(), description: description.trim(), color });
-
+		isLoading = true;
+		errorMessage = '';
+		
 		try {
-			const request: CreateProjectRequest = {
-				name: name.trim(),
-				description: description.trim() || undefined,
-				color
+			const request: CreateProjectRequest = { 
+				name: name.trim(), 
+				description: description.trim(), 
+				color 
 			};
 
-			console.log('📋 Requête de création:', request);
 			const newProject = await createProject(request);
-			console.log('✅ Projet créé avec succès:', newProject);
-			closeModal();
+			
+			// Réinitialiser le formulaire
+			name = '';
+			description = '';
+			color = '#3B82F6';
+			isLoading = false;
+
+			// Fermer le modal
+			dispatch('close');
 		} catch (error) {
 			console.error('❌ Erreur lors de la création du projet:', error);
-			alert(`Erreur lors de la création du projet: ${error.message}`);
-		} finally {
-			isCreating = false;
+			errorMessage = "Erreur lors de la création du projet";
+			isLoading = false;
 		}
-	}
-
-	function handleBackdropClick(event: MouseEvent) {
+	}	function handleBackdropClick(event: MouseEvent) {
 		if (event.target === event.currentTarget) {
 			closeModal();
 		}

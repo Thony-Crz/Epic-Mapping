@@ -1,0 +1,9 @@
+{
+  "features": {
+    "epic-export": {
+      "name": "epic-export",
+      "description": "Fonctionnalité d'export des epics en PDF/Excel et d'export en Backlog Azure",
+      "enabled": false
+    }
+  }
+}
