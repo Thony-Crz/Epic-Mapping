@@ -26,6 +26,7 @@
 	import AddEpicForm from '$ui/components/forms/AddEpicForm.svelte';
 	import AddProjectForm from '$ui/components/forms/AddProjectForm.svelte';
 	import ExportEpicsForm from '$ui/components/forms/ExportEpicsForm.svelte';
+	import SessionControls from '$ui/components/SessionControls.svelte';
 
 	// Charger les données au démarrage
 	onMount(async () => {
@@ -174,6 +175,11 @@
 		<AddProjectForm />
 		<AddEpicForm />
 	</div>
+</div>
+
+<!-- Encadré de session (timebox globale) -->
+<div class="mb-6">
+	<SessionControls />
 </div>
 
 <!-- Filtre par projet -->
