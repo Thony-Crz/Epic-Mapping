@@ -1,0 +1,28 @@
+{
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "explicit"
+	},
+	"html.suggest.html5": true,
+	"html.validate.scripts": true,
+	"html.validate.styles": true,
+	"accessibility.showInvalidAccessibilityTags": true,
+	"accessibility.dimUnfocused": true,
+	"[svelte]": {
+		"editor.defaultFormatter": "svelte.svelte-vscode"
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"playwright.reuseBrowser": true,
+	"playwright.showTrace": true,
+	"files.associations": {
+		"*.spec.ts": "typescript"
+	},
+	"emmet.includeLanguages": {
+		"svelte": "html"
+	}
+}

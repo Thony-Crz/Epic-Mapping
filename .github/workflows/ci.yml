@@ -80,6 +80,82 @@ jobs:
           path: ./frontEnd/test-results/
           retention-days: 30
 
+  accessibility-tests:
+    runs-on: ubuntu-latest
+    continue-on-error: true  # Mode non-bloquant : n'interrompt pas la CI si échec
+    defaults:
+      run:
+        working-directory: ./frontEnd
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: './frontEnd/package-lock.json'
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+      - name: Build application
+        run: npm run build
+      - name: Run accessibility tests
+        run: npm run test:accessibility
+        continue-on-error: true  # Continue même si les tests échouent
+      - name: Upload accessibility test results
+        uses: actions/upload-artifact@v4
+        if: always()  # Upload même en cas d'échec
+        with:
+          name: accessibility-test-results
+          path: |
+            ./frontEnd/accessibility-report/
+            ./frontEnd/accessibility-results.json
+            ./frontEnd/test-results/
+          retention-days: 30
+      - name: Comment PR with accessibility results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        continue-on-error: true
+        with:
+          script: |
+            const fs = require('fs');
+            const path = './frontEnd/accessibility-results.json';
+            
+            if (fs.existsSync(path)) {
+              const results = JSON.parse(fs.readFileSync(path, 'utf8'));
+              const totalTests = results.stats?.total || 0;
+              const passedTests = results.stats?.expected || 0;
+              const failedTests = results.stats?.unexpected || 0;
+              
+              const successRate = totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0;
+              
+              const comment = `## 🔍 Rapport de Tests d'Accessibilité WCAG
+              
+              📊 **Résultats :**
+              - Tests executés : ${totalTests}
+              - Tests réussis : ${passedTests}
+              - Tests échoués : ${failedTests}
+              - Taux de réussite : ${successRate}%
+              
+              ${successRate >= 90 ? '✅' : successRate >= 70 ? '⚠️' : '❌'} **Niveau d'accessibilité :** ${
+                successRate >= 90 ? 'Excellent' : 
+                successRate >= 70 ? 'Bon (améliorations recommandées)' : 
+                'Nécessite des corrections'
+              }
+              
+              📋 [Voir le rapport détaillé dans les artifacts](${context.payload.pull_request.html_url}/checks)
+              
+              > 💡 Ces tests d'accessibilité sont informatifs et n'bloquent pas la CI. Ils aident à maintenir la conformité WCAG 2.1 AA.`;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            }
+
   deploy-frontend-prod:
     if: github.event_name == 'push'
     needs: [frontend-validate]

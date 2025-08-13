@@ -1,0 +1,10 @@
+{
+	"recommendations": [
+		"deque-systems.vscode-axe-linter",
+		"webhint.vscode-webhint",
+		"ms-playwright.playwright",
+		"bradlc.vscode-tailwindcss",
+		"formulahendry.auto-rename-tag"
+	],
+	"unwantedRecommendations": []
+}

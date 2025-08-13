@@ -1,0 +1,231 @@
+name: Tests d'Accessibilité WCAG
+
+on:
+  # Déclenchement manuel
+  workflow_dispatch:
+    inputs:
+      browser:
+        description: 'Navigateur pour les tests'
+        required: false
+        default: 'chromium'
+        type: choice
+        options:
+          - chromium
+          - firefox
+          - webkit
+          - all
+      test_file:
+        description: 'Fichier de test spécifique (optionnel)'
+        required: false
+        type: string
+  
+  # Programmation automatique (tous les lundis à 9h)
+  schedule:
+    - cron: '0 9 * * 1'
+  
+  # Sur pull request (mode informatif)
+  pull_request:
+    paths:
+      - 'frontEnd/**'
+      - '.github/workflows/accessibility.yml'
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  accessibility-audit:
+    name: Audit d'Accessibilité WCAG 2.1 AA
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: ${{ github.event.inputs.browser == 'all' && fromJson('["chromium", "firefox", "webkit"]') || fromJson(format('["{0}"]', github.event.inputs.browser || 'chromium')) }}
+    
+    defaults:
+      run:
+        working-directory: ./frontEnd
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: './frontEnd/package-lock.json'
+      
+      - name: 📦 Install dependencies
+        run: npm ci
+      
+      - name: 🎭 Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+      
+      - name: 🏗️ Build application
+        run: npm run build
+      
+      - name: 🧪 Run accessibility tests
+        run: |
+          if [ -n "${{ github.event.inputs.test_file }}" ]; then
+            npx playwright test accessibility/${{ github.event.inputs.test_file }} --config=e2e/accessibility.config.ts --project=accessibility-${{ matrix.browser }}
+          else
+            npx playwright test --config=e2e/accessibility.config.ts --project=accessibility-${{ matrix.browser }}
+          fi
+        continue-on-error: true
+      
+      - name: 📊 Generate accessibility report summary
+        if: always()
+        run: |
+          echo "# 🔍 Rapport d'Accessibilité - ${{ matrix.browser }}" > accessibility-summary.md
+          echo "" >> accessibility-summary.md
+          
+          if [ -f "accessibility-results.json" ]; then
+            # Extraire les statistiques du JSON
+            TOTAL=$(cat accessibility-results.json | jq -r '.stats.total // 0')
+            PASSED=$(cat accessibility-results.json | jq -r '.stats.expected // 0')
+            FAILED=$(cat accessibility-results.json | jq -r '.stats.unexpected // 0')
+            SKIPPED=$(cat accessibility-results.json | jq -r '.stats.skipped // 0')
+            
+            if [ "$TOTAL" -gt 0 ]; then
+              SUCCESS_RATE=$(echo "scale=1; $PASSED * 100 / $TOTAL" | bc)
+            else
+              SUCCESS_RATE="0"
+            fi
+            
+            echo "## 📈 Statistiques Globales" >> accessibility-summary.md
+            echo "- **Tests exécutés :** $TOTAL" >> accessibility-summary.md
+            echo "- **Tests réussis :** $PASSED" >> accessibility-summary.md
+            echo "- **Tests échoués :** $FAILED" >> accessibility-summary.md
+            echo "- **Tests ignorés :** $SKIPPED" >> accessibility-summary.md
+            echo "- **Taux de réussite :** ${SUCCESS_RATE}%" >> accessibility-summary.md
+            echo "" >> accessibility-summary.md
+            
+            # Évaluation du niveau d'accessibilité
+            if (( $(echo "$SUCCESS_RATE >= 95" | bc -l) )); then
+              echo "## ✅ Niveau d'Accessibilité : EXCELLENT" >> accessibility-summary.md
+              echo "Votre application respecte remarquablement les standards WCAG 2.1 AA !" >> accessibility-summary.md
+            elif (( $(echo "$SUCCESS_RATE >= 85" | bc -l) )); then
+              echo "## 🟢 Niveau d'Accessibilité : TRÈS BON" >> accessibility-summary.md
+              echo "Votre application est bien accessible avec quelques améliorations mineures possibles." >> accessibility-summary.md
+            elif (( $(echo "$SUCCESS_RATE >= 70" | bc -l) )); then
+              echo "## 🟡 Niveau d'Accessibilité : BON" >> accessibility-summary.md
+              echo "Votre application est accessible mais des améliorations sont recommandées." >> accessibility-summary.md
+            elif (( $(echo "$SUCCESS_RATE >= 50" | bc -l) )); then
+              echo "## 🟠 Niveau d'Accessibilité : MOYEN" >> accessibility-summary.md
+              echo "Des corrections importantes sont nécessaires pour améliorer l'accessibilité." >> accessibility-summary.md
+            else
+              echo "## 🔴 Niveau d'Accessibilité : INSUFFISANT" >> accessibility-summary.md
+              echo "Des corrections majeures sont requises pour respecter les standards WCAG." >> accessibility-summary.md
+            fi
+            
+            echo "" >> accessibility-summary.md
+            echo "## 🎯 Standards WCAG Vérifiés" >> accessibility-summary.md
+            echo "- ✅ Niveau A : Accessibilité de base" >> accessibility-summary.md
+            echo "- ✅ Niveau AA : Accessibilité standard (requis)" >> accessibility-summary.md
+            echo "- 🔍 Contraste des couleurs (4.5:1)" >> accessibility-summary.md
+            echo "- 🔍 Navigation au clavier" >> accessibility-summary.md
+            echo "- 🔍 Textes alternatifs" >> accessibility-summary.md
+            echo "- 🔍 Formulaires accessibles" >> accessibility-summary.md
+            echo "- 🔍 Structure sémantique" >> accessibility-summary.md
+            
+          else
+            echo "❌ Aucun résultat de test trouvé" >> accessibility-summary.md
+          fi
+      
+      - name: 📁 Upload accessibility artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: accessibility-report-${{ matrix.browser }}
+          path: |
+            ./frontEnd/accessibility-report/
+            ./frontEnd/accessibility-results.json
+            ./frontEnd/accessibility-summary.md
+            ./frontEnd/test-results/
+          retention-days: 30
+      
+      - name: 💬 Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        continue-on-error: true
+        with:
+          script: |
+            const fs = require('fs');
+            const path = './frontEnd/accessibility-summary.md';
+            
+            if (fs.existsSync(path)) {
+              const summary = fs.readFileSync(path, 'utf8');
+              
+              const comment = `${summary}
+              
+              ---
+              
+              📋 **Artefacts disponibles :**
+              - Rapport HTML interactif
+              - Résultats JSON détaillés  
+              - Screenshots des échecs
+              
+              💡 **Rappel :** Ces tests d'accessibilité sont informatifs et aident à maintenir la conformité WCAG 2.1 AA.
+              
+              🔗 [Voir tous les artefacts](${context.payload.pull_request.html_url}/checks)`;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            }
+
+  accessibility-summary:
+    name: Résumé Global d'Accessibilité
+    runs-on: ubuntu-latest
+    needs: accessibility-audit
+    if: always()
+    
+    steps:
+      - name: 📥 Download all accessibility reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: accessibility-report-*
+          merge-multiple: true
+          path: ./accessibility-reports
+      
+      - name: 📊 Create global summary
+        run: |
+          echo "# 🌐 Rapport Global d'Accessibilité WCAG" > global-summary.md
+          echo "" >> global-summary.md
+          echo "## 🗓️ Exécuté le : $(date '+%Y-%m-%d %H:%M:%S UTC')" >> global-summary.md
+          echo "## 🔗 Commit : ${{ github.sha }}" >> global-summary.md
+          echo "" >> global-summary.md
+          
+          for browser in chromium firefox webkit; do
+            if [ -f "./accessibility-reports/accessibility-summary.md" ]; then
+              echo "### 🌐 Résultats pour $browser" >> global-summary.md
+              cat "./accessibility-reports/accessibility-summary.md" >> global-summary.md
+              echo "" >> global-summary.md
+            fi
+          done
+          
+          echo "## 🛠️ Actions Recommandées" >> global-summary.md
+          echo "1. **Corrigez les erreurs critiques** identifiées dans les rapports" >> global-summary.md
+          echo "2. **Testez manuellement** avec un lecteur d'écran (NVDA, JAWS)" >> global-summary.md
+          echo "3. **Vérifiez la navigation** uniquement au clavier" >> global-summary.md
+          echo "4. **Validez les contrastes** dans vos outils de design" >> global-summary.md
+          echo "5. **Documentez** les exceptions justifiées" >> global-summary.md
+          echo "" >> global-summary.md
+          echo "## 📚 Ressources" >> global-summary.md
+          echo "- [WCAG 2.1 Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)" >> global-summary.md
+          echo "- [Guide d'accessibilité du projet](./frontEnd/accessibility/README.md)" >> global-summary.md
+          echo "- [Démarrage rapide](./frontEnd/ACCESSIBILITY-QUICKSTART.md)" >> global-summary.md
+      
+      - name: 📁 Upload global summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: accessibility-global-summary
+          path: global-summary.md
+          retention-days: 90
