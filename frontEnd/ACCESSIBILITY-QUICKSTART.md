@@ -95,31 +95,27 @@ npm run test:a11y
 ```
 
 ### 2. CI/CD
-Ajoutez à votre pipeline :
-```yaml
-- name: Tests d'accessibilité
-  run: |
-    npm ci
-    npm run build
-    npm run test:accessibility
+**Tests manuels uniquement** pour économiser les minutes GitHub Actions :
+```bash
+# GitHub → Actions → "Tests d'Accessibilité WCAG" → Run workflow
+# Choisissez vos options et lancez quand nécessaire
 ```
 
 ### 3. Code Review
-- Vérifiez que les nouveaux composants passent les tests
+- Lancez manuellement les tests avant les reviews importantes
 - Utilisez les extensions VS Code recommandées
 - Testez manuellement avec un lecteur d'écran
 
 ## Prochaines Étapes
 
 ### Immédiat
-1. **Lancez les tests** : `npm run test:a11y`
+1. **Lancez les tests** : `npm run test:a11y` (local)
 2. **Corrigez les erreurs** trouvées
-3. **Intégrez** dans votre processus de développement
+3. **Intégrez** dans votre processus de développement local
 
-### Recommandé
-1. **Formation équipe** : Standards WCAG et bonnes pratiques
-2. **Tests manuels** : Navigation clavier, lecteur d'écran
-3. **Tests utilisateurs** : Personnes en situation de handicap
+### Validation Projet
+1. **GitHub Actions** : Déclenchement manuel pour validation complète
+2. **Multi-navigateurs** : Tests complets avant les releases importantes
 
 ### Outils Complémentaires
 - **Lecteurs d'écran** : NVDA (gratuit), JAWS, VoiceOver

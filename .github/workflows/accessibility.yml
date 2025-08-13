@@ -1,7 +1,7 @@
 name: Tests d'Accessibilité WCAG
 
 on:
-  # Déclenchement manuel
+  # Déclenchement manuel UNIQUEMENT
   workflow_dispatch:
     inputs:
       browser:
@@ -18,16 +18,14 @@ on:
         description: 'Fichier de test spécifique (optionnel)'
         required: false
         type: string
-  
-  # Programmation automatique (tous les lundis à 9h)
-  schedule:
-    - cron: '0 9 * * 1'
-  
-  # Sur pull request (mode informatif)
-  pull_request:
-    paths:
-      - 'frontEnd/**'
-      - '.github/workflows/accessibility.yml'
+      environment:
+        description: 'Environnement à tester'
+        required: false
+        default: 'local-build'
+        type: choice
+        options:
+          - local-build
+          - production
 
 permissions:
   contents: read

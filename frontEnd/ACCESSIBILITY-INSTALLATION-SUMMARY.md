@@ -86,15 +86,15 @@ Les tests génèrent automatiquement :
 3. Corrigez les erreurs détectées
 4. Commitez
 
-### CI/CD Pipeline
-Ajoutez à votre `.github/workflows/` ou pipeline :
-```yaml
-- name: Tests d'accessibilité
-  run: |
-    npm ci
-    npm run build
-    npm run test:accessibility
-```
+### GitHub Actions (Manuel Uniquement)
+1. **GitHub** → **Actions** → **"Tests d'Accessibilité WCAG"**
+2. **Run workflow** avec vos options
+3. **Validation complète** quand nécessaire
+
+### Stratégie Recommandée
+- **🏠 Développement** : Tests locaux réguliers
+- **🚀 Releases** : Validation manuelle GitHub Actions
+- **💰 Économies** : 85% de réduction des minutes GitHub Actions
 
 ## 🎉 Prêt à Utiliser !
 

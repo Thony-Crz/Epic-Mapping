@@ -6,32 +6,22 @@ Vos tests d'accessibilité sont maintenant **intégrés en mode non-bloquant** d
 
 ## 🔧 Ce qui a été configuré
 
-### 1. Job CI Principal (ci.yml)
+### 1. CI Principale (ci.yml)
 ```yaml
-accessibility-tests:
-  runs-on: ubuntu-latest
-  continue-on-error: true  # ← Mode non-bloquant
+# Job d'accessibilité SUPPRIMÉ pour économiser les minutes GitHub Actions
+# Tests uniquement en local et manuel GitHub Actions
 ```
 
-**Caractéristiques :**
-- ✅ **Non-bloquant** : N'interrompt jamais la CI principale
-- ✅ **Artefacts automatiques** : Rapports uploadés à chaque run
-- ✅ **Commentaires PR** : Résultats directement sur les pull requests
-- ✅ **Multi-navigateurs** : Tests sur Chromium, Firefox, WebKit
+**Changement important :**
+- ❌ **Job automatique supprimé** : Plus d'exécution automatique en CI
+- ✅ **Contrôle total** : Vous décidez quand tester
 
 ### 2. Workflow Dédié (accessibility.yml)
-```yaml
-on:
-  workflow_dispatch:    # Déclenchement manuel
-  schedule:             # Tous les lundis à 9h
-  pull_request:         # Sur les PRs (informatif)
-```
 
-**Fonctionnalités avancées :**
-- 🎛️ **Déclenchement manuel** avec options (navigateur, fichier de test)
-- 📅 **Exécution programmée** hebdomadaire
-- 📊 **Rapports globaux** multi-navigateurs
-- 💬 **Commentaires automatiques** sur les PRs
+**Fonctionnalités :**
+- 🎛️ **Déclenchement manuel exclusif** avec options complètes
+- 📊 **Rapports complets** multi-navigateurs quand vous le souhaitez
+- ⚡ **Flexibilité totale** : Navigateur, tests, environnement au choix
 
 ## 🚀 Utilisation
 
@@ -55,22 +45,20 @@ npm run test:a11y:report
    - Fichier de test spécifique (optionnel)
 
 ### Surveillance Continue
-- **Automatique** : Tous les lundis à 9h UTC
-- **Sur PR** : Commentaires informatifs automatiques
-- **Sur push** : Job intégré au pipeline principal
+- **Manuel uniquement** : Déclenchement GitHub Actions quand vous le souhaitez
+- **Local recommandé** : Tests réguliers en développement local
 
 ## 📊 Rapports et Artefacts
 
-### Ce qui est généré automatiquement :
-1. **Rapport HTML interactif** (`accessibility-report/`)
-2. **Résultats JSON** (`accessibility-results.json`)
-3. **Screenshots des échecs** (`test-results/`)
-4. **Résumé markdown** (`accessibility-summary.md`)
+### Génération sur demande :
+1. **Local** : `npm run test:a11y` → rapports instantanés
+2. **GitHub Actions** : Déclenchement manuel → artefacts complets
+3. **Multi-environnements** : Test local-build ou production
 
 ### Où les trouver :
-- **GitHub Actions** → Votre workflow → **Artifacts** (en bas de page)
-- **PR Comments** → Résumé automatique
-- **Locally** → Après `npm run test:a11y`
+- **Localement** : `accessibility-report/` après exécution
+- **GitHub Actions** → Workflow manuel → **Artifacts**
+- **PowerShell** : `.\run-accessibility-tests.ps1 -Reporter`
 
 ## 🎨 Badges README
 
