@@ -3,7 +3,7 @@
 import { writable } from 'svelte/store';
 import { serviceContainer } from '../../services/ServiceContainer';
 import type { Project } from '../../domain/entities/Project';
-import type { CreateProjectRequest } from '../../features/project-management/use-cases';
+import type { CreateProjectRequest } from '../../features/project-management/use-cases/CreateProject';
 import { exampleProjects } from '../data/exampleMapping';
 
 const projectService = serviceContainer.getProjectService();

@@ -28,7 +28,11 @@
 	import ExportEpicsForm from '$ui/components/forms/ExportEpicsForm.svelte';
 	import SessionControls from '$ui/components/SessionControls.svelte';
 	import { FeatureFlagService } from '../services/feature-flags/FeatureFlagService.js';
-	import { featureFlagsStore, initializeFeatureFlags, isFeatureEnabled } from '../services/feature-flags/featureFlagsStore.js';
+	import {
+		featureFlagsStore,
+		initializeFeatureFlags,
+		isFeatureEnabled
+	} from '../services/feature-flags/featureFlagsStore.js';
 
 	// Charger les données au démarrage
 	onMount(async () => {
@@ -110,7 +114,8 @@
 			: [];
 
 	// Initialiser le service de feature flags avec le store réactif
-	$: isExportEnabled = $featureFlagsStore.find(flag => flag.name === 'epic-export')?.enabled || false;
+	$: isExportEnabled =
+		$featureFlagsStore.find((flag) => flag.name === 'epic-export')?.enabled || false;
 
 	// Regrouper les épics par projet avec filtre
 	$: filteredProjects =
@@ -168,17 +173,6 @@
 	<h1 class="text-3xl font-bold text-gray-900">Gestion des Epics</h1>
 
 	<div class="flex gap-3">
-		<a 
-			href="/feature-flags" 
-			class="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-purple-700"
-			title="Gérer les fonctionnalités de l'application"
-		>
-			<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-			</svg>
-			Feature Flags
-		</a>
 		<AddProjectForm />
 	</div>
 </div>
@@ -291,166 +285,170 @@
 	<section
 		class="mb-8 rounded-2xl border border-gray-200 bg-white/60 p-6 shadow-lg backdrop-blur-sm"
 	>
-			<!-- En-tête du projet -->
-			<div class="mb-6 flex items-center gap-4 border-b border-gray-200 pb-4">
-				<div
-					class="h-6 w-6 rounded-full border-2 border-white shadow-sm"
-					style="background-color: {project.color || '#6B7280'}"
-				></div>
-				<div class="flex-1">
-					<h2 class="text-2xl font-bold text-gray-800">{project.name}</h2>
-					{#if project.description}
-						<p class="mt-1 text-gray-600">{project.description}</p>
+		<!-- En-tête du projet -->
+		<div class="mb-6 flex items-center gap-4 border-b border-gray-200 pb-4">
+			<div
+				class="h-6 w-6 rounded-full border-2 border-white shadow-sm"
+				style="background-color: {project.color || '#6B7280'}"
+			></div>
+			<div class="flex-1">
+				<h2 class="text-2xl font-bold text-gray-800">{project.name}</h2>
+				{#if project.description}
+					<p class="mt-1 text-gray-600">{project.description}</p>
+				{/if}
+			</div>
+			<div class="flex items-center gap-3">
+				<!-- Bouton Nouvelle Epic pour ce projet -->
+				<AddEpicForm preselectedProjectId={project.id} />
+
+				<!-- Badges de statut -->
+				<div class="flex gap-2">
+					{#if projectReadyEpics.length > 0}
+						<span class="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
+							{projectReadyEpics.length} ready
+						</span>
+					{/if}
+					{#if projectOpenEpics.length > 0}
+						<span class="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">
+							{projectOpenEpics.length} en cours
+						</span>
+					{/if}
+					{#if projectArchivedEpics.length > 0}
+						<span class="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700">
+							{projectArchivedEpics.length} archivée{projectArchivedEpics.length > 1 ? 's' : ''}
+						</span>
 					{/if}
 				</div>
-				<div class="flex items-center gap-3">
-					<!-- Bouton Nouvelle Epic pour ce projet -->
-					<AddEpicForm preselectedProjectId={project.id} />
-					
-					<!-- Badges de statut -->
-					<div class="flex gap-2">
-						{#if projectReadyEpics.length > 0}
-							<span class="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
-								{projectReadyEpics.length} ready
-							</span>
-						{/if}
-						{#if projectOpenEpics.length > 0}
-							<span class="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">
-								{projectOpenEpics.length} en cours
-							</span>
-						{/if}
-						{#if projectArchivedEpics.length > 0}
-							<span class="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700">
-								{projectArchivedEpics.length} archivée{projectArchivedEpics.length > 1 ? 's' : ''}
-							</span>
-						{/if}
-					</div>
-				</div>
 			</div>
+		</div>
 
-			<!-- Épics Ready du projet -->
-			{#if projectReadyEpics.length > 0}
-				<div class="mb-6">
-					<div class="mb-4 flex items-center gap-2">
-						<div class="h-3 w-3 rounded-full bg-green-500"></div>
-						<h3 class="text-lg font-semibold text-green-700">Ready</h3>
-					</div>
-					<div class="flex flex-wrap gap-4">
-						{#each projectReadyEpics as card (card.id)}
-							<div class="relative">
-								<button
-									on:click={() => handleNavigateToEpic(card.id)}
-									class="post-it-card w-60 rotate-1 transform cursor-pointer rounded-lg border-l-4 border-green-500 bg-green-200 p-4 text-green-900 shadow-lg transition-all duration-300 hover:scale-105 hover:rotate-0 hover:bg-green-100"
-									style="box-shadow: 4px 4px 8px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.5);"
-								>
-									<BlueCard title={card.title} />
-								</button>
-								<button
-									on:click={(e) => handleArchiveEpic(card.id, e)}
-									class="absolute -top-2 -right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-red-500 opacity-60 shadow-md transition-all duration-200 hover:bg-red-600 hover:opacity-100"
-									title="Archiver cette épic"
-									aria-label="Archiver cette épic"
-								>
-									<svg
-										class="h-3 w-3 text-white"
-										fill="none"
-										stroke="currentColor"
-										viewBox="0 0 24 24"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M6 18L18 6M6 6l12 12"
-										></path>
-									</svg>
-								</button>
-							</div>
-						{/each}
-					</div>
+		<!-- Épics Ready du projet -->
+		{#if projectReadyEpics.length > 0}
+			<div class="mb-6">
+				<div class="mb-4 flex items-center gap-2">
+					<div class="h-3 w-3 rounded-full bg-green-500"></div>
+					<h3 class="text-lg font-semibold text-green-700">Ready</h3>
 				</div>
-			{/if}
-
-			<!-- Épics en cours du projet -->
-			{#if projectOpenEpics.length > 0}
-				<div class="mb-6">
-					<div class="mb-4 flex items-center gap-2">
-						<div class="h-3 w-3 rounded-full bg-blue-500"></div>
-						<h3 class="text-lg font-semibold text-blue-700">En cours</h3>
-					</div>
-					<div class="flex flex-wrap gap-4">
-						{#each projectOpenEpics as card (card.id)}
-							<div class="relative">
-								<button
-									on:click={() => handleNavigateToEpic(card.id)}
-									class="post-it-card w-60 -rotate-1 transform cursor-pointer rounded-lg border-l-4 border-blue-500 bg-blue-200 p-4 text-blue-900 shadow-lg transition-all duration-300 hover:scale-105 hover:rotate-0 hover:bg-blue-100"
-									style="box-shadow: 4px 4px 8px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.5);"
-								>
-									<BlueCard title={card.title} />
-								</button>
-								<button
-									on:click={(e) => handleArchiveEpic(card.id, e)}
-									class="absolute -top-2 -right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-red-500 opacity-60 shadow-md transition-all duration-200 hover:bg-red-600 hover:opacity-100"
-									title="Archiver cette épic"
-									aria-label="Archiver cette épic"
-								>
-									<svg
-										class="h-3 w-3 text-white"
-										fill="none"
-										stroke="currentColor"
-										viewBox="0 0 24 24"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M6 18L18 6M6 6l12 12"
-										></path>
-									</svg>
-								</button>
-							</div>
-						{/each}
-					</div>
-				</div>
-			{/if}
-
-			<!-- Épics archivées du projet -->
-			{#if projectArchivedEpics.length > 0}
-				<div>
-					<div class="mb-4 flex items-center gap-2">
-						<div class="h-3 w-3 rounded-full bg-gray-500"></div>
-						<h3 class="text-lg font-semibold text-gray-700">Archivées</h3>
-					</div>
-					<div class="flex flex-wrap gap-4">
-						{#each projectArchivedEpics as card (card.id)}
+				<div class="flex flex-wrap gap-4">
+					{#each projectReadyEpics as card (card.id)}
+						<div class="relative">
 							<button
 								on:click={() => handleNavigateToEpic(card.id)}
-								class="post-it-card w-60 rotate-2 transform cursor-pointer rounded-lg border-l-4 border-gray-500 bg-gray-200 p-4 text-gray-700 opacity-75 shadow-lg transition-all duration-300 hover:scale-105 hover:rotate-0 hover:bg-gray-100 hover:opacity-100"
+								class="post-it-card w-60 rotate-1 transform cursor-pointer rounded-lg border-l-4 border-green-500 bg-green-200 p-4 text-green-900 shadow-lg transition-all duration-300 hover:scale-105 hover:rotate-0 hover:bg-green-100"
 								style="box-shadow: 4px 4px 8px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.5);"
 							>
 								<BlueCard title={card.title} />
 							</button>
-						{/each}
-					</div>
+							<button
+								on:click={(e) => handleArchiveEpic(card.id, e)}
+								class="absolute -top-2 -right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-red-500 opacity-60 shadow-md transition-all duration-200 hover:bg-red-600 hover:opacity-100"
+								title="Archiver cette épic"
+								aria-label="Archiver cette épic"
+							>
+								<svg
+									class="h-3 w-3 text-white"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M6 18L18 6M6 6l12 12"
+									></path>
+								</svg>
+							</button>
+						</div>
+					{/each}
 				</div>
-			{/if}
+			</div>
+		{/if}
 
-			<!-- État vide si aucune épic dans le projet -->
-			{#if totalEpics === 0}
-				<div class="flex flex-col items-center justify-center py-12 text-center">
-					<!-- Icône simple et élégante -->
-					<div class="mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-indigo-100">
-						<div class="text-4xl animate-bounce">🚀</div>
-					</div>
-					
-					<h3 class="mb-2 text-xl font-semibold text-gray-700">Prêt à décoller !</h3>
-					<p class="mb-4 text-gray-500">Ce projet n'a pas encore d'épics. Créez-en une pour commencer !</p>
-					
-					<!-- Bouton pour créer une épic pour ce projet -->
-					<AddEpicForm preselectedProjectId={project.id} />
+		<!-- Épics en cours du projet -->
+		{#if projectOpenEpics.length > 0}
+			<div class="mb-6">
+				<div class="mb-4 flex items-center gap-2">
+					<div class="h-3 w-3 rounded-full bg-blue-500"></div>
+					<h3 class="text-lg font-semibold text-blue-700">En cours</h3>
 				</div>
-			{/if}
-		</section>
+				<div class="flex flex-wrap gap-4">
+					{#each projectOpenEpics as card (card.id)}
+						<div class="relative">
+							<button
+								on:click={() => handleNavigateToEpic(card.id)}
+								class="post-it-card w-60 -rotate-1 transform cursor-pointer rounded-lg border-l-4 border-blue-500 bg-blue-200 p-4 text-blue-900 shadow-lg transition-all duration-300 hover:scale-105 hover:rotate-0 hover:bg-blue-100"
+								style="box-shadow: 4px 4px 8px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.5);"
+							>
+								<BlueCard title={card.title} />
+							</button>
+							<button
+								on:click={(e) => handleArchiveEpic(card.id, e)}
+								class="absolute -top-2 -right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-red-500 opacity-60 shadow-md transition-all duration-200 hover:bg-red-600 hover:opacity-100"
+								title="Archiver cette épic"
+								aria-label="Archiver cette épic"
+							>
+								<svg
+									class="h-3 w-3 text-white"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M6 18L18 6M6 6l12 12"
+									></path>
+								</svg>
+							</button>
+						</div>
+					{/each}
+				</div>
+			</div>
+		{/if}
+
+		<!-- Épics archivées du projet -->
+		{#if projectArchivedEpics.length > 0}
+			<div>
+				<div class="mb-4 flex items-center gap-2">
+					<div class="h-3 w-3 rounded-full bg-gray-500"></div>
+					<h3 class="text-lg font-semibold text-gray-700">Archivées</h3>
+				</div>
+				<div class="flex flex-wrap gap-4">
+					{#each projectArchivedEpics as card (card.id)}
+						<button
+							on:click={() => handleNavigateToEpic(card.id)}
+							class="post-it-card w-60 rotate-2 transform cursor-pointer rounded-lg border-l-4 border-gray-500 bg-gray-200 p-4 text-gray-700 opacity-75 shadow-lg transition-all duration-300 hover:scale-105 hover:rotate-0 hover:bg-gray-100 hover:opacity-100"
+							style="box-shadow: 4px 4px 8px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.5);"
+						>
+							<BlueCard title={card.title} />
+						</button>
+					{/each}
+				</div>
+			</div>
+		{/if}
+
+		<!-- État vide si aucune épic dans le projet -->
+		{#if totalEpics === 0}
+			<div class="flex flex-col items-center justify-center py-12 text-center">
+				<!-- Icône simple et élégante -->
+				<div
+					class="mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-indigo-100"
+				>
+					<div class="animate-bounce text-4xl">🚀</div>
+				</div>
+
+				<h3 class="mb-2 text-xl font-semibold text-gray-700">Prêt à décoller !</h3>
+				<p class="mb-4 text-gray-500">
+					Ce projet n'a pas encore d'épics. Créez-en une pour commencer !
+				</p>
+
+				<!-- Bouton pour créer une épic pour ce projet -->
+				<AddEpicForm preselectedProjectId={project.id} />
+			</div>
+		{/if}
+	</section>
 {/each}
 
 <!-- Message si aucun projet ou épic -->

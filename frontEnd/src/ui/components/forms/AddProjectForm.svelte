@@ -1,11 +1,17 @@
 <script lang="ts">
-	import { createProject, type CreateProjectRequest } from '$lib/stores/projectsStore';
+	import { createProject } from '$lib/stores/projectsStore';
+	import type { CreateProjectRequest } from '$features/project-management/use-cases/CreateProject';
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
 	let isOpen = false;
 	let name = '';
 	let description = '';
 	let color = '#3B82F6';
 	let isCreating = false;
+	let isLoading = false;
+	let errorMessage = '';
 
 	const predefinedColors = [
 		'#3B82F6', // Bleu
@@ -32,12 +38,15 @@
 		description = '';
 		color = '#3B82F6';
 		isCreating = false;
+		isLoading = false;
+		errorMessage = '';
 	}
 
 	async function handleSubmit() {
 		if (!name.trim()) return;
 
 		isLoading = true;
+		isCreating = true;
 		errorMessage = '';
 		
 		try {
@@ -49,18 +58,15 @@
 
 			const newProject = await createProject(request);
 			
-			// Réinitialiser le formulaire
-			name = '';
-			description = '';
-			color = '#3B82F6';
-			isLoading = false;
-
-			// Fermer le modal
-			dispatch('close');
+			// Réinitialiser le formulaire et fermer le modal
+			resetForm();
+			closeModal();
 		} catch (error) {
 			console.error('❌ Erreur lors de la création du projet:', error);
 			errorMessage = "Erreur lors de la création du projet";
+		} finally {
 			isLoading = false;
+			isCreating = false;
 		}
 	}	function handleBackdropClick(event: MouseEvent) {
 		if (event.target === event.currentTarget) {
@@ -111,6 +117,13 @@
 			</div>
 
 			<form on:submit|preventDefault={handleSubmit} class="space-y-4">
+				<!-- Message d'erreur -->
+				{#if errorMessage}
+					<div class="rounded-lg bg-red-50 border border-red-200 p-3">
+						<p class="text-sm text-red-700">{errorMessage}</p>
+					</div>
+				{/if}
+
 				<!-- Nom du projet -->
 				<div>
 					<label for="project-name" class="mb-2 block text-sm font-medium text-gray-700">
