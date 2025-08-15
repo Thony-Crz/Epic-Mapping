@@ -1,5 +1,4 @@
-﻿using Application.DTOs.ProjectManagement;
-using Application.UseCases.ProjectManagement;
+﻿using Application.UseCases.ProjectManagement;
 using Domain.Entities;
 using Domain.Interfaces.Repositories;
 using Moq;
@@ -14,23 +13,23 @@ namespace Application.UnitTests.ProjectManagement
             // Arrange
             var repositoryMock = new Mock<IProjectRepository>();
 
-            var request = new CreateProjectRequest(Name: "Test Project", Description: "This is a test project.", Color: "#FF5733");
+            var command = new CreateProjectCommand(Name: "Test Project", Description: "This is a test project.", Color: "#FF5733");
 
             var expectedProject = new Project
             {
                 Id = Guid.NewGuid(),
-                Name = request.Name,
-                Description = request.Description,
-                Color = request.Color
+                Name = command.Name,
+                Description = command.Description,
+                Color = command.Color
             };
 
             repositoryMock.Setup(repo => repo.CreateAsync(It.IsAny<Project>(), default))
                 .ReturnsAsync(expectedProject);
 
-            var useCase = new CreateProjectUseCase(repositoryMock.Object);
+            var handler = new CreateProjectCommandHandler(repositoryMock.Object);
 
             // Act
-            var result = await useCase.ExecuteAsync(request);
+            var result = await handler.Handle(command, CancellationToken.None);
 
             // Assert
             Assert.That(result, Is.Not.Null);

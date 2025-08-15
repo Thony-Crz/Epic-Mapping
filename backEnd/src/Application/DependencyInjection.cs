@@ -1,4 +1,3 @@
-using Application.UseCases.ProjectManagement;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -10,9 +9,6 @@ public static class DependencyInjection
     {
         // Enregistrer MediatR avec tous les handlers de l'assembly Application
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-
-        // Enregistrer les Use Cases
-        services.AddScoped<CreateProjectUseCase>();
 
         return services;
     }
