@@ -1,17 +1,17 @@
+using Application;
 using Application.Behaviors;
 using Application.UseCases.AuthenticateUser;
 using Domain.Interfaces;
 using EpicMapping.WebApi.Configuration;
 using EpicMapping.WebApi.Middleware;
 using FluentValidation;
-using Infrastructure.Data;
+using Infrastructure;
 using Infrastructure.Extensions;
 using Infrastructure.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -31,6 +31,10 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 // Custom Security Services
 builder.Services.AddCustomSecurity(builder.Configuration);
+
+// Configuration des services
+builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices();
 
 // Configuration for JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -71,9 +75,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo 
-    { 
-        Title = "Epic Mapping API", 
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Epic Mapping API",
         Version = "v1",
         Description = "API sécurisée pour Epic Mapping avec authentification JWT"
     });
