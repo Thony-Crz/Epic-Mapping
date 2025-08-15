@@ -14,7 +14,8 @@ namespace Application.UseCases.ProjectManagement
                 Id = Guid.NewGuid(),
                 Name = command.Name,
                 Description = command.Description,
-                Color = command.Color
+                Color = command.Color,
+                TeamOwnerId = command.TeamOwnerId
             };
 
             var created = await projectRepository.CreateAsync(project, cancellationToken);
@@ -24,7 +25,8 @@ namespace Application.UseCases.ProjectManagement
                 Id = created.Id,
                 Name = created.Name,
                 Description = created.Description,
-                Color = created.Color
+                Color = created.Color,
+                TeamOwnerId = created.TeamOwnerId
             };
         }
     }

@@ -13,14 +13,19 @@ namespace Application.UnitTests.ProjectManagement
             // Arrange
             var repositoryMock = new Mock<IProjectRepository>();
 
-            var command = new CreateProjectCommand(Name: "Test Project", Description: "This is a test project.", Color: "#FF5733");
+            var command = new CreateProjectCommand(
+                Name: "Test Project",
+                Description: "This is a test project.",
+                Color: "#FF5733",
+                TeamOwnerId: 1);
 
             var expectedProject = new Project
             {
                 Id = Guid.NewGuid(),
                 Name = command.Name,
                 Description = command.Description,
-                Color = command.Color
+                Color = command.Color,
+                TeamOwnerId = 1 // Assuming a default owner ID for the test
             };
 
             repositoryMock.Setup(repo => repo.CreateAsync(It.IsAny<Project>(), default))
@@ -39,6 +44,7 @@ namespace Application.UnitTests.ProjectManagement
                 Assert.That(result.Name, Is.EqualTo(expectedProject.Name));
                 Assert.That(result.Description, Is.EqualTo(expectedProject.Description));
                 Assert.That(result.Color, Is.EqualTo(expectedProject.Color));
+                Assert.That(result.TeamOwnerId, Is.EqualTo(expectedProject.TeamOwnerId));
             });
         }
     }

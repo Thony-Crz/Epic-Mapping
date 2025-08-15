@@ -6,5 +6,6 @@
         public string Name { get; init; } = default!;
         public string? Description { get; init; }
         public string? Color { get; init; }
+        public int TeamOwnerId { get; set; }
     }
 }

@@ -6,5 +6,6 @@
         public string Name { get; set; } = "Unknown";
         public string? Description { get; set; }
         public string? Color { get; set; }
+        public int TeamOwnerId { get; set; }
     }
 }
