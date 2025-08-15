@@ -59,80 +59,86 @@ backend/
 ## 📊 Entités principales
 
 ### User
+
 ```typescript
 interface User {
-  id: string;
-  email: string;
-  name: string;
-  provider: 'local' | 'github' | 'azure' | 'gitlab';
-  createdAt: Date;
-  updatedAt: Date;
+	id: string;
+	email: string;
+	name: string;
+	provider: 'local' | 'github' | 'azure' | 'gitlab';
+	createdAt: Date;
+	updatedAt: Date;
 }
 ```
 
 ### Project
+
 ```typescript
 interface Project {
-  id: string;
-  name: string;
-  description?: string;
-  color?: string;
-  ownerId: string;
-  collaborators: string[];
-  createdAt: Date;
-  updatedAt: Date;
+	id: string;
+	name: string;
+	description?: string;
+	color?: string;
+	ownerId: string;
+	collaborators: string[];
+	createdAt: Date;
+	updatedAt: Date;
 }
 ```
 
 ### Epic
+
 ```typescript
 interface Epic {
-  id: string;
-  title: string;
-  status: 'open' | 'in progress' | 'closed' | 'archived';
-  projectId: string;
-  features: Feature[];
-  createdAt: Date;
-  updatedAt: Date;
+	id: string;
+	title: string;
+	status: 'open' | 'in progress' | 'closed' | 'archived';
+	projectId: string;
+	features: Feature[];
+	createdAt: Date;
+	updatedAt: Date;
 }
 ```
 
 ### Feature
+
 ```typescript
 interface Feature {
-  id: string;
-  title: string;
-  status: 'ready' | 'in-progress' | 'todo';
-  epicId: string;
-  scenarios: Scenario[];
-  createdAt: Date;
-  updatedAt: Date;
+	id: string;
+	title: string;
+	status: 'ready' | 'in-progress' | 'todo';
+	epicId: string;
+	scenarios: Scenario[];
+	createdAt: Date;
+	updatedAt: Date;
 }
 ```
 
 ### Scenario
+
 ```typescript
 interface Scenario {
-  id: string;
-  title: string;
-  type: 'green' | 'grey' | 'yellow';
-  featureId: string;
-  createdAt: Date;
-  updatedAt: Date;
+	id: string;
+	title: string;
+	type: 'green' | 'grey' | 'yellow';
+	featureId: string;
+	createdAt: Date;
+	updatedAt: Date;
 }
 ```
 
 ### Session
+
 ```typescript
 interface Session {
-  id: string;
-  userId: string;
-  startTime: Date;
-  durationInMinutes: number;
-  isActive: boolean;
-  epicId?: string;
-  createdAt: Date;
-  updatedAt: Date;
+	id: string;
+	userId: string;
+	startTime: Date;
+	durationInMinutes: number;
+	isActive: boolean;
+	epicId?: string;
+	createdAt: Date;
+	updatedAt: Date;
 }
 ```
 
@@ -143,6 +149,7 @@ interface Session {
 ### 👤 User Management
 
 #### Authentication Use Cases
+
 - **RegisterUser**
   - Input: `{ email, password, name }`
   - Output: `{ user, token }`
@@ -169,6 +176,7 @@ interface Session {
   - Description: Déconnexion et invalidation du token
 
 #### Profile Use Cases
+
 - **GetUserProfile**
   - Input: `{ userId }`
   - Output: `{ user }`
@@ -187,6 +195,7 @@ interface Session {
 ### 📁 Project Management
 
 #### CRUD Use Cases
+
 - **CreateProject**
   - Input: `{ name, description?, color?, ownerId }`
   - Output: `{ project }`
@@ -213,6 +222,7 @@ interface Session {
   - Description: Supprimer un projet
 
 #### Collaboration Use Cases
+
 - **AddCollaborator**
   - Input: `{ projectId, ownerId, collaboratorEmail }`
   - Output: `{ project }`
@@ -231,6 +241,7 @@ interface Session {
 ### 🎯 Epic Management
 
 #### CRUD Use Cases
+
 - **CreateEpic**
   - Input: `{ title, projectId, userId, status? }`
   - Output: `{ epic }`
@@ -257,6 +268,7 @@ interface Session {
   - Description: Supprimer une épique
 
 #### Status Management Use Cases
+
 - **ArchiveEpic**
   - Input: `{ epicId, userId }`
   - Output: `{ epic }`
@@ -270,6 +282,7 @@ interface Session {
 ### 🚀 Feature Management
 
 #### CRUD Use Cases
+
 - **CreateFeature**
   - Input: `{ title, epicId, userId, status? }`
   - Output: `{ feature }`
@@ -296,6 +309,7 @@ interface Session {
   - Description: Supprimer une fonctionnalité
 
 #### Ordering Use Cases
+
 - **ReorderFeatures**
   - Input: `{ epicId, userId, featureIds }`
   - Output: `{ features }`
@@ -309,6 +323,7 @@ interface Session {
 ### 📝 Scenario Management
 
 #### CRUD Use Cases
+
 - **CreateScenario**
   - Input: `{ title, type, featureId, userId }`
   - Output: `{ scenario }`
@@ -335,6 +350,7 @@ interface Session {
   - Description: Supprimer un scénario
 
 #### Ordering Use Cases
+
 - **ReorderScenarios**
   - Input: `{ featureId, userId, scenarioIds }`
   - Output: `{ scenarios }`
@@ -348,6 +364,7 @@ interface Session {
 ### ⏱️ Session Management
 
 #### Session Lifecycle Use Cases
+
 - **StartSession**
   - Input: `{ userId, durationInMinutes?, epicId? }`
   - Output: `{ session }`
@@ -374,6 +391,7 @@ interface Session {
   - Description: Prolonger une session active
 
 #### Session History Use Cases
+
 - **GetUserSessionHistory**
   - Input: `{ userId, from?, to?, limit?, offset? }`
   - Output: `{ sessions, total }`
@@ -387,6 +405,7 @@ interface Session {
 ### 📤 Export/Import Use Cases
 
 #### Export Use Cases
+
 - **ExportProject**
   - Input: `{ projectId, userId, format }`
   - Output: `{ exportData, fileName }`
@@ -398,6 +417,7 @@ interface Session {
   - Description: Exporter une épique
 
 #### Import Use Cases
+
 - **ImportProject**
   - Input: `{ userId, fileData, format }`
   - Output: `{ project }`
@@ -413,6 +433,7 @@ interface Session {
 ## 🌐 API REST Endpoints
 
 ### Authentication
+
 ```
 POST   /api/auth/register
 POST   /api/auth/login
@@ -424,6 +445,7 @@ POST   /api/auth/logout
 ```
 
 ### Users
+
 ```
 GET    /api/users/profile
 PUT    /api/users/profile
@@ -431,6 +453,7 @@ DELETE /api/users/account
 ```
 
 ### Projects
+
 ```
 GET    /api/projects
 POST   /api/projects
@@ -443,6 +466,7 @@ GET    /api/projects/:id/collaborators
 ```
 
 ### Epics
+
 ```
 GET    /api/projects/:projectId/epics
 POST   /api/projects/:projectId/epics
@@ -454,6 +478,7 @@ POST   /api/epics/:id/reactivate
 ```
 
 ### Features
+
 ```
 GET    /api/epics/:epicId/features
 POST   /api/epics/:epicId/features
@@ -465,6 +490,7 @@ POST   /api/features/:id/move
 ```
 
 ### Scenarios
+
 ```
 GET    /api/features/:featureId/scenarios
 POST   /api/features/:featureId/scenarios
@@ -476,6 +502,7 @@ POST   /api/scenarios/:id/move
 ```
 
 ### Sessions
+
 ```
 POST   /api/sessions/start
 GET    /api/sessions/active
@@ -487,6 +514,7 @@ GET    /api/sessions/stats
 ```
 
 ### Export/Import
+
 ```
 GET    /api/projects/:id/export
 POST   /api/projects/import
@@ -499,17 +527,20 @@ POST   /api/projects/:projectId/epics/import
 ## 🔐 Authentification et autorisation
 
 ### Stratégies d'authentification
+
 1. **Local** : Email/mot de passe avec hachage bcrypt
 2. **OAuth GitHub** : Utilisation de l'API GitHub OAuth
 3. **OAuth Azure** : Intégration Azure AD
 4. **OAuth GitLab** : Utilisation de l'API GitLab OAuth
 
 ### JWT Tokens
+
 - **Access Token** : Durée courte (15 minutes)
 - **Refresh Token** : Durée longue (7 jours)
 - **Claims** : userId, email, provider, iat, exp
 
 ### Autorisations
+
 - **Propriétaire** : Accès total au projet
 - **Collaborateur** : Accès lecture/écriture au projet
 - **Utilisateur** : Accès uniquement à ses propres données
@@ -519,6 +550,7 @@ POST   /api/projects/:projectId/epics/import
 ## ⏱️ Gestion des sessions
 
 ### Logique métier des sessions
+
 - Une seule session active par utilisateur
 - Durée par défaut : 30 minutes
 - Durées prédéfinies : 15, 30, 45, 60 minutes
@@ -528,6 +560,7 @@ POST   /api/projects/:projectId/epics/import
 - Possibilité d'étendre une session active
 
 ### Règles de validation
+
 - Session active = `isActive: true` ET `now < startTime + duration`
 - Une session peut être associée à une épique pour le contexte
 - Historique conservé pour les statistiques
@@ -537,6 +570,7 @@ POST   /api/projects/:projectId/epics/import
 ## 💾 Stockage et persistance
 
 ### Base de données recommandée
+
 **PostgreSQL** avec les tables suivantes :
 
 ```sql
@@ -625,6 +659,7 @@ CREATE TABLE refresh_tokens (
 ```
 
 ### Indexes pour les performances
+
 ```sql
 CREATE INDEX idx_projects_owner_id ON projects(owner_id);
 CREATE INDEX idx_epics_project_id ON epics(project_id);
@@ -640,6 +675,7 @@ CREATE INDEX idx_refresh_tokens_user_id ON refresh_tokens(user_id);
 ## 📋 Règles métier
 
 ### Epic Status Transitions
+
 ```
 open → in progress → closed
    ↓       ↓          ↓
@@ -647,22 +683,26 @@ archived ← archived ← archived
 ```
 
 ### Feature Status Logic
+
 - **todo** : État initial
 - **in-progress** : Automatique si ajout d'un scénario vert
 - **ready** : Marque manuelle
 
 ### Scenario Types
+
 - **Green** (🟢) : Scénario nominal/heureux
 - **Grey** (⚫) : Scénario alternatif
 - **Yellow** (🟡) : Scénario d'erreur/exception
 
 ### Session Business Rules
+
 - Un utilisateur ne peut avoir qu'une session active
 - Une session expire automatiquement après sa durée
 - Une session peut être associée à une épique pour le contexte
 - Terminer une session la rend inactive immédiatement
 
 ### Authorization Rules
+
 - Seul le propriétaire peut supprimer un projet
 - Les collaborateurs peuvent créer/modifier épiques, fonctionnalités, scénarios
 - Les utilisateurs ne voient que leurs projets ou ceux où ils sont collaborateurs
@@ -673,28 +713,34 @@ archived ← archived ← archived
 ## ✅ Validation et contraintes
 
 ### Project Validation
+
 - `name` : Obligatoire, 1-255 caractères
 - `description` : Optionnel, max 1000 caractères
 - `color` : Optionnel, format hex (#RRGGBB)
 
 ### Epic Validation
+
 - `title` : Obligatoire, 1-100 caractères
 - `status` : Doit être dans la liste autorisée
 
 ### Feature Validation
+
 - `title` : Obligatoire, 1-200 caractères
 - `status` : Doit être dans la liste autorisée
 
 ### Scenario Validation
+
 - `title` : Obligatoire, 1-500 caractères
 - `type` : Doit être 'green', 'grey', ou 'yellow'
 
 ### Session Validation
+
 - `durationInMinutes` : Entre 1 et 480 minutes
 - Un seul session active par utilisateur
 - Session doit appartenir à l'utilisateur authentifié
 
 ### User Validation
+
 - `email` : Format email valide, unique
 - `name` : Obligatoire, 1-255 caractères
 - `password` : Min 8 caractères (pour comptes locaux)
