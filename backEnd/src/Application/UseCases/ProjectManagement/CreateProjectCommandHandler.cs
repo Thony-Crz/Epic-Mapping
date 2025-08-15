@@ -17,7 +17,7 @@ namespace Application.UseCases.ProjectManagement
                 Color = command.Color
             };
 
-            var created = await projectRepository.CreateAsync(project);
+            var created = await projectRepository.CreateAsync(project, cancellationToken);
 
             return new CreateProjectResult
             {
