@@ -10,7 +10,7 @@
 			layout: 'padded',
 			docs: {
 				description: {
-					component: 'Composant de fil d\'Ariane pour la navigation'
+					component: 'Composant de fil d\'Ariane pour la navigation (nécessite customBreadcrumbs dans Storybook)'
 				}
 			}
 		},
@@ -22,13 +22,6 @@
 		}
 	});
 </script>
-
-<Story name="Default">
-	<div class="mock-page-context">
-		<Breadcrumb />
-		<p class="mt-4 text-gray-600">Fil d'Ariane automatique basé sur l'URL</p>
-	</div>
-</Story>
 
 <Story name="Custom Breadcrumbs" args={{
 	customBreadcrumbs: [

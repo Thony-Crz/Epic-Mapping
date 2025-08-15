@@ -1,10 +1,11 @@
-<script lang="ts">
-	import { Meta, Template, Story } from '@storybook/addon-svelte-csf';
+<script module>
+	import { defineMeta } from '@storybook/addon-svelte-csf';
 	import Logo from '../../ui/components/Logo.svelte';
 
-	const meta = {
+	const { Story } = defineMeta({
 		title: 'Components/Logo',
 		component: Logo,
+		tags: ['autodocs'],
 		parameters: {
 			layout: 'centered',
 			docs: {
@@ -20,16 +21,8 @@
 				description: 'Taille du logo'
 			}
 		}
-	} satisfies Meta<Logo>;
-
-	export { meta };
+	});
 </script>
-
-<Meta {meta} />
-
-<Template let:args>
-	<Logo {...args} />
-</Template>
 
 <Story name="Small" args={{ size: 'sm' }} />
 
