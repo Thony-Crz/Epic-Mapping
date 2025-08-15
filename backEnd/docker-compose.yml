@@ -40,7 +40,7 @@ services:
   web-api:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: EpicMapping.WebApi/Dockerfile
     container_name: epicmapping-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
