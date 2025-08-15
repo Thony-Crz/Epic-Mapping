@@ -197,11 +197,11 @@ interface Session {
 #### CRUD Use Cases
 
 - **CreateProject**
-  - Input: `{ name, description?, color?, ownerId }`
+  - Input: `{ name, description?, color?, teamOwnerId }`
   - Output: `{ project }`
   - Description: Créer un nouveau projet
 
-- **GetAllUserProjects**
+- **GetAllTeamProjects**
   - Input: `{ userId }`
   - Output: `{ projects }`
   - Description: Récupérer tous les projets d'un utilisateur
