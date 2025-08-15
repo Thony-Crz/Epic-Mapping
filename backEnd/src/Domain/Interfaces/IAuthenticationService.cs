@@ -4,6 +4,6 @@ namespace Domain.Interfaces
 {
     public interface IAuthenticationService
     {
-        Task<AuthResult> AuthenticateWithOAuthAsync(string provider, string code);
+        Task<UserAuthInfo> AuthenticateWithOAuthAsync(string provider, string code);
     }
 }

@@ -1,6 +1,4 @@
 using Infrastructure.Data;
-using Infrastructure.Repositories;
-using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +19,6 @@ public static class InfrastructureServiceExtensions
             ));
 
         // Enregistrement des repositories
-        services.AddScoped<IProjectRepository, ProjectRepository>();
         // services.AddScoped<IEpicRepository, EpicRepository>();
 
         return services;

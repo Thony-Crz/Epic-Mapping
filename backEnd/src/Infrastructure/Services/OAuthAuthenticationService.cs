@@ -10,7 +10,7 @@ namespace Infrastructure.Services
 {
     public class OAuthAuthenticationService : IAuthenticationService
     {
-        public Task<AuthResult> AuthenticateWithOAuthAsync(string provider, string code)
+        public Task<UserAuthInfo> AuthenticateWithOAuthAsync(string provider, string code)
         {
             // Implementation for OAuth authentication goes here
             throw new NotImplementedException("OAuth authentication is not implemented yet.");

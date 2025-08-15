@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities
 {
-    public class AuthResult
+    public class UserAuthInfo
     {
         public required string AccessToken { get; set; }
         public required string JwtToken { get; set; }

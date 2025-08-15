@@ -24,7 +24,7 @@ namespace Application.UnitTests.Authentification
         {
             // Arrange
             var request = new AuthorizeExternalProviderCommand("valid-code", "https://localhost/callback");
-            var expectedAuthResult = new AuthResult
+            var expectedAuthResult = new UserAuthInfo
             {
                 AccessToken = "azure-token",
                 JwtToken = "jwt-app-token",
