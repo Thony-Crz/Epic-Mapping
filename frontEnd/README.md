@@ -104,6 +104,18 @@ src/
 4. **Créer des scénarios** : Détaillez vos fonctionnalités avec des scénarios
 5. **Exporter** : Sauvegardez votre mapping pour le partager
 
+## 📚 Documentation
+
+La documentation complète du projet est disponible dans le dossier [`docs/`](./docs/):
+
+- 🎯 [**Backend Use Cases**](./docs/BACKEND-USE-CASES.md) - Spécifications pour le développement backend
+- 🎨 [**Storybook**](./docs/STORYBOOK.md) - Documentation des composants UI
+- ⚙️ [**Feature Flags**](./docs/FEATURE-FLAGS-README.md) - Guide d'utilisation des feature flags
+- ⏱️ [**Sessions**](./docs/PARAMETRAGE_SESSIONS.md) - Configuration des sessions de travail
+- ♿ [**Accessibilité**](./docs/accessibility/) - Documentation complète sur l'accessibilité
+
+➡️ **[Index complet de la documentation](./docs/README.md)**
+
 ## Contribution
 
 1. Fork le projet
