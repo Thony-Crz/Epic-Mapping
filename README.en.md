@@ -12,7 +12,7 @@
 ---
 
 <div align="center">
-  <img src="logo-with-text.svg" alt="Epic Mapping Logo"/>
+  <img src="logo.svg" alt="Epic Mapping Logo" width="120" height="120"/>
   <h1>🧭 Epic Mapping - Example Mapping + Azure DevOps Integration</h1>
 </div>
 

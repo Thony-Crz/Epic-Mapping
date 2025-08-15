@@ -12,14 +12,7 @@
 ---
 
 <div align="center">
-  <img src="logo-with-text.svg" alt="Epic Mapping Logo"/>
-  <h1>🧭 Epic Mapping - Example Mapping + Intégration Azure DevOps</h1>
-</div> Pipeline](https://github.com/Thony-Crz/Epic-Mapping/actions/workflows/ci.yml/badge.svg)](https://github.com/Thony-Crz/Epic-Mapping/actions/workflows/ci.yml)
-
-[Recette-Front](https://thony-crz.github.io/Epic-Mapping/)
-
-<div align="center">
-  <img src="logo.svg" alt="Epic Mapping Logo"/>
+  <img src="logo.svg" alt="Epic Mapping Logo" width="120" height="120"/>
   <h1>🧭 Epic Mapping - Example Mapping + Intégration Azure DevOps</h1>
 </div>
 
