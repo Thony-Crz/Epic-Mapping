@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Domain.Interfaces.Repositories;
+using Infrastructure.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure
 {
@@ -7,8 +9,7 @@ namespace Infrastructure
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
         {
             // Enregistrer le repository
-            //services.AddScoped<IProjectRepository, ProjectRepository>(); // ProjectRepository est votre implémentation
-
+            services.AddScoped<IProjectRepository, ProjectRepository>(); // ProjectRepository est votre implémentation
             return services;
         }
     }
