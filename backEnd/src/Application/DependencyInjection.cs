@@ -1,3 +1,5 @@
+using Application.Interfaces;
+using Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -9,6 +11,7 @@ public static class DependencyInjection
     {
         // Enregistrer MediatR avec tous les handlers de l'assembly Application
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+        services.AddScoped<IAuthService, AuthService>();
 
         return services;
     }

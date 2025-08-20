@@ -10,6 +10,8 @@ namespace Infrastructure
         {
             // Enregistrer le repository
             services.AddScoped<IProjectRepository, ProjectRepository>(); // ProjectRepository est votre implémentation
+            services.AddScoped<IUserRepository, UserRepository>();
+
             return services;
         }
     }

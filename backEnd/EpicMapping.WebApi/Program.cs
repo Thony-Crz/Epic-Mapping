@@ -1,13 +1,9 @@
 using Application;
 using Application.Behaviors;
-using Application.UseCases.AuthenticateUser;
-using Domain.Interfaces;
 using EpicMapping.WebApi.Configuration;
 using EpicMapping.WebApi.Middleware;
-using FluentValidation;
 using Infrastructure;
 using Infrastructure.Extensions;
-using Infrastructure.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -110,17 +106,12 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // Add MediatR and FluentValidation
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<AuthorizeExternalProviderCommand>());
-builder.Services.AddValidatorsFromAssemblyContaining<AuthorizeExternalProviderValidator>();
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 // Register configuration objects
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.SectionName));
 builder.Services.Configure<AzureAdSettings>(builder.Configuration.GetSection(AzureAdSettings.SectionName));
 builder.Services.Configure<SecuritySettings>(builder.Configuration.GetSection(SecuritySettings.SectionName));
-
-// Register the authentication service
-builder.Services.AddScoped<IAuthenticationService, OAuthAuthenticationService>();
 
 // Configure authorization policies with global authentication requirement
 builder.Services.AddControllers(config =>
