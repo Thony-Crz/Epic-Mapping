@@ -19,7 +19,7 @@ Deliver a Ready-only JSON export for individual epics (including every child car
 
 **Language/Version**: Backend C# 13 on .NET 9.0; Frontend TypeScript 5.6 with Svelte 5 / SvelteKit 2.16.  
 **Primary Dependencies**: ASP.NET Core minimal APIs, Entity Framework Core 9, System.Text.Json, SvelteKit + Vite runtime, Tailwind UI stack.  
-**Storage**: PostgreSQL 15 via EF Core for epics; telemetry/audit sink (NEEDS CLARIFICATION: confirm whether audit events persist in PostgreSQL or external observability store).  
+**Storage**: PostgreSQL 15 via EF Core for epics plus new `ExportAuditEvents` table for export attempts (nightly rollups feed observability stack).  
 **Testing**: `dotnet test` for Domain/Application/Infrastructure suites; `pnpm vitest` for feature state; `pnpm test:accessibility` (Playwright + axe) for AA compliance.  
 **Target Platform**: Linux containers (backend API) and modern evergreen browsers for the SvelteKit SPA.  
 **Project Type**: Full-stack web split across `backEnd` and `frontEnd` workspaces.  
@@ -57,6 +57,9 @@ Deliver a Ready-only JSON export for individual epics (including every child car
 - **Strict TDD (Red → Green → Refactor)** – PASS: Step table enumerates failing-test-first workflow for every layer.
 - **Step Negotiation & Size Control** – PASS: All steps sized, `S2` flagged for reviewer approval.
 - **Traceability & Evidence** – PASS: Plan captures documentation touchpoints (spec, schema, logs) ensuring future tasks link to Markdown artifacts.
+
+**Post-Design Re-Check (2025-12-02)**
+- Research (`research.md`), data map (`data-model.md`), contracts (`contracts/*.json|yaml`), and quickstart guide are now in place, still honoring Clean Architecture and TDD mandates. No constitution violations detected.
 
 ## Project Structure
 

@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://epic-mapping/specs/001-ready-epic-export/contracts/epic-export.schema.json",
+  "title": "EpicExport",
+  "description": "Snapshot payload for exporting a Ready epic (including child Features and Scenarios) to downstream tools such as Azure DevOps.",
+  "type": "object",
+  "required": ["meta", "epic", "features"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["schema_version", "exported_at", "exported_by", "export_channel", "epic_id", "checksum"],
+      "properties": {
+        "schema_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$", "description": "Semantic version of the EpicExport contract." },
+        "exported_at": { "type": "string", "format": "date-time" },
+        "exported_by": { "type": "string", "description": "UPN or service principal that triggered the export." },
+        "export_channel": { "type": "string", "enum": ["Download", "API"], "description": "Delivery route used for this artifact." },
+        "epic_id": { "type": "string", "format": "uuid" },
+        "checksum": { "type": "string", "pattern": "^[A-Fa-f0-9]{64}$", "description": "SHA-256 hash of the serialized payload." },
+        "correlation_id": { "type": "string", "description": "Trace identifier linking to audit logs." }
+      }
+    },
+    "epic": {
+      "type": "object",
+      "required": ["id", "key", "title", "summary", "status", "owner", "business_value", "estimate", "confidence", "readiness_checklist", "acceptance_criteria", "ready_at"],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "key": { "type": "string" },
+        "title": { "type": "string", "maxLength": 140 },
+        "summary": { "type": "string" },
+        "status": { "type": "string", "enum": ["Draft", "Refinement", "Ready", "InFlight", "Done"] },
+        "owner": { "type": "string" },
+        "tribe": { "type": ["string", "null"] },
+        "target_release": { "type": ["string", "null"] },
+        "business_value": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "estimate": { "type": "integer", "minimum": 1 },
+        "confidence": { "type": "string", "enum": ["Low", "Medium", "High"] },
+        "tags": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "key", "title", "type", "status"],
+            "properties": {
+              "id": { "type": "string", "format": "uuid" },
+              "key": { "type": "string" },
+              "title": { "type": "string" },
+              "type": { "type": "string", "enum": ["epic", "external"] },
+              "status": { "type": "string" }
+            }
+          },
+          "default": []
+        },
+        "readiness_checklist": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "title", "is_complete"],
+            "properties": {
+              "id": { "type": "string" },
+              "title": { "type": "string" },
+              "note": { "type": ["string", "null"] },
+              "is_complete": { "type": "boolean" }
+            }
+          }
+        },
+        "acceptance_criteria": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "linked_stories": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/storyRef" },
+          "description": "Flat list of cards with type + order metadata for compatibility." },
+        "updated_at": { "type": "string", "format": "date-time" },
+        "ready_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "features": {
+      "type": "array",
+      "description": "Ordered feature hierarchy including nested scenarios.",
+      "items": { "$ref": "#/definitions/feature" }
+    },
+    "links": {
+      "type": "object",
+      "properties": {
+        "attachments": { "type": "array", "items": { "type": "string", "format": "uri" }, "default": [] },
+        "roadmap_items": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "children": { "type": "array", "items": { "$ref": "#/definitions/storyRef" }, "default": [] }
+      },
+      "default": {}
+    }
+  },
+  "definitions": {
+    "feature": {
+      "type": "object",
+      "required": ["id", "key", "title", "status", "order", "scenarios"],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "key": { "type": "string" },
+        "title": { "type": "string" },
+        "summary": { "type": ["string", "null"] },
+        "status": { "type": "string", "enum": ["Ideation", "Refinement", "Ready", "InFlight", "Done"] },
+        "order": { "type": "integer", "minimum": 0 },
+        "tags": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "scenarios": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/scenario" },
+          "default": []
+        }
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "required": ["id", "title", "status", "order"],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "title": { "type": "string" },
+        "description": { "type": ["string", "null"] },
+        "status": { "type": "string", "enum": ["Draft", "Ready", "Accepted"] },
+        "order": { "type": "integer", "minimum": 0 },
+        "acceptance_criteria": { "type": "array", "items": { "type": "string" }, "default": [] }
+      }
+    },
+    "storyRef": {
+      "type": "object",
+      "required": ["id", "key", "title", "status", "type", "order"],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "key": { "type": "string" },
+        "title": { "type": "string" },
+        "status": { "type": "string" },
+        "type": { "type": "string", "enum": ["feature", "scenario", "story"] },
+        "order": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

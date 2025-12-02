@@ -1,0 +1,97 @@
+openapi: 3.0.3
+info:
+  title: Epic Mapping Export API
+  version: 1.0.0
+  description: >-
+    Read-only endpoint that exports a Ready epic (plus child Features and Scenarios)
+    as a JSON payload conforming to `epic-export.schema.json`.
+servers:
+  - url: https://api.epic-mapping.local
+paths:
+  /api/epics/{id}/export:
+    get:
+      summary: Export Ready epic as JSON
+      description: >-
+        Returns a serialized snapshot of the specified epic when its status is Ready.
+        If the epic is not Ready, clients receive HTTP 409 with remediation details.
+      operationId: getEpicExport
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Epic identifier.
+      responses:
+        '200':
+          description: Ready epic export delivered successfully.
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+              description: >-
+                Includes filename pattern `epic-{key}-{timestamp}.json` for download UX.
+          content:
+            application/json:
+              schema:
+                $ref: './epic-export.schema.json'
+        '404':
+          description: Epic not found or user lacks permission.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '409':
+          description: Epic is not in Ready status; export blocked.
+          headers:
+            Retry-After:
+              schema:
+                type: integer
+                description: Suggested retry window in seconds when status change is imminent.
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Problem'
+                  - type: object
+                    properties:
+                      required_status:
+                        type: string
+                        enum: [Ready]
+                      current_status:
+                        type: string
+                      missing_checklist_items:
+                        type: array
+                        items:
+                          type: string
+        '429':
+          description: Export throttle triggered by rapid repeat requests.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+        - BearerAuth: []
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Problem:
+      type: object
+      required: [type, title, status, traceId]
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        traceId:
+          type: string
