@@ -16,9 +16,9 @@
 
 Purpose: ensure local environments and seed data support Ready-epic export work.
 
-- [ ] T001 small Add export tooling prerequisites (.NET 9 SDK, pnpm, Playwright browsers) to `Docs/DEVELOPMENT-ENVIRONMENT.md` so every dev can run planned tests.
-- [ ] T002 [P] small Create sample Ready epic + child Feature/Scenario seed data in `backEnd/init-scripts/01-init.sh` to exercise export manually.
-- [ ] T003 [P] small Add `.env.example` entry in `frontEnd/.env.example` for `VITE_API_BASE_URL` pointing to the WebApi host used by export flows.
+- [x] T001 small Add export tooling prerequisites (.NET 9 SDK, pnpm, Playwright browsers) to `Docs/DEVELOPMENT-ENVIRONMENT.md` so every dev can run planned tests.
+- [x] T002 [P] small Create sample Ready epic + child Feature/Scenario seed data in `backEnd/init-scripts/01-init.sh` to exercise export manually.
+- [x] T003 [P] small Add `.env.example` entry in `frontEnd/.env.example` for `VITE_API_BASE_URL` pointing to the WebApi host used by export flows.
 
 Checkpoint: local env + sample data ready.
 
