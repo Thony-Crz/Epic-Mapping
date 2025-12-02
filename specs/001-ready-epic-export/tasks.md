@@ -24,9 +24,34 @@ Checkpoint: local env + sample data ready.
 
 ---
 
-## Phase 2: Foundational (Blocking Prerequisites)
+## Phase 2: User Story 1 – Red (tests first)
 
-Purpose: shared infrastructure that all user stories depend on; must finish before US1+.
+Goal: drive the export behavior with failing unit tests before touching domain or persistence code.
+Independent Test: invoke handler via application layer test to verify JSON fields + audit logging hooks (using fakes for persistence).
+
+- [x] T009 [P] [US1] small Author failing unit tests in `backEnd/Tests/Application.UnitTests/Epics/ExportReadyEpicHandlerTests.cs` covering Ready guard, child inclusion, serializer contract, and audit repository interactions (stubbed).
+
+Checkpoint: RED state captured for core export flows.
+
+---
+
+## Phase 3: User Story 1 – Green + Refactor (domain + handler)
+
+Goal: satisfy the failing tests by implementing domain policy, DTO mapping, serializer, and handler orchestration while still using in-memory fakes for persistence.
+
+- [ ] T010 [US1] small Implement `ReadyEpicExportPolicy` in `backEnd/src/Domain/Epics/Services/ReadyEpicExportPolicy.cs` enforcing Ready status + completeness checks.
+- [ ] T011 [P] [US1] small Add DTOs + mapper in `backEnd/src/Application/Epics/Models/EpicExportDto.cs` and `.../Mappers/EpicExportMapper.cs` to shape domain data for serialization.
+- [ ] T012 [P] [US1] small Create `IEpicExportSerializer` + `SystemTextJsonEpicExportSerializer` inside `backEnd/src/Application/Epics/Serialization/` honoring `epic-export.schema.json` (camelCase, schema_version).
+- [ ] T013 [US1] medium Implement `ExportReadyEpicHandler` in `backEnd/src/Application/Epics/ExportReadyEpicHandler.cs` orchestrating repository fetch, policy validation, serialization, and audit repository writes (still targeting interfaces). (Requires reviewer approval for medium size.)
+- [ ] T014 [US1] small Register handler + serializer in `backEnd/src/Application/DependencyInjection.cs` and expose through MediatR pipeline if applicable.
+
+Checkpoint: handler-level export works with unit tests using fake persistence.
+
+---
+
+## Phase 4: Audit persistence & infrastructure (Blocking for US2+)
+
+Purpose: back-fill the storage concerns once US1 logic is validated so the handler can persist audit events for API layers.
 
 - [ ] T004 medium Create EF Core migration `backEnd/src/Infrastructure/Migrations/<timestamp>_AddExportAuditEvents.cs` defining the `ExportAuditEvents` table (id, epic_id, exported_by, exported_at, checksum, payload, delivery_channel, status, failure_reason).
 - [ ] T005 [P] small Register `DbSet<ExportAuditEvent>` and fluent configuration inside `backEnd/src/Infrastructure/Data/EpicMappingDbContext.cs` to expose the audit table.
@@ -34,30 +59,11 @@ Purpose: shared infrastructure that all user stories depend on; must finish befo
 - [ ] T007 [P] small Define shared `EpicExportSnapshot` and value objects in `backEnd/src/Domain/Epics/ValueObjects/EpicExportSnapshot.cs` capturing Epic + Feature + Scenario hierarchies.
 - [ ] T008 small Wire serializer/audit services into DI via `backEnd/src/Application/DependencyInjection.cs` and `backEnd/EpicMapping.WebApi/Program.cs` so downstream tasks can resolve them.
 
-Checkpoint: storage + domain scaffolding complete; proceed to US1.
+Checkpoint: storage + domain scaffolding complete; API layers can depend on concrete persistence.
 
 ---
 
-## Phase 3: User Story 1 – Export a ready epic snapshot (Priority P1)
-
-Goal: deliver Ready-only export handler that serializes an epic (with children) to the contract.
-Independent Test: invoke handler via application layer test to verify JSON fields + audit logging without UI/API layers.
-
-### Tests (write first)
-- [ ] T009 [P] [US1] small Author failing unit tests in `backEnd/Tests/Application.UnitTests/Epics/ExportReadyEpicHandlerTests.cs` covering Ready guard, child inclusion, and audit logging hooks.
-
-### Implementation
-- [ ] T010 [US1] small Implement `ReadyEpicExportPolicy` in `backEnd/src/Domain/Epics/Services/ReadyEpicExportPolicy.cs` enforcing Ready status + completeness checks.
-- [ ] T011 [P] [US1] small Add DTOs + mapper in `backEnd/src/Application/Epics/Models/EpicExportDto.cs` and `.../Mappers/EpicExportMapper.cs` to shape domain data for serialization.
-- [ ] T012 [P] [US1] small Create `IEpicExportSerializer` + `SystemTextJsonEpicExportSerializer` inside `backEnd/src/Application/Epics/Serialization/` honoring `epic-export.schema.json` (camelCase, schema_version).
-- [ ] T013 [US1] medium Implement `ExportReadyEpicHandler` in `backEnd/src/Application/Epics/ExportReadyEpicHandler.cs` orchestrating repository fetch, policy validation, serialization, and audit repository writes. (Requires reviewer approval for medium size.)
-- [ ] T014 [US1] small Register handler + serializer in `backEnd/src/Application/DependencyInjection.cs` and expose through MediatR pipeline if applicable.
-
-Checkpoint: handler-level export works with unit tests.
-
----
-
-## Phase 4: User Story 2 – Enforce Ready-only exports (Priority P2)
+## Phase 5: User Story 2 – Enforce Ready-only exports (Priority P2)
 
 Goal: expose HTTP endpoint that only serves Ready epics, returns 409 otherwise, and records audit events.
 Independent Test: run Web API integration tests hitting `/api/epics/{id}/export` for 200/404/409 cases.
@@ -75,7 +81,7 @@ Checkpoint: API returns exports only when Ready, with full logging.
 
 ---
 
-## Phase 5: User Story 3 – Generate Azure-ready payload (Priority P3)
+## Phase 6: User Story 3 – Generate Azure-ready payload (Priority P3)
 
 Goal: allow UI users + automation to download the export and use it for Azure DevOps Feature/Scenario creation, with accessibility guarantees and mapping docs.
 Independent Test: run Vitest + Playwright suites plus an Azure import dry-run using exported JSON from the new UI button.
@@ -95,7 +101,7 @@ Checkpoint: UI + documentation enable Azure import flows end-to-end.
 
 ---
 
-## Phase 6: Polish & Cross-Cutting Concerns
+## Phase 7: Polish & Cross-Cutting Concerns
 
 Purpose: final hardening, docs, and validation across stories.
 
@@ -108,22 +114,24 @@ Purpose: final hardening, docs, and validation across stories.
 
 ## Dependencies & Execution Order
 
-1. **Phase 1 → Phase 2**: Setup must finish before foundational DB/services work.
-2. **Phase 2 → Phases 3-5**: Export audit tables + serializer scaffolding unblock all stories.
-3. **User Stories**: US1 (export handler) should complete before US2 (API) to reuse handler; US3 (UI) depends on US2 being callable.
-4. **Polish**: Runs after desired user stories; can overlap partially once US3 code stabilizes.
+1. **Phase 1 → Phase 2**: Setup (seed data, env files) must be ready before capturing RED tests.
+2. **Phase 2 → Phase 3**: TDD flow requires tests (RED) before implementing policy/handler (GREEN).
+3. **Phase 3 → Phase 4**: Only once the handler passes tests with fakes do we introduce concrete persistence/audit infrastructure.
+4. **Phase 4 → Phase 5**: API work (US2) requires the audit persistence pieces to exist.
+5. **Phase 5 → Phase 6**: UI (US3) depends on the API endpoint.
+6. **Phase 7**: Polish runs last, optionally overlapping after US3 is stable.
 
 ### Story Completion Graph
 - US1 → US2 → US3 (US2 cannot start before US1 handler exists; US3 depends on API).
 
 ### Parallel Opportunities
-- Setup tasks T002/T003 can run in parallel after T001.
-- Foundational tasks T005 and T007 can run once T004 migration structure is defined (different files).
-- Within US1, T011 and T012 can proceed in parallel after T010 establishes policy requirements.
-- In US3, T022-T025 touch separate front-end layers and can divide across developers once tests (T020/T021) exist.
+- Setup tasks T002/T003 can run in parallel after T001 (already completed).
+- Within US1, T011 and T012 can proceed in parallel after T010 defines the policy contract, while T013 waits for both to finish.
+- Phase 4 persistence tasks split naturally: T005 and T007 touch separate files once T004 (migration) lands; T006 follows after DbContext wiring.
+- In US3, T022-T025 span different front-end layers and can divide across developers once tests (T020/T021) exist.
 
 ## Implementation Strategy
 
-- **MVP (US1)**: complete Setup → Foundational → US1 tasks to unlock a handler-level export suitable for CLI consumers.
-- **Incremental Delivery**: after MVP, layer US2 to publish the API, then US3 for UI/Azure integration; deploy after each story if desired.
+- **MVP (US1)**: follow strict RED → GREEN flow (Phase 2 then Phase 3) using fakes; add persistence (Phase 4) only after tests pass to keep concerns isolated.
+- **Incremental Delivery**: after MVP, layer US2 (Phase 5) to publish the API, then US3 (Phase 6) for UI/Azure integration; deploy after each story if desired.
 - **Evidence**: every task should log Red/Green/Refactor commands (dotnet/vitest/playwright) plus schema validation steps noted in quickstart.
