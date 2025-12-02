@@ -1,50 +1,66 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Epic Mapping Specify Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Clean Architecture & Bounded Contexts
+All work must reinforce the layered separation already captured in `Docs/ARCHITECTURE.md` and the `frontEnd/src` + `backEnd/src` structure: Domain rules live in Domain, Application orchestrates use-cases, Infrastructure handles adapters. No feature work may merge layers or leak framework concerns into the Domain.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Technical Specification First
+Every increment starts with a written spec derived from `.specify/templates/spec-template.md`. Specs capture user journeys, measurable outcomes, data contracts, and the intended Clean Architecture touchpoints before any task enters implementation.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Strict TDD (Red → Green → Refactor)
+Tests precede production code. For each approved step we require: draft/approve test, ensure it fails (RED), implement the smallest code to pass (GREEN), then refactor under green tests. Skipping or reordering these sub-steps is prohibited.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Step Negotiation & Size Control
+The AI must announce the exact step it plans to implement, including the expected test delta, and wait for human validation. Steps must declare a `step_size` parameter: `tiny`, `small`, `medium`, `large`. Default is `small`; anything larger requires explicit approval with rationale.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Traceability & Evidence
+Every decision, test artifact, and architectural change needs a Markdown trace (README updates, ADRs, specs). CI logs and test outputs must be linkable from the spec or task notes so any reviewer can replay the reasoning.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Specify Implementation Directives
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+1. **Step Proposal Block** (mandatory before coding):
+	- `step_name`: short, imperative label.
+	- `goal`: concise outcome.
+	- `touched_layers`: Domain | Application | Infrastructure | UI.
+	- `tests`: list of new/updated tests and target files.
+	- `step_size`: `tiny/small/medium/large` with justification if not tiny/small.
+	- `acceptance_hook`: command(s) or manual checks to prove success.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+2. **User Validation Gate**: implementation starts only after the user (or reviewer) acknowledges the step proposal. If requirements change mid-step, abort and renegotiate.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+3. **Technical Specs Enforcement**:
+	- Every feature spec must cite the impacted domain entities/use-cases (see `frontEnd/src/features`, `backEnd/src/Application`).
+	- Data contracts and DTOs must be mirrored in both `Docs/BACKEND-USE-CASES.md` and `frontEnd/src/domain` notes when relevant.
+	- Non-functional requirements (performance, security, accessibility) live in the spec under “Requirements → Constraints”.
+
+4. **Automated Evidence**:
+	- Front-end: `pnpm test`, `pnpm vitest`, `pnpm lint`, `pnpm check`.
+	- Back-end: `dotnet test`, `dotnet format`, `dotnet ef migrations add --dry-run` when schema changes.
+	- Accessibility: `frontEnd/run-accessibility-tests.ps1` for UI-affecting steps.
+	- Observability: mention logging/metrics updates for API changes.
+
+5. **TDD Rituals**:
+	- Write/commit failing test with reference to spec + step id.
+	- Smallest code to pass only the targeted test.
+	- Refactor with guardrails: no functional deltas, keep tests green, update documentation.
+
+## Development Workflow & Quality Gates
+
+1. **Discovery**: confirm user problem, align on spec template, capture constraints.
+2. **Specification**: fill spec template, mark priorities, link to Clean Architecture layers.
+3. **Planning**: break spec into ordered steps, size them, ensure each fits inside TDD loops.
+4. **Implementation**: follow Red/Green/Refactor for each validated step, documenting outcomes.
+5. **Review**: reviewer checks spec compliance, test evidence, and doc updates before merge.
+6. **Release**: update release notes, ensure `.specify` artifacts reference commit/tag.
+
+Quality gates are blocking: no merge if any checklist fails (missing spec, missing failing test proof, unapproved step size, or missing README/Docs references).
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+- This constitution overrides ad-hoc habits. Changes require an ADR that explains the motivation, risks, and migration plan.
+- Pull Requests must link the active spec, list executed steps with their sizes, and attach test command outputs.
+- Automated bots must abide by the same step proposal/validation ritual.
+- Use `.specify/templates/plan-template.md` for roadmap-level planning and `.specify/templates/tasks-template.md` for daily execution logs.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025-12-02 | **Last Amended**: 2025-12-02

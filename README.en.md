@@ -45,6 +45,17 @@
 | [**Architecture**](./Docs/ARCHITECTURE.md) | 🏗️ DDD code structure |
 | [**Security**](./Docs/SECURITY.md) | 🔒 Security best practices |
 
+## 🤖 Specify Workflow
+
+1. **Constitution**: Every change must comply with `.specify/memory/constitution.md` (Clean Architecture, technical specs, strict TDD).
+2. **Specification**: Author a spec via `.specify/templates/spec-template.md`, filling the *Clean Architecture Alignment*, *Technical Specification Details*, and *TDD Strategy & Step Sizing* sections.
+3. **Planning**: Generate `plan.md` to capture layer commitments and the ordered step table with `step_size` (`tiny/small/medium/large`).
+4. **Tasks**: Use `.specify/templates/tasks-template.md`; each task is a "Step" that records `step_size`, targeted tests, and the Red/Green/Refactor plan.
+5. **Validation**: The AI must propose the next step (description + tests) and wait for human approval before writing any code or tests.
+6. **Evidence**: Track the failing test command (RED), the passing run (GREEN), and any refactor/doc updates for every approved step.
+
+> Tip: Reject `medium/large` steps unless the spec clearly justifies the risk and reviewer approval is captured in the plan.
+
 ## 🎯 Objective
 
 This web application allows you to **model User Story Maps using Example Mapping**, and **automatically generate the corresponding tree structure (Epic, Features, Scenarios) in an Azure DevOps backlog** once the analysis work is completed.

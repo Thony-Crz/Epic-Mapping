@@ -45,6 +45,17 @@
 | [**Architecture**](./Docs/ARCHITECTURE.md) | 🏗️ Structure DDD du code |
 | [**Sécurité**](./Docs/SECURITY.md) | 🔒 Bonnes pratiques sécurité |
 
+## 🤖 Flux Specify
+
+1. **Constitution**: Toute intervention doit respecter `.specify/memory/constitution.md` (Clean Architecture, specs techniques, TDD strict).
+2. **Spécification**: Rédiger un spec via `.specify/templates/spec-template.md` en complétant les sections *Clean Architecture Alignment*, *Technical Specification Details* et *TDD Strategy & Step Sizing*.
+3. **Planification**: Générer un plan (`plan.md`) et détailler les engagements par couche ainsi que la table des steps (`step_size` = tiny/small/medium/large).
+4. **Tasks**: Utiliser `.specify/templates/tasks-template.md` → chaque tâche devient un « Step » avec `step_size`, tests ciblés et validation Red/Green/Refactor.
+5. **Validation**: L’IA propose systématiquement le prochain step (description + tests). Aucun code n’est écrit sans validation humaine de la taille et du contenu du step.
+6. **Évidence**: Chaque step conserve la commande RED (test en échec), la passe GREEN, puis le refactoring/documentation.
+
+> Astuce: refuser tout step `medium/large` sans justification liée au spec ou à la contrainte Clean Architecture.
+
 ## 🎯 Objectif
 
 Cette application web permet de **modéliser des User Story Maps à l'aide de l'Example Mapping**, et de **générer automatiquement l'arborescence correspondante (Epic, Features, Scenarios) dans un backlog Azure DevOps** une fois le travail d'analyse complété.

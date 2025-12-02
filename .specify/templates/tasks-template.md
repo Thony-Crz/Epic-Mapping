@@ -12,11 +12,19 @@ description: "Task list template for feature implementation"
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
-## Format: `[ID] [P?] [Story] Description`
+## Format: `[ID] [P?] [Story] [StepSize] Description`
 
 - **[P]**: Can run in parallel (different files, no dependencies)
 - **[Story]**: Which user story this task belongs to (e.g., US1, US2, US3)
+- **[StepSize]**: `tiny`, `small`, `medium`, or `large`. Default is `small`; `medium/large` require reviewer approval and justification in the task description.
 - Include exact file paths in descriptions
+
+### Validation Ritual
+
+1. Propose the next task as a "Step" with `step_name`, `step_size`, impacted layers, and planned tests.
+2. Wait for reviewer approval before starting work.
+3. Start with the test task (RED), make it pass with the smallest change (GREEN), then refactor/tests/documentation (REFACTOR).
+4. Record evidence (commands + outputs) adjacent to the completed task.
 
 ## Path Conventions
 

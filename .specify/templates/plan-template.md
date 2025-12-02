@@ -27,6 +27,24 @@
 **Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
 **Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
 
+## Clean Architecture Commitments
+
+- **Domain Layer**: [Entities/value objects/use cases touched. Reference `frontEnd/src/domain`, `backEnd/src/Domain`.]
+- **Application Layer**: [Services/interactors/use cases. Reference `frontEnd/src/features`, `backEnd/src/Application`.]
+- **Infrastructure & Interfaces**: [Adapters, repositories, UI gateways, external APIs. Reference `frontEnd/src/infrastructure`, `backEnd/src/Infrastructure`, `frontEnd/src/routes`.]
+- **Rules**: No domain model depends on framework code. Document any exceptions with justification and mitigation plan.
+
+## Step Strategy & TDD Gates
+
+| Step | Description | Target Tests | Step Size (`tiny/small/medium/large`) | Approval Needed |
+|------|-------------|--------------|--------------------------------------|-----------------|
+| [S1] | [e.g., Define failing unit test for entity invariant] | `Tests/Application.UnitTests/...` | tiny | Reviewer auto |
+| [S2] | [...] | [...] | small | Reviewer auto |
+
+- Default cadence: propose → wait for approval → implement via Red/Green/Refactor.
+- Steps larger than `small` need explicit reviewer sign-off and updated risk notes.
+- Evidence for Red (failing test command) must be recorded before implementation begins.
+
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*

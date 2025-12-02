@@ -17,6 +17,14 @@ Ce dossier contient toute la documentation du projet Epic Mapping.
 | [**SECURITY.md**](./SECURITY.md) | Guide de sécurité et bonnes pratiques |
 | [**DEV-TOKEN-README.md**](./DEV-TOKEN-README.md) | Tokens de développement pour l'API |
 
+## 🤖 Flux Specify obligatoire
+
+1. **Constitution** : lire et respecter `.specify/memory/constitution.md` (Clean Architecture, specs techniques, TDD Red-Green-Refactor, validation par step).
+2. **Spec** : créer le spec avec `.specify/templates/spec-template.md` → remplir les sections *Clean Architecture Alignment*, *Technical Specification Details* et *TDD Strategy & Step Sizing*.
+3. **Plan** : utiliser `.specify/templates/plan-template.md` pour capturer les engagements par couche et le tableau des steps (`step_size` tiny/small/medium/large).
+4. **Tasks** : détailler l'exécution via `.specify/templates/tasks-template.md`, chaque tâche = « step » avec evidence Red/Green/Refactor.
+5. **Validation** : l'IA doit proposer le prochain step (description + tests) et attendre ton feu vert avant toute implémentation.
+
 ## 🚀 Démarrage rapide
 
 ```bash

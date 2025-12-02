@@ -21,6 +21,14 @@ Le projet suit une architecture hexagonale avec :
 - **Services** : Orchestration des use cases
 - **UI Components** : Composants Svelte réutilisables
 
+## 🤖 Flux Specify (Frontend)
+
+1. Respecter `.specify/memory/constitution.md` pour toute modification (Clean Architecture, spec technique, TDD Red/Green/Refactor).
+2. Avant d'implémenter une feature UI, compléter `.specify/templates/spec-template.md` en listant les modules `frontEnd/src/...` impactés.
+3. Décrire les steps et leur `step_size` dans `plan.md`, puis détailler les tasks via `.specify/templates/tasks-template.md`.
+4. Chaque step doit commencer par un test (Vitest/Playwright) en échec, suivi de l'implémentation minimale et d'un refactoring documenté.
+5. L'IA doit annoncer le step retenu (nom + taille + tests) et attendre validation avant de coder.
+
 ## Technologies
 
 - **SvelteKit** - Framework frontend
