@@ -11,6 +11,8 @@
 	import { dndzone } from 'svelte-dnd-action';
 	import type { Feature } from '$domain/entities/Feature';
 	import type { Scenario } from '$domain/entities/Scenario';
+	import { checkEpicReadiness } from '../../../domain/services/EpicReadinessService';
+	import { downloadEpicExport } from '../../../domain/services/EpicExportService';
 	import BlueCard from '$ui/components/cards/BlueCard.svelte';
 	import YellowCard from '$ui/components/cards/YellowCard.svelte';
 	import GreenCard from '$ui/components/cards/GreenCard.svelte';
@@ -19,11 +21,6 @@
 	import AddFeatureContentForm from '$ui/components/forms/AddFeatureContentForm.svelte';
 	import SessionControls from '$ui/components/SessionControls.svelte';
 	import ExportReadyEpicToastStack from '$ui/toasts/export-ready-epic-toast.svelte';
-	import {
-		createExportReadyEpicStore,
-		type ExportReadyEpicState,
-		type ExportReadyEpicStore
-	} from '../../../features/epics/export/exportReadyEpicStore';
 	import {
 		safeUpdateEpicTitle,
 		safeUpdateFeature,
@@ -38,19 +35,22 @@
 		message: string;
 	};
 
-	let exportReadyEpicStoreInstance: ExportReadyEpicStore | null = null;
-	let exportState: ExportReadyEpicState | null = null;
-	let exportLiveMessage = 'Export disponible uniquement lorsque le statut est Ready.';
 	let exportToasts: ExportReadyEpicToast[] = [];
-	let exportStatusSnapshot = '';
-	let exportStoreUnsubscribe: (() => void) | null = null;
 	let toastIdCounter = 0;
 	const toastTimers = new Map<number, ReturnType<typeof setTimeout>>();
-	let exportButtonDisabled = true;
-	let exportHelperText = 'Export disponible uniquement lorsque le statut est Ready.';
+	let isExporting = false;
 
 	$: id = $page.params.id;
 	$: epic = $epicsDisplayStore.find((e) => e.id === id);
+
+	// Check epic readiness using the domain service
+	$: readinessResult = epic ? checkEpicReadiness(epic) : { isReady: false, reason: 'Épic non trouvée' };
+	$: canExport = readinessResult.isReady;
+	$: exportHelperText = canExport
+		? 'Téléchargez le JSON et importez-le dans Azure DevOps.'
+		: readinessResult.reason || 'Export disponible uniquement lorsque le statut est Ready.';
+	$: exportButtonDisabled = !canExport || isExporting;
+	$: exportLiveMessage = buildLiveRegionMessage(epic?.title, canExport, isExporting);
 
 	// Variables pour le drag and drop
 	let featuresWithId: Feature[] = [];
@@ -70,69 +70,21 @@
 		});
 	}
 
-	$: if (epic) {
-		const normalizedStatus = normalizeEpicStatus(epic.status);
-		if (!exportReadyEpicStoreInstance) {
-			initializeExportReadyEpicStore(normalizedStatus);
-		} else if (normalizedStatus !== exportStatusSnapshot) {
-			exportReadyEpicStoreInstance.setEpicStatus(normalizedStatus);
-			exportStatusSnapshot = normalizedStatus;
-		}
-	} else {
-		disposeExportReadyEpicStore();
-	}
-
-	$: exportButtonDisabled = !exportState?.canExport || !!exportState?.isExporting;
-	$: exportHelperText = exportState
-		? exportState.canExport
-			? 'Téléchargez le JSON et importez-le dans Azure DevOps.'
-			: exportState.disabledHint ||
-			  'Export disponible uniquement lorsque le statut est Ready.'
-		: 'Export disponible uniquement lorsque le statut est Ready.';
-	$: exportLiveMessage = buildLiveRegionMessage(epic?.title, exportState);
-
-	// Effet réactif pour gérer les transitions automatiques de statut
-	// TODO: Implémenter la logique de transition automatique si nécessaire
-
-	function initializeExportReadyEpicStore(status: string) {
-		if (!epic) {
-			return;
-		}
-
-		exportReadyEpicStoreInstance = createExportReadyEpicStore({
-			epic: {
-				id,
-				title: epic.title,
-				status
-			},
-			deps: {
-				toasts: {
-					success: (message: string) => pushExportToast('success', message),
-					error: (message: string) => pushExportToast('error', message)
-				}
-			}
-		});
-
-		exportStoreUnsubscribe = exportReadyEpicStoreInstance.state.subscribe((value) => {
-			exportState = value;
-		});
-		exportStatusSnapshot = status;
-	}
-
-	function disposeExportReadyEpicStore() {
-		exportStoreUnsubscribe?.();
-		exportStoreUnsubscribe = null;
-		exportReadyEpicStoreInstance = null;
-		exportState = null;
-		exportStatusSnapshot = '';
-	}
-
 	async function handleReadyEpicExport() {
-		if (!exportReadyEpicStoreInstance) {
+		if (!epic || !canExport || isExporting) {
 			return;
 		}
 
-		await exportReadyEpicStoreInstance.exportNow();
+		isExporting = true;
+		try {
+			downloadEpicExport(epic);
+			pushExportToast('success', `Export réussi pour "${epic.title}"`);
+		} catch (error) {
+			const message = error instanceof Error ? error.message : 'Erreur lors de l\'export';
+			pushExportToast('error', message);
+		} finally {
+			isExporting = false;
+		}
 	}
 
 	function pushExportToast(type: 'success' | 'error', message: string) {
@@ -161,31 +113,16 @@
 		toastTimers.clear();
 	}
 
-	function normalizeEpicStatus(status?: string) {
-		if (!status) {
-			return '';
-		}
-		return status.toLowerCase() === 'ready' ? 'Ready' : status;
-	}
-
 	function buildLiveRegionMessage(
 		epicTitle: string | undefined,
-		state: ExportReadyEpicState | null
+		canExportFlag: boolean,
+		isExportingFlag: boolean
 	) {
-		if (!state) {
-			return 'Export non initialise.';
-		}
-		if (state.isExporting) {
+		if (isExportingFlag) {
 			return `Export en cours pour ${epicTitle ?? 'cette epic'}.`;
 		}
-		if (state.error) {
-			return `Export echoue : ${state.error.message}`;
-		}
-		if (state.lastFileName) {
-			return `Export reussi : ${state.lastFileName}`;
-		}
-		if (!state.canExport) {
-			return state.disabledHint || 'Export disponible uniquement lorsque le statut est Ready.';
+		if (!canExportFlag) {
+			return readinessResult.reason || 'Export disponible uniquement lorsque le statut est Ready.';
 		}
 		return 'Export pret a demarrer.';
 	}
@@ -317,7 +254,6 @@
 	}
 
 	onDestroy(() => {
-		disposeExportReadyEpicStore();
 		clearExportToastTimers();
 	});
 </script>
@@ -381,7 +317,7 @@
 				aria-describedby="export-ready-epic-helper"
 				title={exportHelperText}
 			>
-				{#if exportState?.isExporting}
+				{#if isExporting}
 					<svg
 						class="h-4 w-4 animate-spin"
 						viewBox="0 0 24 24"
