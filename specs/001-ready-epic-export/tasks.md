@@ -91,8 +91,8 @@ Independent Test: run Vitest + Playwright suites plus an Azure import dry-run us
 - [ ] T021 [P] [US3] tiny Extend `frontEnd/accessibility/comprehensive-accessibility.spec.ts` to verify keyboard focus, aria-label, and live-region announcements for the export control.
 
 ### Implementation
-- [ ] T022 [US3] small Extend API client in `frontEnd/src/infrastructure/api/epics.ts` with `exportReadyEpic(id: string)` returning a `Blob` + filename metadata.
-- [ ] T023 [P] [US3] small Create store/hook in `frontEnd/src/features/epics/export/exportReadyEpicStore.ts` to manage loading, eligibility, and toast dispatch.
+- [x] T022 [US3] small Extend API client in `frontEnd/src/infrastructure/api/epics.ts` with `exportReadyEpic(id: string)` returning a `Blob` + filename metadata.
+- [x] T023 [P] [US3] small Create store/hook in `frontEnd/src/features/epics/export/exportReadyEpicStore.ts` to manage loading, eligibility, and toast dispatch.
 - [ ] T024 [US3] small Update epic detail page `frontEnd/src/routes/epics/[id]/+page.svelte` to render the export button, gating on status === Ready, and triggering download via hidden anchor.
 - [ ] T025 [US3] small Add success/error toast components in `frontEnd/src/ui/toasts/export-ready-epic-toast.svelte` (or existing toast registry) with localization strings.
 - [ ] T026 [US3] small Document Azure DevOps field mapping + import script reference in `Docs/BACKEND-USE-CASES.md` and `specs/001-ready-epic-export/quickstart.md` per FR-009.
