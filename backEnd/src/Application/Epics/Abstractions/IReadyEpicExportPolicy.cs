@@ -1,6 +1,3 @@
 namespace Application.Epics.Abstractions;
 
-public interface IReadyEpicExportPolicy
-{
-    void EnsureCanExport(IReadyEpicProjection epic);
-}
+// Intentionally left blank. IReadyEpicExportPolicy now lives under Domain.Epics.Policies.

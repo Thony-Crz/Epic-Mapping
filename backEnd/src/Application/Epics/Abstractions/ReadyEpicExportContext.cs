@@ -1,3 +1,5 @@
+using Domain.Epics.ReadModel;
+
 namespace Application.Epics.Abstractions;
 
 public sealed record ReadyEpicExportContext(

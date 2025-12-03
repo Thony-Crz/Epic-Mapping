@@ -1,8 +1,3 @@
 namespace Application.Epics.Exceptions;
 
-public sealed class ReadyEpicExportValidationException : Exception
-{
-    public ReadyEpicExportValidationException(string message) : base(message)
-    {
-    }
-}
+// Obsolete: ReadyEpicExportValidationException now resides in Domain.Epics.Exceptions.

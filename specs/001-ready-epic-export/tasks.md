@@ -39,10 +39,10 @@ Checkpoint: RED state captured for core export flows.
 
 Goal: satisfy the failing tests by implementing domain policy, DTO mapping, serializer, and handler orchestration while still using in-memory fakes for persistence.
 
-- [ ] T010 [US1] small Implement `ReadyEpicExportPolicy` in `backEnd/src/Domain/Epics/Services/ReadyEpicExportPolicy.cs` enforcing Ready status + completeness checks.
-- [ ] T011 [P] [US1] small Add DTOs + mapper in `backEnd/src/Application/Epics/Models/EpicExportDto.cs` and `.../Mappers/EpicExportMapper.cs` to shape domain data for serialization.
-- [ ] T012 [P] [US1] small Create `IEpicExportSerializer` + `SystemTextJsonEpicExportSerializer` inside `backEnd/src/Application/Epics/Serialization/` honoring `epic-export.schema.json` (camelCase, schema_version).
-- [ ] T013 [US1] medium Implement `ExportReadyEpicHandler` in `backEnd/src/Application/Epics/ExportReadyEpicHandler.cs` orchestrating repository fetch, policy validation, serialization, and audit repository writes (still targeting interfaces). (Requires reviewer approval for medium size.)
+- [x] T010 [US1] small Implement `ReadyEpicExportPolicy` in `backEnd/src/Domain/Epics/Services/ReadyEpicExportPolicy.cs` enforcing Ready status + completeness checks.
+- [x] T011 [P] [US1] small Add DTOs + mapper in `backEnd/src/Application/Epics/Models/EpicExportDto.cs` and `.../Mappers/EpicExportMapper.cs` to shape domain data for serialization.
+- [x] T012 [P] [US1] small Create `IEpicExportSerializer` + `SystemTextJsonEpicExportSerializer` inside `backEnd/src/Application/Epics/Serialization/` honoring `epic-export.schema.json` (camelCase, schema_version).
+- [x] T013 [US1] medium Implement `ExportReadyEpicHandler` in `backEnd/src/Application/Epics/ExportReadyEpicHandler.cs` orchestrating repository fetch, policy validation, serialization, and audit repository writes (still targeting interfaces). (Requires reviewer approval for medium size.)
 - [ ] T014 [US1] small Register handler + serializer in `backEnd/src/Application/DependencyInjection.cs` and expose through MediatR pipeline if applicable.
 
 Checkpoint: handler-level export works with unit tests using fake persistence.
