@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { onDestroy } from 'svelte';
 	import {
 		epicsDisplayStore,
 		reorderFeatures,
@@ -17,6 +18,12 @@
 	import AddFeatureForm from '$ui/components/forms/AddFeatureForm.svelte';
 	import AddFeatureContentForm from '$ui/components/forms/AddFeatureContentForm.svelte';
 	import SessionControls from '$ui/components/SessionControls.svelte';
+	import ExportReadyEpicToastStack from '$ui/toasts/export-ready-epic-toast.svelte';
+	import {
+		createExportReadyEpicStore,
+		type ExportReadyEpicState,
+		type ExportReadyEpicStore
+	} from '../../../features/epics/export/exportReadyEpicStore';
 	import {
 		safeUpdateEpicTitle,
 		safeUpdateFeature,
@@ -24,6 +31,23 @@
 		safeUpdateScenario,
 		safeAddScenarioToFeature
 	} from './sessionGuards';
+
+	type ExportReadyEpicToast = {
+		id: number;
+		type: 'success' | 'error';
+		message: string;
+	};
+
+	let exportReadyEpicStoreInstance: ExportReadyEpicStore | null = null;
+	let exportState: ExportReadyEpicState | null = null;
+	let exportLiveMessage = 'Export disponible uniquement lorsque le statut est Ready.';
+	let exportToasts: ExportReadyEpicToast[] = [];
+	let exportStatusSnapshot = '';
+	let exportStoreUnsubscribe: (() => void) | null = null;
+	let toastIdCounter = 0;
+	const toastTimers = new Map<number, ReturnType<typeof setTimeout>>();
+	let exportButtonDisabled = true;
+	let exportHelperText = 'Export disponible uniquement lorsque le statut est Ready.';
 
 	$: id = $page.params.id;
 	$: epic = $epicsDisplayStore.find((e) => e.id === id);
@@ -46,8 +70,125 @@
 		});
 	}
 
+	$: if (epic) {
+		const normalizedStatus = normalizeEpicStatus(epic.status);
+		if (!exportReadyEpicStoreInstance) {
+			initializeExportReadyEpicStore(normalizedStatus);
+		} else if (normalizedStatus !== exportStatusSnapshot) {
+			exportReadyEpicStoreInstance.setEpicStatus(normalizedStatus);
+			exportStatusSnapshot = normalizedStatus;
+		}
+	} else {
+		disposeExportReadyEpicStore();
+	}
+
+	$: exportButtonDisabled = !exportState?.canExport || !!exportState?.isExporting;
+	$: exportHelperText = exportState
+		? exportState.canExport
+			? 'Téléchargez le JSON et importez-le dans Azure DevOps.'
+			: exportState.disabledHint ||
+			  'Export disponible uniquement lorsque le statut est Ready.'
+		: 'Export disponible uniquement lorsque le statut est Ready.';
+	$: exportLiveMessage = buildLiveRegionMessage(epic?.title, exportState);
+
 	// Effet réactif pour gérer les transitions automatiques de statut
 	// TODO: Implémenter la logique de transition automatique si nécessaire
+
+	function initializeExportReadyEpicStore(status: string) {
+		if (!epic) {
+			return;
+		}
+
+		exportReadyEpicStoreInstance = createExportReadyEpicStore({
+			epic: {
+				id,
+				title: epic.title,
+				status
+			},
+			deps: {
+				toasts: {
+					success: (message: string) => pushExportToast('success', message),
+					error: (message: string) => pushExportToast('error', message)
+				}
+			}
+		});
+
+		exportStoreUnsubscribe = exportReadyEpicStoreInstance.state.subscribe((value) => {
+			exportState = value;
+		});
+		exportStatusSnapshot = status;
+	}
+
+	function disposeExportReadyEpicStore() {
+		exportStoreUnsubscribe?.();
+		exportStoreUnsubscribe = null;
+		exportReadyEpicStoreInstance = null;
+		exportState = null;
+		exportStatusSnapshot = '';
+	}
+
+	async function handleReadyEpicExport() {
+		if (!exportReadyEpicStoreInstance) {
+			return;
+		}
+
+		await exportReadyEpicStoreInstance.exportNow();
+	}
+
+	function pushExportToast(type: 'success' | 'error', message: string) {
+		const id = ++toastIdCounter;
+		exportToasts = [...exportToasts, { id, type, message }];
+
+		const timeout = setTimeout(() => {
+			dismissExportToast(id);
+		}, 5000);
+		toastTimers.set(id, timeout);
+	}
+
+	function dismissExportToast(id: number) {
+		exportToasts = exportToasts.filter((toast) => toast.id !== id);
+		const timeout = toastTimers.get(id);
+		if (timeout) {
+			clearTimeout(timeout);
+			toastTimers.delete(id);
+		}
+	}
+
+	function clearExportToastTimers() {
+		for (const timeout of toastTimers.values()) {
+			clearTimeout(timeout);
+		}
+		toastTimers.clear();
+	}
+
+	function normalizeEpicStatus(status?: string) {
+		if (!status) {
+			return '';
+		}
+		return status.toLowerCase() === 'ready' ? 'Ready' : status;
+	}
+
+	function buildLiveRegionMessage(
+		epicTitle: string | undefined,
+		state: ExportReadyEpicState | null
+	) {
+		if (!state) {
+			return 'Export non initialise.';
+		}
+		if (state.isExporting) {
+			return `Export en cours pour ${epicTitle ?? 'cette epic'}.`;
+		}
+		if (state.error) {
+			return `Export echoue : ${state.error.message}`;
+		}
+		if (state.lastFileName) {
+			return `Export reussi : ${state.lastFileName}`;
+		}
+		if (!state.canExport) {
+			return state.disabledHint || 'Export disponible uniquement lorsque le statut est Ready.';
+		}
+		return 'Export pret a demarrer.';
+	}
 
 	async function handleEpicTitleUpdate(newTitle: string) {
 		try {
@@ -174,7 +315,17 @@
 			id: `${scenario.title}-${scenario.type}-${index}` // ID stable basé sur le contenu
 		}));
 	}
+
+	onDestroy(() => {
+		disposeExportReadyEpicStore();
+		clearExportToastTimers();
+	});
 </script>
+
+<ExportReadyEpicToastStack
+	toasts={exportToasts}
+	on:dismiss={(event) => dismissExportToast(event.detail.id)}
+/>
 
 {#if epic}
 	<!-- Contrôles de session avec belle horloge -->
@@ -211,6 +362,74 @@
 			</svg>
 			Sauvegarder les changements
 		</button>
+	</div>
+
+	<div class="mb-6 rounded-2xl border border-blue-100 bg-blue-50/70 p-4 shadow-inner">
+		<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+			<div>
+				<p class="text-sm font-semibold text-blue-900">Export JSON pour Azure DevOps</p>
+				<p id="export-ready-epic-helper" class="text-xs text-blue-800">{exportHelperText}</p>
+			</div>
+			<button
+				type="button"
+				class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300"
+				on:click={handleReadyEpicExport}
+				disabled={exportButtonDisabled}
+				aria-disabled={exportButtonDisabled}
+				aria-live="polite"
+				aria-label="Export Ready Epic JSON"
+				aria-describedby="export-ready-epic-helper"
+				title={exportHelperText}
+			>
+				{#if exportState?.isExporting}
+					<svg
+						class="h-4 w-4 animate-spin"
+						viewBox="0 0 24 24"
+						role="presentation"
+						aria-hidden="true"
+					>
+						<circle
+							class="opacity-25"
+							cx="12"
+							cy="12"
+							r="10"
+							stroke="currentColor"
+							stroke-width="4"
+							fill="none"
+						></circle>
+						<path
+							class="opacity-75"
+							fill="currentColor"
+							d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+						></path>
+					</svg>
+					<span>Export en cours...</span>
+				{:else}
+					<svg
+						class="h-4 w-4"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						viewBox="0 0 24 24"
+						role="presentation"
+						aria-hidden="true"
+					>
+						<path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2"></path>
+						<path stroke-linecap="round" stroke-linejoin="round" d="M7 10l5 5 5-5"></path>
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 5v10"></path>
+					</svg>
+					<span>Export Ready Epic JSON</span>
+				{/if}
+			</button>
+		</div>
+		<div
+			class="sr-only"
+			role="status"
+			aria-live="polite"
+			data-testid="export-ready-epic-live-region"
+		>
+			{exportLiveMessage}
+		</div>
 	</div>
 
 	<!-- Container principal avec effet tableau blanc -->

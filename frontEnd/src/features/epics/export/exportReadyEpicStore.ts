@@ -32,7 +32,7 @@ export type ExportReadyEpicStoreDeps = {
 };
 
 export type CreateExportReadyEpicStoreArgs = {
-	deps?: ExportReadyEpicStoreDeps;
+	deps?: Partial<ExportReadyEpicStoreDeps>;
 	epic: {
 		id: string;
 		key?: string;
@@ -47,7 +47,7 @@ export function createExportReadyEpicStore(
 	epic
 }: CreateExportReadyEpicStoreArgs
 ): ExportReadyEpicStore {
-	const resolvedDeps = deps ?? createDefaultDeps();
+	const resolvedDeps = resolveDeps(deps);
 	const initialState: ExportReadyEpicState = {
 		isExporting: false,
 		canExport: epic.status === 'Ready',
@@ -117,6 +117,15 @@ function createDefaultDeps(): ExportReadyEpicStoreDeps {
 			success: (message: string) => console.info(message),
 			error: (message: string) => console.error(message)
 		}
+	};
+}
+
+function resolveDeps(overrides?: Partial<ExportReadyEpicStoreDeps>): ExportReadyEpicStoreDeps {
+	const defaults = createDefaultDeps();
+	return {
+		api: { ...defaults.api, ...(overrides?.api ?? {}) },
+		downloader: { ...defaults.downloader, ...(overrides?.downloader ?? {}) },
+		toasts: { ...defaults.toasts, ...(overrides?.toasts ?? {}) }
 	};
 }
 

@@ -91,7 +91,7 @@
 	// Fonction de navigation sécurisée
 	function handleNavigateToEpic(epicId: string) {
 		try {
-			const epicUrl = `${base}/epic/${epicId}`;
+			const epicUrl = `${base}/epics/${epicId}`;
 			goto(epicUrl);
 			goto(epicUrl);
 		} catch (error) {

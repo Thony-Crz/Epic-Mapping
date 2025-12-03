@@ -10,7 +10,9 @@
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {},
+    "metadata": {
+      "actualWorkers": 4
+    },
     "preserveOutput": "always",
     "reporter": [
       [
@@ -40,7 +42,9 @@
         "outputDir": "C:/data/POC/Epic-Mapping/frontEnd/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 4
+        },
         "id": "accessibility-chromium",
         "name": "accessibility-chromium",
         "testDir": "C:/data/POC/Epic-Mapping/frontEnd/accessibility",
@@ -54,7 +58,9 @@
         "outputDir": "C:/data/POC/Epic-Mapping/frontEnd/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 4
+        },
         "id": "accessibility-firefox",
         "name": "accessibility-firefox",
         "testDir": "C:/data/POC/Epic-Mapping/frontEnd/accessibility",
@@ -68,7 +74,9 @@
         "outputDir": "C:/data/POC/Epic-Mapping/frontEnd/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 4
+        },
         "id": "accessibility-webkit",
         "name": "accessibility-webkit",
         "testDir": "C:/data/POC/Epic-Mapping/frontEnd/accessibility",
@@ -102,12 +110,12 @@
         {
           "title": "Tests d'accessibilite avec utilitaires",
           "file": "comprehensive-accessibility.spec.ts",
-          "line": 8,
+          "line": 11,
           "column": 6,
           "specs": [
             {
-              "title": "Rapport complet d'accessibilite - Page d'accueil",
-              "ok": true,
+              "title": "Ready-epic export control est focusable et annonce son etat",
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -116,18 +124,67 @@
                   "expectedStatus": "passed",
                   "projectId": "accessibility-chromium",
                   "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 6246,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByRole('button', { name: /export ready epic json/i })\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: /export ready epic json/i })\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByRole('button', { name: /export ready epic json/i })\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: /export ready epic json/i })\u001b[22m\n\n    at C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts:265:30",
+                        "location": {
+                          "file": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts",
+                          "column": 30,
+                          "line": 265
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 263 |\u001b[39m\n \u001b[90m 264 |\u001b[39m \t\t\u001b[36mconst\u001b[39m exportButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/export ready epic json/i\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 265 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(exportButton)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m \t\t                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 266 |\u001b[39m \t\t\u001b[36mawait\u001b[39m exportButton\u001b[33m.\u001b[39mfocus()\u001b[33m;\u001b[39m\n \u001b[90m 267 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(exportButton)\u001b[33m.\u001b[39mtoBeFocused()\u001b[33m;\u001b[39m\n \u001b[90m 268 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(exportButton)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'aria-label'\u001b[39m\u001b[33m,\u001b[39m \u001b[35m/ready/i\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts",
+                            "column": 30,
+                            "line": 265
+                          },
+                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByRole('button', { name: /export ready epic json/i })\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: /export ready epic json/i })\u001b[22m\n\n\n\u001b[0m \u001b[90m 263 |\u001b[39m\n \u001b[90m 264 |\u001b[39m \t\t\u001b[36mconst\u001b[39m exportButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/export ready epic json/i\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 265 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(exportButton)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m \t\t                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 266 |\u001b[39m \t\t\u001b[36mawait\u001b[39m exportButton\u001b[33m.\u001b[39mfocus()\u001b[33m;\u001b[39m\n \u001b[90m 267 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(exportButton)\u001b[33m.\u001b[39mtoBeFocused()\u001b[33m;\u001b[39m\n \u001b[90m 268 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(exportButton)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'aria-label'\u001b[39m\u001b[33m,\u001b[39m \u001b[35m/ready/i\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts:265:30\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-03T15:34:49.735Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\test-results\\comprehensive-accessibilit-33525-cusable-et-annonce-son-etat-accessibility-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\test-results\\comprehensive-accessibilit-33525-cusable-et-annonce-son-etat-accessibility-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts",
+                        "column": 30,
+                        "line": 265
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
                 }
               ],
-              "id": "4adc4bf0b7e7926feeb5-8444388fcc538ef473e7",
+              "id": "4adc4bf0b7e7926feeb5-771d9e7529e16b8a0fca",
               "file": "comprehensive-accessibility.spec.ts",
-              "line": 15,
+              "line": 256,
               "column": 2
             },
             {
-              "title": "Rapport complet d'accessibilite - Page de connexion",
-              "ok": true,
+              "title": "Export control annonce les resultats via une region aria-live",
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -136,2741 +193,338 @@
                   "expectedStatus": "passed",
                   "projectId": "accessibility-chromium",
                   "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 6132,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator('[data-testid=\"export-ready-epic-live-region\"]')\nExpected pattern: \u001b[32m/polite|assertive/i\u001b[39m\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"export-ready-epic-live-region\"]')\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator('[data-testid=\"export-ready-epic-live-region\"]')\nExpected pattern: \u001b[32m/polite|assertive/i\u001b[39m\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"export-ready-epic-live-region\"]')\u001b[22m\n\n    at C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts:281:28",
+                        "location": {
+                          "file": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts",
+                          "column": 28,
+                          "line": 281
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 279 |\u001b[39m\n \u001b[90m 280 |\u001b[39m \t\t\u001b[36mconst\u001b[39m liveRegion \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"export-ready-epic-live-region\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 281 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(liveRegion)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'aria-live'\u001b[39m\u001b[33m,\u001b[39m \u001b[35m/polite|assertive/i\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m \t\t                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 282 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(liveRegion)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'role'\u001b[39m\u001b[33m,\u001b[39m \u001b[35m/status|alert/i\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 283 |\u001b[39m\n \u001b[90m 284 |\u001b[39m \t\t\u001b[36mconst\u001b[39m exportButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/export ready epic json/i\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts",
+                            "column": 28,
+                            "line": 281
+                          },
+                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator('[data-testid=\"export-ready-epic-live-region\"]')\nExpected pattern: \u001b[32m/polite|assertive/i\u001b[39m\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"export-ready-epic-live-region\"]')\u001b[22m\n\n\n\u001b[0m \u001b[90m 279 |\u001b[39m\n \u001b[90m 280 |\u001b[39m \t\t\u001b[36mconst\u001b[39m liveRegion \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"export-ready-epic-live-region\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 281 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(liveRegion)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'aria-live'\u001b[39m\u001b[33m,\u001b[39m \u001b[35m/polite|assertive/i\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m \t\t                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 282 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(liveRegion)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'role'\u001b[39m\u001b[33m,\u001b[39m \u001b[35m/status|alert/i\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 283 |\u001b[39m\n \u001b[90m 284 |\u001b[39m \t\t\u001b[36mconst\u001b[39m exportButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/export ready epic json/i\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts:281:28\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-03T15:34:49.781Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\test-results\\comprehensive-accessibilit-c2bff-ts-via-une-region-aria-live-accessibility-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\test-results\\comprehensive-accessibilit-c2bff-ts-via-une-region-aria-live-accessibility-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts",
+                        "column": 28,
+                        "line": 281
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
                 }
               ],
-              "id": "4adc4bf0b7e7926feeb5-af45d4ee0843d9873c37",
+              "id": "4adc4bf0b7e7926feeb5-4febd248e780def5b365",
               "file": "comprehensive-accessibility.spec.ts",
-              "line": 37,
+              "line": 272,
               "column": 2
             },
             {
-              "title": "Navigation au clavier - Test detaille",
-              "ok": true,
+              "title": "Ready-epic export control est focusable et annonce son etat",
+              "ok": false,
               "tags": [],
               "tests": [
                 {
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "projectId": "accessibility-firefox",
+                  "projectName": "accessibility-firefox",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 9494,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByRole('button', { name: /export ready epic json/i })\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: /export ready epic json/i })\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByRole('button', { name: /export ready epic json/i })\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: /export ready epic json/i })\u001b[22m\n\n    at C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts:265:30",
+                        "location": {
+                          "file": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts",
+                          "column": 30,
+                          "line": 265
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 263 |\u001b[39m\n \u001b[90m 264 |\u001b[39m \t\t\u001b[36mconst\u001b[39m exportButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/export ready epic json/i\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 265 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(exportButton)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m \t\t                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 266 |\u001b[39m \t\t\u001b[36mawait\u001b[39m exportButton\u001b[33m.\u001b[39mfocus()\u001b[33m;\u001b[39m\n \u001b[90m 267 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(exportButton)\u001b[33m.\u001b[39mtoBeFocused()\u001b[33m;\u001b[39m\n \u001b[90m 268 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(exportButton)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'aria-label'\u001b[39m\u001b[33m,\u001b[39m \u001b[35m/ready/i\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts",
+                            "column": 30,
+                            "line": 265
+                          },
+                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByRole('button', { name: /export ready epic json/i })\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: /export ready epic json/i })\u001b[22m\n\n\n\u001b[0m \u001b[90m 263 |\u001b[39m\n \u001b[90m 264 |\u001b[39m \t\t\u001b[36mconst\u001b[39m exportButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/export ready epic json/i\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 265 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(exportButton)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m \t\t                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 266 |\u001b[39m \t\t\u001b[36mawait\u001b[39m exportButton\u001b[33m.\u001b[39mfocus()\u001b[33m;\u001b[39m\n \u001b[90m 267 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(exportButton)\u001b[33m.\u001b[39mtoBeFocused()\u001b[33m;\u001b[39m\n \u001b[90m 268 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(exportButton)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'aria-label'\u001b[39m\u001b[33m,\u001b[39m \u001b[35m/ready/i\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts:265:30\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-03T15:34:49.746Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\test-results\\comprehensive-accessibilit-33525-cusable-et-annonce-son-etat-accessibility-firefox\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\test-results\\comprehensive-accessibilit-33525-cusable-et-annonce-son-etat-accessibility-firefox\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts",
+                        "column": 30,
+                        "line": 265
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
                 }
               ],
-              "id": "4adc4bf0b7e7926feeb5-13dd8e6e1401aa1cd390",
+              "id": "4adc4bf0b7e7926feeb5-0996c15bbe06f4ea2722",
               "file": "comprehensive-accessibility.spec.ts",
-              "line": 59,
+              "line": 256,
               "column": 2
             },
             {
-              "title": "Verification des labels de formulaire",
-              "ok": true,
+              "title": "Export control annonce les resultats via une region aria-live",
+              "ok": false,
               "tags": [],
               "tests": [
                 {
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "projectId": "accessibility-firefox",
+                  "projectName": "accessibility-firefox",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 9537,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator('[data-testid=\"export-ready-epic-live-region\"]')\nExpected pattern: \u001b[32m/polite|assertive/i\u001b[39m\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"export-ready-epic-live-region\"]')\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator('[data-testid=\"export-ready-epic-live-region\"]')\nExpected pattern: \u001b[32m/polite|assertive/i\u001b[39m\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"export-ready-epic-live-region\"]')\u001b[22m\n\n    at C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts:281:28",
+                        "location": {
+                          "file": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts",
+                          "column": 28,
+                          "line": 281
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 279 |\u001b[39m\n \u001b[90m 280 |\u001b[39m \t\t\u001b[36mconst\u001b[39m liveRegion \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"export-ready-epic-live-region\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 281 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(liveRegion)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'aria-live'\u001b[39m\u001b[33m,\u001b[39m \u001b[35m/polite|assertive/i\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m \t\t                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 282 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(liveRegion)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'role'\u001b[39m\u001b[33m,\u001b[39m \u001b[35m/status|alert/i\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 283 |\u001b[39m\n \u001b[90m 284 |\u001b[39m \t\t\u001b[36mconst\u001b[39m exportButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/export ready epic json/i\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts",
+                            "column": 28,
+                            "line": 281
+                          },
+                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator('[data-testid=\"export-ready-epic-live-region\"]')\nExpected pattern: \u001b[32m/polite|assertive/i\u001b[39m\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"export-ready-epic-live-region\"]')\u001b[22m\n\n\n\u001b[0m \u001b[90m 279 |\u001b[39m\n \u001b[90m 280 |\u001b[39m \t\t\u001b[36mconst\u001b[39m liveRegion \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"export-ready-epic-live-region\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 281 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(liveRegion)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'aria-live'\u001b[39m\u001b[33m,\u001b[39m \u001b[35m/polite|assertive/i\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m \t\t                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 282 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(liveRegion)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'role'\u001b[39m\u001b[33m,\u001b[39m \u001b[35m/status|alert/i\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 283 |\u001b[39m\n \u001b[90m 284 |\u001b[39m \t\t\u001b[36mconst\u001b[39m exportButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/export ready epic json/i\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts:281:28\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-03T15:34:49.736Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\test-results\\comprehensive-accessibilit-c2bff-ts-via-une-region-aria-live-accessibility-firefox\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\test-results\\comprehensive-accessibilit-c2bff-ts-via-une-region-aria-live-accessibility-firefox\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts",
+                        "column": 28,
+                        "line": 281
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
                 }
               ],
-              "id": "4adc4bf0b7e7926feeb5-f439b33b1975c751aeb8",
+              "id": "4adc4bf0b7e7926feeb5-f821419922e554d7c219",
               "file": "comprehensive-accessibility.spec.ts",
-              "line": 72,
+              "line": 272,
               "column": 2
             },
             {
-              "title": "Hierarchie des titres - Structure semantique",
-              "ok": true,
+              "title": "Ready-epic export control est focusable et annonce son etat",
+              "ok": false,
               "tags": [],
               "tests": [
                 {
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "projectId": "accessibility-webkit",
+                  "projectName": "accessibility-webkit",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 6531,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByRole('button', { name: /export ready epic json/i })\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: /export ready epic json/i })\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByRole('button', { name: /export ready epic json/i })\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: /export ready epic json/i })\u001b[22m\n\n    at C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts:265:30",
+                        "location": {
+                          "file": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts",
+                          "column": 30,
+                          "line": 265
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 263 |\u001b[39m\n \u001b[90m 264 |\u001b[39m \t\t\u001b[36mconst\u001b[39m exportButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/export ready epic json/i\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 265 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(exportButton)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m \t\t                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 266 |\u001b[39m \t\t\u001b[36mawait\u001b[39m exportButton\u001b[33m.\u001b[39mfocus()\u001b[33m;\u001b[39m\n \u001b[90m 267 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(exportButton)\u001b[33m.\u001b[39mtoBeFocused()\u001b[33m;\u001b[39m\n \u001b[90m 268 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(exportButton)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'aria-label'\u001b[39m\u001b[33m,\u001b[39m \u001b[35m/ready/i\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts",
+                            "column": 30,
+                            "line": 265
+                          },
+                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByRole('button', { name: /export ready epic json/i })\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: /export ready epic json/i })\u001b[22m\n\n\n\u001b[0m \u001b[90m 263 |\u001b[39m\n \u001b[90m 264 |\u001b[39m \t\t\u001b[36mconst\u001b[39m exportButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/export ready epic json/i\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 265 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(exportButton)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m \t\t                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 266 |\u001b[39m \t\t\u001b[36mawait\u001b[39m exportButton\u001b[33m.\u001b[39mfocus()\u001b[33m;\u001b[39m\n \u001b[90m 267 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(exportButton)\u001b[33m.\u001b[39mtoBeFocused()\u001b[33m;\u001b[39m\n \u001b[90m 268 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(exportButton)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'aria-label'\u001b[39m\u001b[33m,\u001b[39m \u001b[35m/ready/i\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts:265:30\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-03T15:34:57.618Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\test-results\\comprehensive-accessibilit-33525-cusable-et-annonce-son-etat-accessibility-webkit\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\test-results\\comprehensive-accessibilit-33525-cusable-et-annonce-son-etat-accessibility-webkit\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts",
+                        "column": 30,
+                        "line": 265
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
                 }
               ],
-              "id": "4adc4bf0b7e7926feeb5-cf15184ca2244b421148",
+              "id": "4adc4bf0b7e7926feeb5-e2cc598bda6b94edb5bb",
               "file": "comprehensive-accessibility.spec.ts",
-              "line": 91,
+              "line": 256,
               "column": 2
             },
             {
-              "title": "Images et textes alternatifs",
-              "ok": true,
+              "title": "Export control annonce les resultats via une region aria-live",
+              "ok": false,
               "tags": [],
               "tests": [
                 {
                   "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "projectId": "accessibility-webkit",
+                  "projectName": "accessibility-webkit",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 6511,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator('[data-testid=\"export-ready-epic-live-region\"]')\nExpected pattern: \u001b[32m/polite|assertive/i\u001b[39m\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"export-ready-epic-live-region\"]')\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator('[data-testid=\"export-ready-epic-live-region\"]')\nExpected pattern: \u001b[32m/polite|assertive/i\u001b[39m\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"export-ready-epic-live-region\"]')\u001b[22m\n\n    at C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts:281:28",
+                        "location": {
+                          "file": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts",
+                          "column": 28,
+                          "line": 281
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 279 |\u001b[39m\n \u001b[90m 280 |\u001b[39m \t\t\u001b[36mconst\u001b[39m liveRegion \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"export-ready-epic-live-region\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 281 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(liveRegion)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'aria-live'\u001b[39m\u001b[33m,\u001b[39m \u001b[35m/polite|assertive/i\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m \t\t                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 282 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(liveRegion)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'role'\u001b[39m\u001b[33m,\u001b[39m \u001b[35m/status|alert/i\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 283 |\u001b[39m\n \u001b[90m 284 |\u001b[39m \t\t\u001b[36mconst\u001b[39m exportButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/export ready epic json/i\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts",
+                            "column": 28,
+                            "line": 281
+                          },
+                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator('[data-testid=\"export-ready-epic-live-region\"]')\nExpected pattern: \u001b[32m/polite|assertive/i\u001b[39m\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"export-ready-epic-live-region\"]')\u001b[22m\n\n\n\u001b[0m \u001b[90m 279 |\u001b[39m\n \u001b[90m 280 |\u001b[39m \t\t\u001b[36mconst\u001b[39m liveRegion \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"export-ready-epic-live-region\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 281 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(liveRegion)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'aria-live'\u001b[39m\u001b[33m,\u001b[39m \u001b[35m/polite|assertive/i\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m \t\t                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 282 |\u001b[39m \t\t\u001b[36mawait\u001b[39m expect(liveRegion)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'role'\u001b[39m\u001b[33m,\u001b[39m \u001b[35m/status|alert/i\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 283 |\u001b[39m\n \u001b[90m 284 |\u001b[39m \t\t\u001b[36mconst\u001b[39m exportButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/export ready epic json/i\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts:281:28\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-03T15:34:57.603Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\test-results\\comprehensive-accessibilit-c2bff-ts-via-une-region-aria-live-accessibility-webkit\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\test-results\\comprehensive-accessibilit-c2bff-ts-via-une-region-aria-live-accessibility-webkit\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\data\\POC\\Epic-Mapping\\frontEnd\\accessibility\\comprehensive-accessibility.spec.ts",
+                        "column": 28,
+                        "line": 281
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
                 }
               ],
-              "id": "4adc4bf0b7e7926feeb5-de02784f6de869239210",
+              "id": "4adc4bf0b7e7926feeb5-0004d29e9bda1e71b296",
               "file": "comprehensive-accessibility.spec.ts",
-              "line": 111,
-              "column": 2
-            },
-            {
-              "title": "Accessibilite des couleurs - Test daltonisme",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-a9c0f6382557e072d143",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 130,
-              "column": 2
-            },
-            {
-              "title": "Elements focusables - Verification complete",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-66938cd83263b418713e",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 150,
-              "column": 2
-            },
-            {
-              "title": "Test de stress - Navigation intensive au clavier",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-67da0d2990c60cb1dbd8",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 173,
-              "column": 2
-            },
-            {
-              "title": "Simulation utilisateur malvoyant",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-f149b182c3c38c2c7141",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 204,
-              "column": 2
-            },
-            {
-              "title": "Rapport complet d'accessibilite - Page d'accueil",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-797dfacf316f0451dd11",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 15,
-              "column": 2
-            },
-            {
-              "title": "Rapport complet d'accessibilite - Page de connexion",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-5090b6cf8ed84206b5c9",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 37,
-              "column": 2
-            },
-            {
-              "title": "Navigation au clavier - Test detaille",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-a4c4b64cbfc10cbeec21",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 59,
-              "column": 2
-            },
-            {
-              "title": "Verification des labels de formulaire",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-e92c360a3fb3977156a4",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 72,
-              "column": 2
-            },
-            {
-              "title": "Hierarchie des titres - Structure semantique",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-540f508d1e8a64197639",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 91,
-              "column": 2
-            },
-            {
-              "title": "Images et textes alternatifs",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-5435e64d962c8ede7c67",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 111,
-              "column": 2
-            },
-            {
-              "title": "Accessibilite des couleurs - Test daltonisme",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-9a903584dad6e093b5af",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 130,
-              "column": 2
-            },
-            {
-              "title": "Elements focusables - Verification complete",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-a674ac33d27e472e6edc",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 150,
-              "column": 2
-            },
-            {
-              "title": "Test de stress - Navigation intensive au clavier",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-1a6e2db2344b9739e30b",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 173,
-              "column": 2
-            },
-            {
-              "title": "Simulation utilisateur malvoyant",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-8c5bf03113edba3c9254",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 204,
-              "column": 2
-            },
-            {
-              "title": "Rapport complet d'accessibilite - Page d'accueil",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-b4f6de0db7e1d3cdbc34",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 15,
-              "column": 2
-            },
-            {
-              "title": "Rapport complet d'accessibilite - Page de connexion",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-91c710d3c5d2cd7c46cd",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 37,
-              "column": 2
-            },
-            {
-              "title": "Navigation au clavier - Test detaille",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-f8dce2a1a977a8a081ae",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 59,
-              "column": 2
-            },
-            {
-              "title": "Verification des labels de formulaire",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-03e89216d31edb548289",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 72,
-              "column": 2
-            },
-            {
-              "title": "Hierarchie des titres - Structure semantique",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-a0457a7f75f95b8ac116",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 91,
-              "column": 2
-            },
-            {
-              "title": "Images et textes alternatifs",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-1a62144143679f4f08b3",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 111,
-              "column": 2
-            },
-            {
-              "title": "Accessibilite des couleurs - Test daltonisme",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-9fff3ece46c47e0d795f",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 130,
-              "column": 2
-            },
-            {
-              "title": "Elements focusables - Verification complete",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-36f5b6f53d52c282dfca",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 150,
-              "column": 2
-            },
-            {
-              "title": "Test de stress - Navigation intensive au clavier",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-38042d3c900bb16dc594",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 173,
-              "column": 2
-            },
-            {
-              "title": "Simulation utilisateur malvoyant",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4adc4bf0b7e7926feeb5-890190af71aabecdec8e",
-              "file": "comprehensive-accessibility.spec.ts",
-              "line": 204,
-              "column": 2
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "forms-accessibility.spec.ts",
-      "file": "forms-accessibility.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "Accessibilite des formulaires",
-          "file": "forms-accessibility.spec.ts",
-          "line": 9,
-          "column": 6,
-          "specs": [
-            {
-              "title": "Labels - Tous les champs ont des labels appropries",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-b9cd8929e9038de577f6",
-              "file": "forms-accessibility.spec.ts",
-              "line": 10,
-              "column": 2
-            },
-            {
-              "title": "Messages d'erreur - Accessibles et associes aux champs",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-9f1afa6e6dd3d9495628",
-              "file": "forms-accessibility.spec.ts",
-              "line": 56,
-              "column": 2
-            },
-            {
-              "title": "Instructions et descriptions - Clairement associees",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-9f07982351b1508019ae",
-              "file": "forms-accessibility.spec.ts",
-              "line": 96,
-              "column": 2
-            },
-            {
-              "title": "Groupes de champs - Fieldsets et legends",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-bb5d1b2731e7231bbf02",
-              "file": "forms-accessibility.spec.ts",
-              "line": 124,
-              "column": 2
-            },
-            {
-              "title": "Validation en temps reel - Accessible",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-04975299105a01946cf6",
-              "file": "forms-accessibility.spec.ts",
-              "line": 170,
-              "column": 2
-            },
-            {
-              "title": "Formulaires complexes - Navigation et structure",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-e08c68d29e592ac3d461",
-              "file": "forms-accessibility.spec.ts",
-              "line": 200,
-              "column": 2
-            },
-            {
-              "title": "Controles personnalises - Accessibilite ARIA",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-400cc34c7ba4bc6715d8",
-              "file": "forms-accessibility.spec.ts",
-              "line": 241,
-              "column": 2
-            },
-            {
-              "title": "Auto-completion et suggestions - Accessibles",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-a554235821cf8ca599d0",
-              "file": "forms-accessibility.spec.ts",
-              "line": 301,
-              "column": 2
-            },
-            {
-              "title": "Labels - Tous les champs ont des labels appropries",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-7c503276e40e26082e1a",
-              "file": "forms-accessibility.spec.ts",
-              "line": 10,
-              "column": 2
-            },
-            {
-              "title": "Messages d'erreur - Accessibles et associes aux champs",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-8e01c1a1365d14c8a01c",
-              "file": "forms-accessibility.spec.ts",
-              "line": 56,
-              "column": 2
-            },
-            {
-              "title": "Instructions et descriptions - Clairement associees",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-1b869a2147de2309c9a1",
-              "file": "forms-accessibility.spec.ts",
-              "line": 96,
-              "column": 2
-            },
-            {
-              "title": "Groupes de champs - Fieldsets et legends",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-26262273b80570d29782",
-              "file": "forms-accessibility.spec.ts",
-              "line": 124,
-              "column": 2
-            },
-            {
-              "title": "Validation en temps reel - Accessible",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-4d39b35761c71543efac",
-              "file": "forms-accessibility.spec.ts",
-              "line": 170,
-              "column": 2
-            },
-            {
-              "title": "Formulaires complexes - Navigation et structure",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-ed738f0bc5b32e148240",
-              "file": "forms-accessibility.spec.ts",
-              "line": 200,
-              "column": 2
-            },
-            {
-              "title": "Controles personnalises - Accessibilite ARIA",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-bc6b895e348d5c6c27b0",
-              "file": "forms-accessibility.spec.ts",
-              "line": 241,
-              "column": 2
-            },
-            {
-              "title": "Auto-completion et suggestions - Accessibles",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-c6d4806003b331fe0b75",
-              "file": "forms-accessibility.spec.ts",
-              "line": 301,
-              "column": 2
-            },
-            {
-              "title": "Labels - Tous les champs ont des labels appropries",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-b444676e5f60098ba348",
-              "file": "forms-accessibility.spec.ts",
-              "line": 10,
-              "column": 2
-            },
-            {
-              "title": "Messages d'erreur - Accessibles et associes aux champs",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-a21d41debdb2db36bb81",
-              "file": "forms-accessibility.spec.ts",
-              "line": 56,
-              "column": 2
-            },
-            {
-              "title": "Instructions et descriptions - Clairement associees",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-0f98766fd8f431b5c586",
-              "file": "forms-accessibility.spec.ts",
-              "line": 96,
-              "column": 2
-            },
-            {
-              "title": "Groupes de champs - Fieldsets et legends",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-f528a1e7894c21c44421",
-              "file": "forms-accessibility.spec.ts",
-              "line": 124,
-              "column": 2
-            },
-            {
-              "title": "Validation en temps reel - Accessible",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-499ad4f5d1c7bf455ca0",
-              "file": "forms-accessibility.spec.ts",
-              "line": 170,
-              "column": 2
-            },
-            {
-              "title": "Formulaires complexes - Navigation et structure",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-66c3fe761ce434336b21",
-              "file": "forms-accessibility.spec.ts",
-              "line": 200,
-              "column": 2
-            },
-            {
-              "title": "Controles personnalises - Accessibilite ARIA",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-b60b85d42664810bd4e3",
-              "file": "forms-accessibility.spec.ts",
-              "line": 241,
-              "column": 2
-            },
-            {
-              "title": "Auto-completion et suggestions - Accessibles",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "221b782ae2e009767ab2-f06614e7ac429fed83e0",
-              "file": "forms-accessibility.spec.ts",
-              "line": 301,
-              "column": 2
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "keyboard-navigation.spec.ts",
-      "file": "keyboard-navigation.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "Navigation au clavier",
-          "file": "keyboard-navigation.spec.ts",
-          "line": 8,
-          "column": 6,
-          "specs": [
-            {
-              "title": "Navigation Tab - Ordre logique des elements focusables",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-77e15fd8a8e2c502b95a",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 9,
-              "column": 2
-            },
-            {
-              "title": "Navigation Shift+Tab - Ordre inverse",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-1c2bad728d9fc6403270",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 38,
-              "column": 2
-            },
-            {
-              "title": "Activation des boutons avec Entree et Espace",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-47253940a39326b3a588",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 66,
-              "column": 2
-            },
-            {
-              "title": "Formulaires - Navigation et soumission au clavier",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-71a53ff1ad28499447ae",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 85,
-              "column": 2
-            },
-            {
-              "title": "Menus et dropdowns - Navigation au clavier",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-85c7895de3ca00111295",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 117,
-              "column": 2
-            },
-            {
-              "title": "Liens - Activation et navigation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-c9921c810acff53ea05f",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 143,
-              "column": 2
-            },
-            {
-              "title": "Raccourcis clavier - Touches d'acceleration",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-280bbd2231b610311016",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 166,
-              "column": 2
-            },
-            {
-              "title": "Pieges a clavier - Aucun piege detecte",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-aaae101256e309e33fa1",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 189,
-              "column": 2
-            },
-            {
-              "title": "Focus visible - Indicateurs visuels de focus",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-97b4978f1300592b9b57",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 227,
-              "column": 2
-            },
-            {
-              "title": "Navigation Tab - Ordre logique des elements focusables",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-a4c4c3513d3aa42c5967",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 9,
-              "column": 2
-            },
-            {
-              "title": "Navigation Shift+Tab - Ordre inverse",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-01e97aed4d0afe611a1a",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 38,
-              "column": 2
-            },
-            {
-              "title": "Activation des boutons avec Entree et Espace",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-f68c5a98a27c2f53d2ae",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 66,
-              "column": 2
-            },
-            {
-              "title": "Formulaires - Navigation et soumission au clavier",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-7309c176ae7375d5a2b5",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 85,
-              "column": 2
-            },
-            {
-              "title": "Menus et dropdowns - Navigation au clavier",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-9a19487294b9faa5ac41",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 117,
-              "column": 2
-            },
-            {
-              "title": "Liens - Activation et navigation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-ad2dde2ced642af2de43",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 143,
-              "column": 2
-            },
-            {
-              "title": "Raccourcis clavier - Touches d'acceleration",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-b1560531439959f160d7",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 166,
-              "column": 2
-            },
-            {
-              "title": "Pieges a clavier - Aucun piege detecte",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-9087f119fd9439f82864",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 189,
-              "column": 2
-            },
-            {
-              "title": "Focus visible - Indicateurs visuels de focus",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-ba1b49c5a0f62f47fb8f",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 227,
-              "column": 2
-            },
-            {
-              "title": "Navigation Tab - Ordre logique des elements focusables",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-4e85f248a5ba5f7edb13",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 9,
-              "column": 2
-            },
-            {
-              "title": "Navigation Shift+Tab - Ordre inverse",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-ed944149153a25339bbb",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 38,
-              "column": 2
-            },
-            {
-              "title": "Activation des boutons avec Entree et Espace",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-152ad53431f1f3612bc5",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 66,
-              "column": 2
-            },
-            {
-              "title": "Formulaires - Navigation et soumission au clavier",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-09f95b48aca77ec86c2f",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 85,
-              "column": 2
-            },
-            {
-              "title": "Menus et dropdowns - Navigation au clavier",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-4fb254bac600d25cabb5",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 117,
-              "column": 2
-            },
-            {
-              "title": "Liens - Activation et navigation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-d52603cd5fba330e03c6",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 143,
-              "column": 2
-            },
-            {
-              "title": "Raccourcis clavier - Touches d'acceleration",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-2a32f272396c615f07f0",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 166,
-              "column": 2
-            },
-            {
-              "title": "Pieges a clavier - Aucun piege detecte",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-79ed00f1729777f4f4ab",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 189,
-              "column": 2
-            },
-            {
-              "title": "Focus visible - Indicateurs visuels de focus",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "deafb80922fb0e392fd7-05da19707eada5c75724",
-              "file": "keyboard-navigation.spec.ts",
-              "line": 227,
-              "column": 2
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "multimedia-accessibility.spec.ts",
-      "file": "multimedia-accessibility.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "Accessibilite multimedia et visuelle",
-          "file": "multimedia-accessibility.spec.ts",
-          "line": 9,
-          "column": 6,
-          "specs": [
-            {
-              "title": "Images - Textes alternatifs appropries",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-065ed3dd790612fa09c9",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 10,
-              "column": 2
-            },
-            {
-              "title": "Videos et medias - Alternatives accessibles",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-ca934c602bed58ec808e",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 53,
-              "column": 2
-            },
-            {
-              "title": "Contraste des couleurs - Conformite WCAG AA",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-70eed8e2322e514109c5",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 109,
-              "column": 2
-            },
-            {
-              "title": "Texte redimensionnable - Zoom jusqu'a 200%",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-b3f93f5d13ca0926d177",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 135,
-              "column": 2
-            },
-            {
-              "title": "Animations et mouvement - Respect des preferences utilisateur",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-cdadcc623d48b9f75251",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 182,
-              "column": 2
-            },
-            {
-              "title": "Clignotement et flash - Pas de contenu dangereux",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-b5c8792ae0e67d872638",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 219,
-              "column": 2
-            },
-            {
-              "title": "Couleur comme seule information - Alternatives disponibles",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-f313f9179c4e8380a6ca",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 255,
-              "column": 2
-            },
-            {
-              "title": "Focus visible - Indicateurs de navigation clairs",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-5a93b791df0cf62fb300",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 307,
-              "column": 2
-            },
-            {
-              "title": "Espacement et taille - Criteres de confort visuel",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-0e5f0d375cd453adc91a",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 350,
-              "column": 2
-            },
-            {
-              "title": "Images - Textes alternatifs appropries",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-544a663131bc2a770816",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 10,
-              "column": 2
-            },
-            {
-              "title": "Videos et medias - Alternatives accessibles",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-cf0548dbe0113eb7b603",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 53,
-              "column": 2
-            },
-            {
-              "title": "Contraste des couleurs - Conformite WCAG AA",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-7d3db0de0d5c4b30a1cb",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 109,
-              "column": 2
-            },
-            {
-              "title": "Texte redimensionnable - Zoom jusqu'a 200%",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-182b54fe9df579eee24f",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 135,
-              "column": 2
-            },
-            {
-              "title": "Animations et mouvement - Respect des preferences utilisateur",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-0c13354b8c569f466e98",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 182,
-              "column": 2
-            },
-            {
-              "title": "Clignotement et flash - Pas de contenu dangereux",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-40a4529bcb824740271a",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 219,
-              "column": 2
-            },
-            {
-              "title": "Couleur comme seule information - Alternatives disponibles",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-a353cfb52cf27da1ee41",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 255,
-              "column": 2
-            },
-            {
-              "title": "Focus visible - Indicateurs de navigation clairs",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-3ffbf6eb240fd87cfff8",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 307,
-              "column": 2
-            },
-            {
-              "title": "Espacement et taille - Criteres de confort visuel",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-92461fca85bf8f3273dc",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 350,
-              "column": 2
-            },
-            {
-              "title": "Images - Textes alternatifs appropries",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-a338dd6a5af4dd0be36e",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 10,
-              "column": 2
-            },
-            {
-              "title": "Videos et medias - Alternatives accessibles",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-f969ee1d624ae0967162",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 53,
-              "column": 2
-            },
-            {
-              "title": "Contraste des couleurs - Conformite WCAG AA",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-569c685c096bfc0de73c",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 109,
-              "column": 2
-            },
-            {
-              "title": "Texte redimensionnable - Zoom jusqu'a 200%",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-c19efe76eaddaa395117",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 135,
-              "column": 2
-            },
-            {
-              "title": "Animations et mouvement - Respect des preferences utilisateur",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-5cb2b1b47d24ae8fb2f9",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 182,
-              "column": 2
-            },
-            {
-              "title": "Clignotement et flash - Pas de contenu dangereux",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-32c11b4e2b3bce9f53de",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 219,
-              "column": 2
-            },
-            {
-              "title": "Couleur comme seule information - Alternatives disponibles",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-36cc5bbe6d898b05bc8e",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 255,
-              "column": 2
-            },
-            {
-              "title": "Focus visible - Indicateurs de navigation clairs",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-faf8ac3b0c5a1aa2a228",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 307,
-              "column": 2
-            },
-            {
-              "title": "Espacement et taille - Criteres de confort visuel",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "4a1a5b5acc298745c232-9b5a994d335d289fd480",
-              "file": "multimedia-accessibility.spec.ts",
-              "line": 350,
-              "column": 2
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "wcag-compliance.spec.ts",
-      "file": "wcag-compliance.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "Tests accessibilite WCAG",
-          "file": "wcag-compliance.spec.ts",
-          "line": 8,
-          "column": 6,
-          "specs": [
-            {
-              "title": "Page accueil - Conformite WCAG 2.1 AA",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-228e30a939584033dc30",
-              "file": "wcag-compliance.spec.ts",
-              "line": 9,
-              "column": 2
-            },
-            {
-              "title": "Page de connexion - Conformite WCAG 2.1 AA",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-8f5279ae5d66690be087",
-              "file": "wcag-compliance.spec.ts",
-              "line": 22,
-              "column": 2
-            },
-            {
-              "title": "Navigation au clavier - Toutes les pages accessibles",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-fe01aad20bf66bc04d82",
-              "file": "wcag-compliance.spec.ts",
-              "line": 33,
-              "column": 2
-            },
-            {
-              "title": "Contraste des couleurs - Conformite WCAG AA",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-04451c9ee574c9d5e85a",
-              "file": "wcag-compliance.spec.ts",
-              "line": 53,
-              "column": 2
-            },
-            {
-              "title": "Images et medias - Textes alternatifs requis",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-d52488564082ea95da9b",
-              "file": "wcag-compliance.spec.ts",
-              "line": 70,
-              "column": 2
-            },
-            {
-              "title": "Formulaires - Labels et descriptions accessibles",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-776d8b3acb2dfc3b083a",
-              "file": "wcag-compliance.spec.ts",
-              "line": 89,
-              "column": 2
-            },
-            {
-              "title": "Hierarchie des titres - Structure semantique correcte",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-c5a22e5a4691a8db8f9a",
-              "file": "wcag-compliance.spec.ts",
-              "line": 119,
-              "column": 2
-            },
-            {
-              "title": "Support des technologies d'assistance",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-2fe5427d29dd3532153e",
-              "file": "wcag-compliance.spec.ts",
-              "line": 145,
-              "column": 2
-            },
-            {
-              "title": "Accessibilite responsive - Zoom jusqu'a 200%",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-chromium",
-                  "projectName": "accessibility-chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-796ad07756c82e83d123",
-              "file": "wcag-compliance.spec.ts",
-              "line": 162,
-              "column": 2
-            },
-            {
-              "title": "Page accueil - Conformite WCAG 2.1 AA",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-de1fb75b0f8753505ce3",
-              "file": "wcag-compliance.spec.ts",
-              "line": 9,
-              "column": 2
-            },
-            {
-              "title": "Page de connexion - Conformite WCAG 2.1 AA",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-4e604fa799a598d31d48",
-              "file": "wcag-compliance.spec.ts",
-              "line": 22,
-              "column": 2
-            },
-            {
-              "title": "Navigation au clavier - Toutes les pages accessibles",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-ca77c2bd53567d769511",
-              "file": "wcag-compliance.spec.ts",
-              "line": 33,
-              "column": 2
-            },
-            {
-              "title": "Contraste des couleurs - Conformite WCAG AA",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-fab62426b6bef3ff9a7c",
-              "file": "wcag-compliance.spec.ts",
-              "line": 53,
-              "column": 2
-            },
-            {
-              "title": "Images et medias - Textes alternatifs requis",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-ca199de0a521a14326a1",
-              "file": "wcag-compliance.spec.ts",
-              "line": 70,
-              "column": 2
-            },
-            {
-              "title": "Formulaires - Labels et descriptions accessibles",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-4b2850ccc5fb37a2246c",
-              "file": "wcag-compliance.spec.ts",
-              "line": 89,
-              "column": 2
-            },
-            {
-              "title": "Hierarchie des titres - Structure semantique correcte",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-df459c72e60e6e92e63e",
-              "file": "wcag-compliance.spec.ts",
-              "line": 119,
-              "column": 2
-            },
-            {
-              "title": "Support des technologies d'assistance",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-576fd4a6ed6ae58ded29",
-              "file": "wcag-compliance.spec.ts",
-              "line": 145,
-              "column": 2
-            },
-            {
-              "title": "Accessibilite responsive - Zoom jusqu'a 200%",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-firefox",
-                  "projectName": "accessibility-firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-c8939716e728cc92e7ba",
-              "file": "wcag-compliance.spec.ts",
-              "line": 162,
-              "column": 2
-            },
-            {
-              "title": "Page accueil - Conformite WCAG 2.1 AA",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-596d8a169e32b4418752",
-              "file": "wcag-compliance.spec.ts",
-              "line": 9,
-              "column": 2
-            },
-            {
-              "title": "Page de connexion - Conformite WCAG 2.1 AA",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-4ee6c0b4d75fead97063",
-              "file": "wcag-compliance.spec.ts",
-              "line": 22,
-              "column": 2
-            },
-            {
-              "title": "Navigation au clavier - Toutes les pages accessibles",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-9d7d02c093b173c278f3",
-              "file": "wcag-compliance.spec.ts",
-              "line": 33,
-              "column": 2
-            },
-            {
-              "title": "Contraste des couleurs - Conformite WCAG AA",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-42c297e156cf50180d4a",
-              "file": "wcag-compliance.spec.ts",
-              "line": 53,
-              "column": 2
-            },
-            {
-              "title": "Images et medias - Textes alternatifs requis",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-426d894448c8013fe34b",
-              "file": "wcag-compliance.spec.ts",
-              "line": 70,
-              "column": 2
-            },
-            {
-              "title": "Formulaires - Labels et descriptions accessibles",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-d62c6e75cc5992e30964",
-              "file": "wcag-compliance.spec.ts",
-              "line": 89,
-              "column": 2
-            },
-            {
-              "title": "Hierarchie des titres - Structure semantique correcte",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-005ae47e654d6cd4141b",
-              "file": "wcag-compliance.spec.ts",
-              "line": 119,
-              "column": 2
-            },
-            {
-              "title": "Support des technologies d'assistance",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-84e779890153f6a872a9",
-              "file": "wcag-compliance.spec.ts",
-              "line": 145,
-              "column": 2
-            },
-            {
-              "title": "Accessibilite responsive - Zoom jusqu'a 200%",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "accessibility-webkit",
-                  "projectName": "accessibility-webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "410b8fb5b8a708f489fa-b44af43cacb785b66309",
-              "file": "wcag-compliance.spec.ts",
-              "line": 162,
+              "line": 272,
               "column": 2
             }
           ]
@@ -2880,11 +534,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-08-13T06:06:54.458Z",
-    "duration": 451.597,
+    "startTime": "2025-12-03T15:34:31.089Z",
+    "duration": 33525.082,
     "expected": 0,
-    "skipped": 135,
-    "unexpected": 0,
+    "skipped": 0,
+    "unexpected": 6,
     "flaky": 0
   }
 }
