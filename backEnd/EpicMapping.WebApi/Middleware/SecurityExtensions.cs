@@ -1,32 +1,48 @@
+using System;
+using EpicMapping.WebApi.Configuration;
+using EpicMapping.WebApi.RateLimiting;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System.Security.Claims;
 using System.Threading.RateLimiting;
 
 namespace EpicMapping.WebApi.Middleware
 {
+    public static class SecurityPolicies
+    {
+        public const string AuthenticatedRequests = "AuthPolicy";
+    }
+
     public static class SecurityExtensions
     {
         public static IServiceCollection AddCustomSecurity(this IServiceCollection services, IConfiguration configuration)
         {
             // Rate Limiting Configuration
-            var rateLimitSettings = configuration.GetSection("Security:RateLimiting");
-            var requestsPerMinute = rateLimitSettings.GetValue("RequestsPerMinute", 60);
-            var tokenRequestsPerMinute = rateLimitSettings.GetValue("TokenRequestsPerMinute", 10);
+            var rateLimitSettings = configuration.GetSection("Security:RateLimiting").Get<RateLimitingSettings>() ?? new RateLimitingSettings();
+            var requestsPerMinute = rateLimitSettings.RequestsPerMinute;
+            var tokenRequestsPerMinute = rateLimitSettings.TokenRequestsPerMinute;
 
             services.AddRateLimiter(options =>
             {
-                // Global rate limit
+                options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
                 options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
-                    RateLimitPartition.GetFixedWindowLimiter(
-                        partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
-                        factory: partition => new FixedWindowRateLimiterOptions
-                        {
-                            AutoReplenishment = true,
-                            PermitLimit = requestsPerMinute,
-                            Window = TimeSpan.FromMinutes(1)
-                        }));
+                {
+                    var partitionKey = $"global:{ResolvePartitionKey(httpContext)}";
+                    return RateLimitPartition.GetFixedWindowLimiter(partitionKey, _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = requestsPerMinute,
+                        Window = TimeSpan.FromMinutes(1),
+                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                        QueueLimit = 5,
+                        AutoReplenishment = true
+                    });
+                });
 
-                // Specific rate limit for authentication endpoints
-                options.AddFixedWindowLimiter("AuthPolicy", options =>
+                // Specific rate limit for authentication endpoints when needed
+                options.AddFixedWindowLimiter(SecurityPolicies.AuthenticatedRequests, options =>
                 {
                     options.PermitLimit = tokenRequestsPerMinute;
                     options.Window = TimeSpan.FromMinutes(1);
@@ -34,6 +50,8 @@ namespace EpicMapping.WebApi.Middleware
                     options.QueueLimit = 5;
                 });
             });
+
+            services.AddSingleton<IReadyEpicExportLimiter, ReadyEpicExportLimiter>();
 
             // CORS Configuration
             var allowedOrigins = configuration.GetSection("Security:AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
@@ -77,15 +95,16 @@ namespace EpicMapping.WebApi.Middleware
             // CORS
             app.UseCors("SecurePolicy");
 
-            // Rate Limiting
-            app.UseRateLimiter();
-
-            if (requireHttps)
-            {
-                app.UseHttpsRedirection();
-            }
-
             return app;
         }
+
+        private static string ResolvePartitionKey(HttpContext context)
+        {
+            return context.User?.Identity?.Name
+                ?? context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                ?? context.Connection.RemoteIpAddress?.ToString()
+                ?? "anonymous";
+        }
+
     }
 }

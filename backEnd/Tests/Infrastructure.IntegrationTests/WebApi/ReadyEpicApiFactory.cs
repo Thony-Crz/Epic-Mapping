@@ -22,6 +22,7 @@ internal sealed class ReadyEpicApiFactory : WebApplicationFactory<Program>
         ["Security:RequireHttps"] = "false",
         ["Security:RateLimiting:RequestsPerMinute"] = "1000",
         ["Security:RateLimiting:TokenRequestsPerMinute"] = "1000",
+        ["Security:RateLimiting:ExportRequestsPerMinute"] = "1000",
         ["Jwt:Key"] = TestJwtKey,
         ["Jwt:Issuer"] = "integration-tests",
         ["Jwt:Audience"] = "integration-tests"
@@ -38,6 +39,11 @@ internal sealed class ReadyEpicApiFactory : WebApplicationFactory<Program>
     public void SetTokenRateLimit(int permitsPerMinute)
     {
         _configurationOverrides["Security:RateLimiting:TokenRequestsPerMinute"] = permitsPerMinute.ToString();
+    }
+
+    public void SetExportRateLimit(int permitsPerMinute)
+    {
+        _configurationOverrides["Security:RateLimiting:ExportRequestsPerMinute"] = permitsPerMinute.ToString();
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)

@@ -17,7 +17,8 @@ public sealed class ReadyEpicExportPolicy : IReadyEpicExportPolicy
         if (!string.Equals(epic.Status, "Ready", StringComparison.OrdinalIgnoreCase))
         {
             throw new ReadyEpicExportValidationException(
-                $"Epic '{epic.Key}' must be Ready before export (current: {epic.Status}).");
+                $"Epic '{epic.Key}' must be Ready before export (current: {epic.Status}).",
+                epic.Status);
         }
 
         var checklist = epic.ReadinessChecklist ?? Array.Empty<ChecklistItemProjection>();
@@ -25,7 +26,8 @@ public sealed class ReadyEpicExportPolicy : IReadyEpicExportPolicy
         if (checklist.Count == 0)
         {
             throw new ReadyEpicExportValidationException(
-                $"Epic '{epic.Key}' must provide a completed readiness checklist before export.");
+                $"Epic '{epic.Key}' must provide a completed readiness checklist before export.",
+                epic.Status);
         }
 
         var incompleteItems = checklist
@@ -37,21 +39,25 @@ public sealed class ReadyEpicExportPolicy : IReadyEpicExportPolicy
         {
             throw new ReadyEpicExportValidationException(
                 $"Epic '{epic.Key}' cannot be exported until checklist items are complete: " +
-                string.Join(", ", incompleteItems));
+                string.Join(", ", incompleteItems),
+                epic.Status,
+                incompleteItems);
         }
 
         var acceptanceCriteria = epic.AcceptanceCriteria ?? Array.Empty<string>();
         if (acceptanceCriteria.Count == 0)
         {
             throw new ReadyEpicExportValidationException(
-                $"Epic '{epic.Key}' must define at least one acceptance criterion before export.");
+                $"Epic '{epic.Key}' must define at least one acceptance criterion before export.",
+                epic.Status);
         }
 
         var features = epic.Features ?? Array.Empty<FeatureProjection>();
         if (features.Count == 0)
         {
             throw new ReadyEpicExportValidationException(
-                "Ready epic exports require at least one feature.");
+                "Ready epic exports require at least one feature.",
+                epic.Status);
         }
 
         var missingScenarioFeature = features.FirstOrDefault(feature =>
@@ -60,7 +66,8 @@ public sealed class ReadyEpicExportPolicy : IReadyEpicExportPolicy
         if (missingScenarioFeature is not null)
         {
             throw new ReadyEpicExportValidationException(
-                $"Feature '{missingScenarioFeature.Key}' must include at least one scenario before export.");
+                $"Feature '{missingScenarioFeature.Key}' must include at least one scenario before export.",
+                epic.Status);
         }
     }
 }

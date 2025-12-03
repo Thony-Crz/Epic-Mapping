@@ -72,8 +72,8 @@ Independent Test: run Web API integration tests hitting `/api/epics/{id}/export`
 - [x] T015 [P] [US2] small Add failing integration tests in `backEnd/Tests/Infrastructure.IntegrationTests/WebApi/EpicsExportEndpointTests.cs` covering Ready success, non-ready 409, not-found 404, and throttle 429.
 
 ### Implementation
-- [ ] T016 [US2] medium Add `GET /api/epics/{id}/export` action to `backEnd/EpicMapping.WebApi/Controllers/EpicsController.cs` wiring to the new handler, setting `Content-Disposition`, and streaming JSON. (Requires reviewer approval.)
-- [ ] T017 [P] [US2] small Register endpoint + auth policies + rate limiting middleware in `backEnd/EpicMapping.WebApi/Program.cs` and `backEnd/EpicMapping.WebApi/Middleware/SecurityExtensions.cs`.
+- [x] T016 [US2] medium Add `GET /api/epics/{id}/export` action to `backEnd/EpicMapping.WebApi/Controllers/EpicsController.cs` wiring to the new handler, setting `Content-Disposition`, and streaming JSON. (Requires reviewer approval.)
+- [x] T017 [P] [US2] small Register endpoint + auth policies + rate limiting middleware in `backEnd/EpicMapping.WebApi/Program.cs` and `backEnd/EpicMapping.WebApi/Middleware/SecurityExtensions.cs`.
 - [ ] T018 [US2] small Emit structured audit logs in `backEnd/src/Infrastructure/Logging/ExportAuditLogger.cs` (or similar) to mirror database entries for observability.
 - [ ] T019 [US2] small Document and exercise the endpoint via `backEnd/EpicMapping.WebApi/WebApi.http` sample request referencing a Ready epic.
 

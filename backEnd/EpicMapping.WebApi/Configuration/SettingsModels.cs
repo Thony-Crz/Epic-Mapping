@@ -33,6 +33,7 @@ namespace EpicMapping.WebApi.Configuration
     {
         public int RequestsPerMinute { get; set; } = 60;
         public int TokenRequestsPerMinute { get; set; } = 10;
+        public int ExportRequestsPerMinute { get; set; } = 30;
     }
 
     public static class ConfigurationExtensions

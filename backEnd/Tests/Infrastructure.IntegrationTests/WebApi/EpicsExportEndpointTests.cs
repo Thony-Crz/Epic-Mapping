@@ -79,6 +79,7 @@ public class EpicsExportEndpointTests
     {
         var epicId = Guid.NewGuid();
         _factory.SetTokenRateLimit(1);
+        _factory.SetExportRateLimit(1);
         _factory.EpicRepository.SetProjection(ReadyEpicProjectionFactory.CreateReady(epicId));
 
         using var client = _factory.CreateClient();
