@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Application.Epics.Abstractions;
 using Domain.Interfaces.Repositories;
 using Infrastructure.Logging;
 using Infrastructure.Repositories;
@@ -15,6 +16,7 @@ namespace Infrastructure
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddSingleton<IExportAuditLogger, ExportAuditLogger>();
             services.AddScoped<IExportAuditRepository, ExportAuditRepository>();
+            services.AddSingleton<IEpicRepository, EpicRepository>();
 
             return services;
         }
