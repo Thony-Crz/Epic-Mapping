@@ -1,4 +1,6 @@
 @WebApi_HostAddress = http://localhost:5209
+@ReadyEpicId = b1a4f2b8-5e2f-4bc7-8a04-4d1a17aa0f22
+@ExportAuthToken = REPLACE_WITH_JWT
 
 GET {{WebApi_HostAddress}}/weatherforecast/
 Accept: application/json
@@ -42,5 +44,14 @@ Content-Type: application/json
   "username": "dev-user",
   "password": "dev-password"
 }
+
+###
+
+# Export Ready epic snapshot (requires Ready status + valid Bearer token)
+# 1. Run a token request above and copy the JWT into the @ExportAuthToken placeholder.
+# 2. Keep @ReadyEpicId aligned with the seeded Ready epic from init-scripts/01-init.sh or replace with another Ready epic id.
+GET {{WebApi_HostAddress}}/api/epics/{{ReadyEpicId}}/export
+Accept: application/json
+Authorization: Bearer {{ExportAuthToken}}
 
 ###

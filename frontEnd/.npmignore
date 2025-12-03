@@ -1,0 +1,21 @@
+# Build artifacts
+build/
+dist/
+.svelte-kit/
+.vite/
+
+# Dependencies
+node_modules/
+
+# Tests and coverage
+coverage/
+playwright-report/
+test-results/
+
+# Environment and logs
+.env*
+*.log
+
+# Tooling leftovers
+.DS_Store
+Thumbs.db

@@ -1,4 +1,7 @@
-﻿using Domain.Interfaces.Repositories;
+﻿using Application.Common.Interfaces;
+using Application.Epics.Abstractions;
+using Domain.Interfaces.Repositories;
+using Infrastructure.Logging;
 using Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,6 +14,9 @@ namespace Infrastructure
             // Enregistrer le repository
             services.AddScoped<IProjectRepository, ProjectRepository>(); // ProjectRepository est votre implémentation
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddSingleton<IExportAuditLogger, ExportAuditLogger>();
+            services.AddScoped<IExportAuditRepository, ExportAuditRepository>();
+            services.AddSingleton<IEpicRepository, EpicRepository>();
 
             return services;
         }

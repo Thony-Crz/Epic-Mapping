@@ -124,7 +124,12 @@ builder.Services.AddControllers(config =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline with security
+if (securitySettings.RequireHttps)
+{
+    app.UseHttpsRedirection();
+}
+
+app.UseRouting();
 app.UseCustomSecurity(builder.Configuration);
 
 // Configure the HTTP request pipeline.
@@ -138,12 +143,14 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// Security middleware order is important
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Apply rate limiting to specific endpoints
-app.MapControllers()
-   .RequireRateLimiting("AuthPolicy"); // Apply to all controllers
+app.MapControllers();
 
 app.Run();
+
+public partial class Program
+{
+}

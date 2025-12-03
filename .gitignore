@@ -45,6 +45,19 @@
 .vscode/launch.json
 .vscode/tasks.json
 
+# Front-end artifacts
+/frontEnd/node_modules/
+/frontEnd/.svelte-kit/
+/frontEnd/.vite/
+/frontEnd/build/
+/frontEnd/dist/
+/frontEnd/.playwright/
+/frontEnd/playwright-report/
+/frontEnd/test-results/
+/frontEnd/coverage/
+/frontEnd/.turbo/
+/frontEnd/.cache/
+
 # Security - Environment variables and secrets
 .env
 .env.local

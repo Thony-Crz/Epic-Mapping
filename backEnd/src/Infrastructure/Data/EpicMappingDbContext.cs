@@ -1,3 +1,4 @@
+using Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data;
@@ -8,13 +9,14 @@ public class EpicMappingDbContext : DbContext
     {
     }
 
-    // DbSets pour nos entités
+    public DbSet<ExportAuditEvent> ExportAuditEvents => Set<ExportAuditEvent>();
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(EpicMappingDbContext).Assembly);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

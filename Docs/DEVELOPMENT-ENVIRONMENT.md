@@ -4,6 +4,30 @@ Ce guide vous aide à démarrer et gérer l'environnement de développement comp
 
 ## 🚀 Démarrage Rapide
 
+## 🧰 Prérequis Outils
+
+Avant d'exécuter les scripts ci-dessous, assurez-vous que chaque outil est installé localement :
+
+| Outil | Version minimale | Vérification rapide | Notes |
+|-------|------------------|---------------------|-------|
+| .NET SDK | 9.0.x | `dotnet --list-sdks` | Requis pour l'API + tests `ExportReadyEpicHandler`. |
+| EF Core Tools | 9.0.x | `dotnet tool list -g` | Utilisé pour les migrations (`ExportAuditEvents`). |
+| Node.js | 20.x LTS | `node -v` | Frontend + Vitest. |
+| pnpm | 9.x | `pnpm -v` | Gestionnaire de paquets préféré (`npm i -g pnpm`). |
+| Playwright browsers | latest | `npx playwright install` | Obligatoire pour `pnpm test:accessibility`. |
+| PostgreSQL client | 15.x | `psql --version` | Permet de valider les migrations/exports manuellement. |
+| Docker & Compose | 24.x / v2 | `docker --version` | Utilisés par `scripts/start-dev.sh`. |
+| Azure DevOps sandbox | n/a | — | Accès requis pour tester l'import des Features/Scenarios depuis le JSON exporté. |
+
+```bash
+# Installation rapide recommandée
+winget install Microsoft.DotNet.SDK.9
+npm install -g pnpm
+npx playwright install --with-deps
+```
+
+> 💡 Conseil : validez également la présence de `VITE_API_BASE_URL` dans `frontEnd/.env.local` (copie de `.env.example`) pour pointer vers l'API lors des tests UI.
+
 ```bash
 # Démarrage de l'environnement complet
 ./scripts/start-dev.sh

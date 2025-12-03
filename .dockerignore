@@ -1,0 +1,38 @@
+# Ignore VCS metadata
+.git
+.gitignore
+
+# Development environment configs
+.vscode
+.specify
+specs/
+Docs/
+
+# Node tooling
+frontEnd/node_modules/
+frontEnd/.svelte-kit/
+frontEnd/.vite/
+frontEnd/build/
+frontEnd/dist/
+frontEnd/.playwright/
+frontEnd/playwright-report/
+
+# .NET build artifacts
+backEnd/**/bin/
+backEnd/**/obj/
+
+# Logs and coverage
+**/*.log
+logs/
+frontEnd/coverage/
+
+# Environment / secrets
+.env*
+backEnd/**/appsettings.*.json
+**/*.pfx
+**/*.pem
+**/*.key
+
+# Local scripts / artifacts
+scripts/*.log
+.frontend.pid

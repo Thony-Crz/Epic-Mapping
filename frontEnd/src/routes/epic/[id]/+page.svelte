@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { onDestroy } from 'svelte';
 	import {
 		epicsDisplayStore,
 		reorderFeatures,
@@ -10,6 +11,8 @@
 	import { dndzone } from 'svelte-dnd-action';
 	import type { Feature } from '$domain/entities/Feature';
 	import type { Scenario } from '$domain/entities/Scenario';
+	import { checkEpicReadiness } from '../../../domain/services/EpicReadinessService';
+	import { downloadEpicExport } from '../../../domain/services/EpicExportService';
 	import BlueCard from '$ui/components/cards/BlueCard.svelte';
 	import YellowCard from '$ui/components/cards/YellowCard.svelte';
 	import GreenCard from '$ui/components/cards/GreenCard.svelte';
@@ -17,6 +20,7 @@
 	import AddFeatureForm from '$ui/components/forms/AddFeatureForm.svelte';
 	import AddFeatureContentForm from '$ui/components/forms/AddFeatureContentForm.svelte';
 	import SessionControls from '$ui/components/SessionControls.svelte';
+	import ExportReadyEpicToastStack from '$ui/toasts/export-ready-epic-toast.svelte';
 	import {
 		safeUpdateEpicTitle,
 		safeUpdateFeature,
@@ -25,8 +29,28 @@
 		safeAddScenarioToFeature
 	} from './sessionGuards';
 
+	type ExportReadyEpicToast = {
+		id: number;
+		type: 'success' | 'error';
+		message: string;
+	};
+
+	let exportToasts: ExportReadyEpicToast[] = [];
+	let toastIdCounter = 0;
+	const toastTimers = new Map<number, ReturnType<typeof setTimeout>>();
+	let isExporting = false;
+
 	$: id = $page.params.id;
 	$: epic = $epicsDisplayStore.find((e) => e.id === id);
+
+	// Check epic readiness using the domain service
+	$: readinessResult = epic ? checkEpicReadiness(epic) : { isReady: false, reason: 'Épic non trouvée' };
+	$: canExport = readinessResult.isReady;
+	$: exportHelperText = canExport
+		? 'Téléchargez le JSON et importez-le dans Azure DevOps.'
+		: readinessResult.reason || 'Export disponible uniquement lorsque le statut est Ready.';
+	$: exportButtonDisabled = !canExport || isExporting;
+	$: exportLiveMessage = buildLiveRegionMessage(epic?.title, canExport, isExporting);
 
 	// Variables pour le drag and drop
 	let featuresWithId: Feature[] = [];
@@ -46,8 +70,62 @@
 		});
 	}
 
-	// Effet réactif pour gérer les transitions automatiques de statut
-	// TODO: Implémenter la logique de transition automatique si nécessaire
+	async function handleReadyEpicExport() {
+		if (!epic || !canExport || isExporting) {
+			return;
+		}
+
+		isExporting = true;
+		try {
+			downloadEpicExport(epic);
+			pushExportToast('success', `Export réussi pour "${epic.title}"`);
+		} catch (error) {
+			const message = error instanceof Error ? error.message : 'Erreur lors de l\'export';
+			pushExportToast('error', message);
+		} finally {
+			isExporting = false;
+		}
+	}
+
+	function pushExportToast(type: 'success' | 'error', message: string) {
+		const id = ++toastIdCounter;
+		exportToasts = [...exportToasts, { id, type, message }];
+
+		const timeout = setTimeout(() => {
+			dismissExportToast(id);
+		}, 5000);
+		toastTimers.set(id, timeout);
+	}
+
+	function dismissExportToast(id: number) {
+		exportToasts = exportToasts.filter((toast) => toast.id !== id);
+		const timeout = toastTimers.get(id);
+		if (timeout) {
+			clearTimeout(timeout);
+			toastTimers.delete(id);
+		}
+	}
+
+	function clearExportToastTimers() {
+		for (const timeout of toastTimers.values()) {
+			clearTimeout(timeout);
+		}
+		toastTimers.clear();
+	}
+
+	function buildLiveRegionMessage(
+		epicTitle: string | undefined,
+		canExportFlag: boolean,
+		isExportingFlag: boolean
+	) {
+		if (isExportingFlag) {
+			return `Export en cours pour ${epicTitle ?? 'cette epic'}.`;
+		}
+		if (!canExportFlag) {
+			return readinessResult.reason || 'Export disponible uniquement lorsque le statut est Ready.';
+		}
+		return 'Export pret a demarrer.';
+	}
 
 	async function handleEpicTitleUpdate(newTitle: string) {
 		try {
@@ -174,7 +252,16 @@
 			id: `${scenario.title}-${scenario.type}-${index}` // ID stable basé sur le contenu
 		}));
 	}
+
+	onDestroy(() => {
+		clearExportToastTimers();
+	});
 </script>
+
+<ExportReadyEpicToastStack
+	toasts={exportToasts}
+	on:dismiss={(event) => dismissExportToast(event.detail.id)}
+/>
 
 {#if epic}
 	<!-- Contrôles de session avec belle horloge -->
@@ -211,6 +298,74 @@
 			</svg>
 			Sauvegarder les changements
 		</button>
+	</div>
+
+	<div class="mb-6 rounded-2xl border border-blue-100 bg-blue-50/70 p-4 shadow-inner">
+		<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+			<div>
+				<p class="text-sm font-semibold text-blue-900">Export JSON pour Azure DevOps</p>
+				<p id="export-ready-epic-helper" class="text-xs text-blue-800">{exportHelperText}</p>
+			</div>
+			<button
+				type="button"
+				class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300"
+				on:click={handleReadyEpicExport}
+				disabled={exportButtonDisabled}
+				aria-disabled={exportButtonDisabled}
+				aria-live="polite"
+				aria-label="Export Ready Epic JSON"
+				aria-describedby="export-ready-epic-helper"
+				title={exportHelperText}
+			>
+				{#if isExporting}
+					<svg
+						class="h-4 w-4 animate-spin"
+						viewBox="0 0 24 24"
+						role="presentation"
+						aria-hidden="true"
+					>
+						<circle
+							class="opacity-25"
+							cx="12"
+							cy="12"
+							r="10"
+							stroke="currentColor"
+							stroke-width="4"
+							fill="none"
+						></circle>
+						<path
+							class="opacity-75"
+							fill="currentColor"
+							d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+						></path>
+					</svg>
+					<span>Export en cours...</span>
+				{:else}
+					<svg
+						class="h-4 w-4"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						viewBox="0 0 24 24"
+						role="presentation"
+						aria-hidden="true"
+					>
+						<path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2"></path>
+						<path stroke-linecap="round" stroke-linejoin="round" d="M7 10l5 5 5-5"></path>
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 5v10"></path>
+					</svg>
+					<span>Export Ready Epic JSON</span>
+				{/if}
+			</button>
+		</div>
+		<div
+			class="sr-only"
+			role="status"
+			aria-live="polite"
+			data-testid="export-ready-epic-live-region"
+		>
+			{exportLiveMessage}
+		</div>
 	</div>
 
 	<!-- Container principal avec effet tableau blanc -->

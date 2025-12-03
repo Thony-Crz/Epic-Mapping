@@ -1,4 +1,12 @@
 # Package Managers
+node_modules/
+.svelte-kit/
+.vite/
+build/
+dist/
+coverage/
+playwright-report/
+test-results/
 package-lock.json
 pnpm-lock.yaml
 yarn.lock
