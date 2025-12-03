@@ -147,3 +147,7 @@ app.MapControllers()
    .RequireRateLimiting("AuthPolicy"); // Apply to all controllers
 
 app.Run();
+
+public partial class Program
+{
+}

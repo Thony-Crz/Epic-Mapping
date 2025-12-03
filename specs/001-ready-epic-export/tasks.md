@@ -43,7 +43,7 @@ Goal: satisfy the failing tests by implementing domain policy, DTO mapping, seri
 - [x] T011 [P] [US1] small Add DTOs + mapper in `backEnd/src/Application/Epics/Models/EpicExportDto.cs` and `.../Mappers/EpicExportMapper.cs` to shape domain data for serialization.
 - [x] T012 [P] [US1] small Create `IEpicExportSerializer` + `SystemTextJsonEpicExportSerializer` inside `backEnd/src/Application/Epics/Serialization/` honoring `epic-export.schema.json` (camelCase, schema_version).
 - [x] T013 [US1] medium Implement `ExportReadyEpicHandler` in `backEnd/src/Application/Epics/ExportReadyEpicHandler.cs` orchestrating repository fetch, policy validation, serialization, and audit repository writes (still targeting interfaces). (Requires reviewer approval for medium size.)
-- [ ] T014 [US1] small Register handler + serializer in `backEnd/src/Application/DependencyInjection.cs` and expose through MediatR pipeline if applicable.
+- [x] T014 [US1] small Register handler + serializer in `backEnd/src/Application/DependencyInjection.cs` and expose through MediatR pipeline if applicable.
 
 Checkpoint: handler-level export works with unit tests using fake persistence.
 
@@ -69,7 +69,7 @@ Goal: expose HTTP endpoint that only serves Ready epics, returns 409 otherwise, 
 Independent Test: run Web API integration tests hitting `/api/epics/{id}/export` for 200/404/409 cases.
 
 ### Tests (write first)
-- [ ] T015 [P] [US2] small Add failing integration tests in `backEnd/Tests/Infrastructure.IntegrationTests/WebApi/EpicsExportEndpointTests.cs` covering Ready success, non-ready 409, not-found 404, and throttle 429.
+- [x] T015 [P] [US2] small Add failing integration tests in `backEnd/Tests/Infrastructure.IntegrationTests/WebApi/EpicsExportEndpointTests.cs` covering Ready success, non-ready 409, not-found 404, and throttle 429.
 
 ### Implementation
 - [ ] T016 [US2] medium Add `GET /api/epics/{id}/export` action to `backEnd/EpicMapping.WebApi/Controllers/EpicsController.cs` wiring to the new handler, setting `Content-Disposition`, and streaming JSON. (Requires reviewer approval.)
