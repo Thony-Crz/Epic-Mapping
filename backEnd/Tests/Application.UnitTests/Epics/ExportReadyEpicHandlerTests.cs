@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Application.Common.Interfaces;
 using Application.Epics;
 using Application.Epics.Abstractions;
 using Application.Epics.Exceptions;
@@ -86,7 +87,11 @@ public class ExportReadyEpicHandlerTests
                 record.Status == "Succeeded" &&
                 record.DeliveryChannel == envelope.DeliveryChannel &&
                 record.Checksum == envelope.Checksum &&
-                record.FailureReason == null),
+                record.Payload == envelope.Json &&
+                record.SchemaVersion == document.Meta.SchemaVersion &&
+                record.FileName == envelope.FileName &&
+                record.FailureReason == null &&
+                record.Snapshot.Meta.EpicId == _epicId),
             It.IsAny<CancellationToken>()), Times.Once);
     }
 
@@ -160,7 +165,10 @@ public class ExportReadyEpicHandlerTests
             It.Is<ExportAuditRecord>(record =>
                 record.EpicId == _epicId &&
                 record.Status == "Failed" &&
-                record.FailureReason == serializationException.Message),
+                record.FailureReason == serializationException.Message &&
+                record.Payload == string.Empty &&
+                record.FileName == string.Empty &&
+                record.Snapshot.Meta.EpicId == _epicId),
             It.IsAny<CancellationToken>()), Times.Once);
     }
 

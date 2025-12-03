@@ -53,11 +53,11 @@ Checkpoint: handler-level export works with unit tests using fake persistence.
 
 Purpose: back-fill the storage concerns once US1 logic is validated so the handler can persist audit events for API layers.
 
-- [ ] T004 medium Create EF Core migration `backEnd/src/Infrastructure/Migrations/<timestamp>_AddExportAuditEvents.cs` defining the `ExportAuditEvents` table (id, epic_id, exported_by, exported_at, checksum, payload, delivery_channel, status, failure_reason).
-- [ ] T005 [P] small Register `DbSet<ExportAuditEvent>` and fluent configuration inside `backEnd/src/Infrastructure/Data/EpicMappingDbContext.cs` to expose the audit table.
-- [ ] T006 small Introduce `IExportAuditRepository` and default implementation in `backEnd/src/Application/Common/Interfaces/IExportAuditRepository.cs` + `backEnd/src/Infrastructure/Repositories/ExportAuditRepository.cs` for persisting audit entries.
-- [ ] T007 [P] small Define shared `EpicExportSnapshot` and value objects in `backEnd/src/Domain/Epics/ValueObjects/EpicExportSnapshot.cs` capturing Epic + Feature + Scenario hierarchies.
-- [ ] T008 small Wire serializer/audit services into DI via `backEnd/src/Application/DependencyInjection.cs` and `backEnd/EpicMapping.WebApi/Program.cs` so downstream tasks can resolve them.
+- [x] T004 medium Create EF Core migration `backEnd/src/Infrastructure/Migrations/<timestamp>_AddExportAuditEvents.cs` defining the `ExportAuditEvents` table (id, epic_id, exported_by, exported_at, checksum, payload, delivery_channel, status, failure_reason).
+- [x] T005 [P] small Register `DbSet<ExportAuditEvent>` and fluent configuration inside `backEnd/src/Infrastructure/Data/EpicMappingDbContext.cs` to expose the audit table.
+- [x] T006 small Introduce `IExportAuditRepository` and default implementation in `backEnd/src/Application/Common/Interfaces/IExportAuditRepository.cs` + `backEnd/src/Infrastructure/Repositories/ExportAuditRepository.cs` for persisting audit entries.
+- [x] T007 [P] small Define shared `EpicExportSnapshot` and value objects in `backEnd/src/Domain/Epics/ValueObjects/EpicExportSnapshot.cs` capturing Epic + Feature + Scenario hierarchies.
+- [x] T008 small Wire serializer/audit services into DI via `backEnd/src/Application/DependencyInjection.cs` and `backEnd/EpicMapping.WebApi/Program.cs` so downstream tasks can resolve them.
 
 Checkpoint: storage + domain scaffolding complete; API layers can depend on concrete persistence.
 
