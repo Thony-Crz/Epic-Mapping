@@ -20,3 +20,8 @@ public sealed record ExportAuditRecord(
     string FileName,
     string? CorrelationId,
     EpicExportSnapshot Snapshot);
+
+public interface IExportAuditLogger
+{
+    void Log(ExportAuditRecord record);
+}

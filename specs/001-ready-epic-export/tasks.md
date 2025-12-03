@@ -74,8 +74,8 @@ Independent Test: run Web API integration tests hitting `/api/epics/{id}/export`
 ### Implementation
 - [x] T016 [US2] medium Add `GET /api/epics/{id}/export` action to `backEnd/EpicMapping.WebApi/Controllers/EpicsController.cs` wiring to the new handler, setting `Content-Disposition`, and streaming JSON. (Requires reviewer approval.)
 - [x] T017 [P] [US2] small Register endpoint + auth policies + rate limiting middleware in `backEnd/EpicMapping.WebApi/Program.cs` and `backEnd/EpicMapping.WebApi/Middleware/SecurityExtensions.cs`.
-- [ ] T018 [US2] small Emit structured audit logs in `backEnd/src/Infrastructure/Logging/ExportAuditLogger.cs` (or similar) to mirror database entries for observability.
-- [ ] T019 [US2] small Document and exercise the endpoint via `backEnd/EpicMapping.WebApi/WebApi.http` sample request referencing a Ready epic.
+- [x] T018 [US2] small Emit structured audit logs in `backEnd/src/Infrastructure/Logging/ExportAuditLogger.cs` (or similar) to mirror database entries for observability.
+- [x] T019 [US2] small Document and exercise the endpoint via `backEnd/EpicMapping.WebApi/WebApi.http` sample request referencing a Ready epic.
 
 Checkpoint: API returns exports only when Ready, with full logging.
 
@@ -87,7 +87,7 @@ Goal: allow UI users + automation to download the export and use it for Azure De
 Independent Test: run Vitest + Playwright suites plus an Azure import dry-run using exported JSON from the new UI button.
 
 ### Tests (write first)
-- [ ] T020 [P] [US3] small Create failing Vitest specs in `frontEnd/src/features/epics/export/export-ready-epic.spec.ts` covering button states, blob download, and error toasts.
+- [x] T020 [P] [US3] small Create failing Vitest specs in `frontEnd/src/features/epics/export/export-ready-epic.spec.ts` covering button states, blob download, and error toasts.
 - [ ] T021 [P] [US3] tiny Extend `frontEnd/accessibility/comprehensive-accessibility.spec.ts` to verify keyboard focus, aria-label, and live-region announcements for the export control.
 
 ### Implementation

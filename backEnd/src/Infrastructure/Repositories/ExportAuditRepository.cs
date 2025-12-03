@@ -8,10 +8,12 @@ namespace Infrastructure.Repositories;
 public sealed class ExportAuditRepository : IExportAuditRepository
 {
     private readonly EpicMappingDbContext _dbContext;
+    private readonly IExportAuditLogger _auditLogger;
 
-    public ExportAuditRepository(EpicMappingDbContext dbContext)
+    public ExportAuditRepository(EpicMappingDbContext dbContext, IExportAuditLogger auditLogger)
     {
         _dbContext = dbContext;
+        _auditLogger = auditLogger;
     }
 
     public async Task RecordAsync(ExportAuditRecord record, CancellationToken cancellationToken)
@@ -34,5 +36,7 @@ public sealed class ExportAuditRepository : IExportAuditRepository
 
         await _dbContext.ExportAuditEvents.AddAsync(entity, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
+
+        _auditLogger.Log(record);
     }
 }
