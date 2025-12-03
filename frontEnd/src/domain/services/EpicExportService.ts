@@ -112,6 +112,10 @@ export function downloadEpicExport(epic: EpicProps, projectName?: string): void 
 	URL.revokeObjectURL(url);
 }
 
+// Constants for filename generation
+const MAX_TITLE_LENGTH = 50;
+const ISO_DATETIME_LENGTH = 19; // Length of "YYYY-MM-DDTHH-MM-SS"
+
 /**
  * Generates a safe filename for the export
  */
@@ -120,9 +124,9 @@ function generateExportFilename(epicTitle: string): string {
 		.replace(/[^a-zA-Z0-9\s-]/g, '')
 		.replace(/\s+/g, '-')
 		.toLowerCase()
-		.substring(0, 50);
+		.substring(0, MAX_TITLE_LENGTH);
 
-	const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
+	const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, ISO_DATETIME_LENGTH);
 
 	return `epic-${safeTitle}-${timestamp}.json`;
 }
