@@ -1,6 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { AccessibilityHelper } from './accessibility-helpers';
 
+const READY_EPIC_ID = 'b1a4f2b8-5e2f-4bc7-8a04-4d1a17aa0f22';
+const READY_EPIC_PATH = `/epics/${READY_EPIC_ID}`;
+
 /**
  * Tests d'accessibilite utilisant les utilitaires personnalises
  */
@@ -248,5 +251,38 @@ test.describe('Tests d\'accessibilite avec utilitaires', () => {
 				}
 			`
 		});
+	});
+
+	test('Ready-epic export control est focusable et annonce son etat', async ({ page }) => {
+		const pageExists = await page.goto(READY_EPIC_PATH).then(() => true).catch(() => false);
+		if (!pageExists) {
+			throw new Error(`La page ${READY_EPIC_PATH} doit exister pour verifier l'accessibilite du bouton d'export.`);
+		}
+
+		await page.waitForLoadState('networkidle');
+
+		const exportButton = page.getByRole('button', { name: /export ready epic json/i });
+		await expect(exportButton).toBeVisible();
+		await exportButton.focus();
+		await expect(exportButton).toBeFocused();
+		await expect(exportButton).toHaveAttribute('aria-label', /ready/i);
+		await expect(exportButton).toHaveAttribute('aria-live', /polite|assertive/i);
+	});
+
+	test('Export control annonce les resultats via une region aria-live', async ({ page }) => {
+		const pageExists = await page.goto(READY_EPIC_PATH).then(() => true).catch(() => false);
+		if (!pageExists) {
+			throw new Error(`La page ${READY_EPIC_PATH} doit exister pour verifier la region aria-live.`);
+		}
+
+		await page.waitForLoadState('networkidle');
+
+		const liveRegion = page.locator('[data-testid="export-ready-epic-live-region"]');
+		await expect(liveRegion).toHaveAttribute('aria-live', /polite|assertive/i);
+		await expect(liveRegion).toHaveAttribute('role', /status|alert/i);
+
+		const exportButton = page.getByRole('button', { name: /export ready epic json/i });
+		await exportButton.click();
+		await expect(liveRegion).toContainText(/export en cours|export reussi|export echoue/i);
 	});
 });
