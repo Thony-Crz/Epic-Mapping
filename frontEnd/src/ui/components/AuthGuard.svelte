@@ -8,6 +8,21 @@
 	let isReady = false;
 	let shouldShowContent = false;
 
+	// Routes that don't require authentication
+	const publicRoutes = ['/login', '/auth/callback'];
+	// Routes for users pending approval
+	const pendingRoutes = ['/pending-approval'];
+
+	function isPublicRoute(routeId: string | null): boolean {
+		if (!routeId) return false;
+		return publicRoutes.some(r => routeId === r || routeId.startsWith(r + '/'));
+	}
+
+	function isPendingRoute(routeId: string | null): boolean {
+		if (!routeId) return false;
+		return pendingRoutes.some(r => routeId === r || routeId.startsWith(r + '/'));
+	}
+
 	onMount(async () => {
 		try {
 			// Initialiser l'authentification de manière synchrone
@@ -20,14 +35,21 @@
 			const currentAuth = $authStore;
 			const currentRoute = $page.route.id;
 
-			if (!currentAuth.isAuthenticated && currentRoute !== '/login') {
-				// Utiliser le base path pour les redirections
+			if (!currentAuth.isAuthenticated && !isPublicRoute(currentRoute)) {
+				// Not authenticated and not on public route -> redirect to login
 				const loginUrl = `${base}/login`;
 				await goto(loginUrl, { replaceState: true });
-			} else if (currentAuth.isAuthenticated && currentRoute === '/login') {
-				// Utiliser le base path pour les redirections
-				const homeUrl = base || '/';
-				await goto(homeUrl, { replaceState: true });
+			} else if (currentAuth.isAuthenticated && isPublicRoute(currentRoute)) {
+				// Authenticated and on public route -> redirect appropriately
+				if (currentAuth.user?.isApproved) {
+					const homeUrl = base || '/';
+					await goto(homeUrl, { replaceState: true });
+				} else {
+					await goto(`${base}/pending-approval`, { replaceState: true });
+				}
+			} else if (currentAuth.isAuthenticated && !currentAuth.user?.isApproved && !isPendingRoute(currentRoute) && !isPublicRoute(currentRoute)) {
+				// Authenticated but not approved -> redirect to pending
+				await goto(`${base}/pending-approval`, { replaceState: true });
 			} else {
 				// État correct -> afficher le contenu
 				shouldShowContent = true;
@@ -46,18 +68,25 @@
 		const currentAuth = $authStore;
 		const currentRoute = $page.route.id;
 
-		if (!currentAuth.isAuthenticated && currentRoute !== '/login' && shouldShowContent) {
+		if (!currentAuth.isAuthenticated && !isPublicRoute(currentRoute) && shouldShowContent) {
 			const loginUrl = `${base}/login`;
 			goto(loginUrl, { replaceState: true });
 			shouldShowContent = false;
-		} else if (currentAuth.isAuthenticated && currentRoute === '/login' && shouldShowContent) {
-			const homeUrl = base || '/';
-			goto(homeUrl, { replaceState: true });
-			goto(homeUrl, { replaceState: true });
+		} else if (currentAuth.isAuthenticated && isPublicRoute(currentRoute) && shouldShowContent) {
+			if (currentAuth.user?.isApproved) {
+				const homeUrl = base || '/';
+				goto(homeUrl, { replaceState: true });
+			} else {
+				goto(`${base}/pending-approval`, { replaceState: true });
+			}
+			shouldShowContent = false;
+		} else if (currentAuth.isAuthenticated && !currentAuth.user?.isApproved && !isPendingRoute(currentRoute) && !isPublicRoute(currentRoute) && shouldShowContent) {
+			goto(`${base}/pending-approval`, { replaceState: true });
 			shouldShowContent = false;
 		} else if (
-			(currentAuth.isAuthenticated && currentRoute !== '/login') ||
-			(!currentAuth.isAuthenticated && currentRoute === '/login')
+			(currentAuth.isAuthenticated && currentAuth.user?.isApproved && !isPublicRoute(currentRoute)) ||
+			(currentAuth.isAuthenticated && isPendingRoute(currentRoute)) ||
+			(!currentAuth.isAuthenticated && isPublicRoute(currentRoute))
 		) {
 			shouldShowContent = true;
 		}
