@@ -71,11 +71,9 @@ public class AuthController : ControllerBase
             }
             else
             {
-                // Check if this is the first user or admin GitHub ID
+                // Get configured admin GitHub ID
                 var adminGitHubId = Environment.GetEnvironmentVariable("ADMIN_GITHUB_ID") 
                     ?? _configuration["Admin:GitHubId"];
-                var hasAnyUsers = await _userRepository.HasAnyUsersAsync();
-                var isAdmin = !hasAnyUsers || gitHubUser.Id == adminGitHubId;
 
                 user = new User(
                     gitHubUser.Id,
@@ -84,19 +82,9 @@ public class AuthController : ControllerBase
                     gitHubUser.AvatarUrl
                 );
 
-                if (isAdmin)
-                {
-                    user.Role = UserRole.Admin;
-                    user.ApprovalStatus = ApprovalStatus.Approved;
-                    user.ApprovedAt = DateTime.UtcNow;
-                }
-                else
-                {
-                    user.Role = UserRole.User;
-                    user.ApprovalStatus = ApprovalStatus.Pending;
-                }
+                // Use atomic method to prevent race condition for first user
+                user = await _userRepository.CreateUserWithRoleAsync(user, adminGitHubId);
 
-                await _userRepository.AddAsync(user);
                 _logger.LogInformation("New user registered: {Name} ({GitHubId}), Role: {Role}, Status: {Status}", 
                     user.Name, user.GitHubId, user.Role, user.ApprovalStatus);
             }

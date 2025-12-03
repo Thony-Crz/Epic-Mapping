@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
@@ -14,11 +15,13 @@ namespace Application.Services
     {
         private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ILogger<AuthService> _logger;
 
-        public AuthService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        public AuthService(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger<AuthService> logger)
         {
             _configuration = configuration;
             _httpClientFactory = httpClientFactory;
+            _logger = logger;
         }
 
         public Task<string> GenerateTokenAsync(User user)
@@ -26,6 +29,12 @@ namespace Application.Services
             var jwtKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY") 
                 ?? _configuration["Jwt:Key"] 
                 ?? throw new InvalidOperationException("JWT Key not configured");
+            
+            // Ensure key meets minimum security requirements (256 bits / 32 characters)
+            if (jwtKey.Length < 32)
+            {
+                throw new InvalidOperationException("JWT Key must be at least 32 characters long for security");
+            }
             
             var issuer = _configuration["Jwt:Issuer"] ?? "EpicMappingApi";
             var audience = _configuration["Jwt:Audience"] ?? "EpicMappingClient";
@@ -100,17 +109,28 @@ namespace Application.Services
 
             var tokenResponse = await client.SendAsync(tokenRequest);
             if (!tokenResponse.IsSuccessStatusCode)
+            {
+                var errorContent = await tokenResponse.Content.ReadAsStringAsync();
+                _logger.LogWarning("GitHub token exchange failed. Status: {StatusCode}, Response: {Response}", 
+                    tokenResponse.StatusCode, errorContent);
                 return null;
+            }
 
             var tokenContent = await tokenResponse.Content.ReadAsStringAsync();
             var tokenData = JsonSerializer.Deserialize<JsonElement>(tokenContent);
             
             if (!tokenData.TryGetProperty("access_token", out var accessTokenElement))
+            {
+                _logger.LogWarning("GitHub token response did not contain access_token. Response: {Response}", tokenContent);
                 return null;
+            }
 
             var accessToken = accessTokenElement.GetString();
             if (string.IsNullOrEmpty(accessToken))
+            {
+                _logger.LogWarning("GitHub access_token was empty");
                 return null;
+            }
 
             // Get user info
             var userRequest = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/user");
@@ -119,7 +139,12 @@ namespace Application.Services
 
             var userResponse = await client.SendAsync(userRequest);
             if (!userResponse.IsSuccessStatusCode)
+            {
+                var errorContent = await userResponse.Content.ReadAsStringAsync();
+                _logger.LogWarning("GitHub user info request failed. Status: {StatusCode}, Response: {Response}", 
+                    userResponse.StatusCode, errorContent);
                 return null;
+            }
 
             var userContent = await userResponse.Content.ReadAsStringAsync();
             var userData = JsonSerializer.Deserialize<JsonElement>(userContent);

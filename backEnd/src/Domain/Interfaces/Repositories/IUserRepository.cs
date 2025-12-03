@@ -11,5 +11,11 @@ namespace Domain.Interfaces.Repositories
         Task<IEnumerable<User>> GetPendingUsersAsync();
         Task<IEnumerable<User>> GetAllUsersAsync();
         Task<bool> HasAnyUsersAsync();
+        
+        /// <summary>
+        /// Atomically creates a user as admin if no users exist, otherwise as regular user.
+        /// This prevents race conditions when multiple users register simultaneously.
+        /// </summary>
+        Task<User> CreateUserWithRoleAsync(User user, string? configuredAdminGitHubId);
     }
 }

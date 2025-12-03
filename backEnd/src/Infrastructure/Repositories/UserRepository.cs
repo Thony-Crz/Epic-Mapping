@@ -77,5 +77,41 @@ namespace Infrastructure.Repositories
         {
             return await _context.Users.AnyAsync();
         }
+
+        public async Task<User> CreateUserWithRoleAsync(User user, string? configuredAdminGitHubId)
+        {
+            // Use a transaction to ensure atomicity
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                // Check again within transaction to prevent race condition
+                var hasAnyUsers = await _context.Users.AnyAsync();
+                var isAdmin = !hasAnyUsers || user.GitHubId == configuredAdminGitHubId;
+
+                if (isAdmin)
+                {
+                    user.Role = UserRole.Admin;
+                    user.ApprovalStatus = ApprovalStatus.Approved;
+                    user.ApprovedAt = DateTime.UtcNow;
+                }
+                else
+                {
+                    user.Role = UserRole.User;
+                    user.ApprovalStatus = ApprovalStatus.Pending;
+                }
+
+                var entity = UserEntity.FromDomain(user);
+                _context.Users.Add(entity);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return entity.ToDomain();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
     }
 }

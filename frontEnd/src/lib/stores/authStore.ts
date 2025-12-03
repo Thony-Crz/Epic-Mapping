@@ -72,7 +72,7 @@ function createAuthStore() {
 			try {
 				// Verify state for CSRF protection
 				const storedState = sessionStorage.getItem('oauth_state');
-				if (state !== storedState) {
+				if (!storedState || state !== storedState) {
 					throw new Error('État OAuth invalide - possible attaque CSRF');
 				}
 				sessionStorage.removeItem('oauth_state');
