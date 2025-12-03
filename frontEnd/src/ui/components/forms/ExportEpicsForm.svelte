@@ -1,19 +1,19 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import { projectsStore } from '$lib/stores/projectsStore';
-	import type { Epic } from '$domain/entities/Epic';
+	import type { EpicProps } from '$domain/entities/Epic';
 	import type { Feature } from '$domain/entities/Feature';
 	import type { Scenario } from '$domain/entities/Scenario';
+	import { downloadEpicExport } from '../../../domain/services/EpicExportService';
 
 	export let isOpen = false;
-	export let readyEpics: Epic[] = [];
+	export let readyEpics: EpicProps[] = [];
 
 	const dispatch = createEventDispatcher();
 
 	let selectedEpicId = '';
 	let selectedProjectId = 'all'; // Nouveau filtre par projet
 	let isExporting = false;
-	let azurePath = '';
 
 	// Épics filtrées par projet
 	$: filteredEpics =
@@ -48,7 +48,6 @@
 		isOpen = false;
 		selectedProjectId = 'all'; // Réinitialiser le filtre
 		selectedEpicId = '';
-		azurePath = '';
 		dispatch('close');
 	}
 
@@ -64,19 +63,20 @@
 		closeModal();
 	}
 
-	function handleTransferToAzure() {
+	function handleExportToJson() {
 		if (!selectedEpic) {
-			alert('Veuillez sélectionner une épic à transférer');
-			return;
-		}
-
-		if (!azurePath.trim()) {
-			alert('Veuillez saisir le chemin Azure DevOps');
+			alert('Veuillez sélectionner une épic à exporter');
 			return;
 		}
 
 		isExporting = true;
-		transferToAzureDevOps();
+		try {
+			const projectName = getProjectName(selectedEpic.projectId);
+			downloadEpicExport(selectedEpic, projectName);
+		} catch (error) {
+			console.error('Export error:', error);
+			alert('Erreur lors de l\'export JSON');
+		}
 		isExporting = false;
 		closeModal();
 	}
@@ -140,14 +140,6 @@
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);
-	}
-
-	function transferToAzureDevOps() {
-		if (!selectedEpic) return;
-
-		alert(
-			`Transfert de l'épic "${selectedEpic.title}" vers Azure DevOps au chemin "${azurePath}" sera implémenté côté WebAPI prochainement`
-		);
 	}
 
 	function handleBackdropClick(event: MouseEvent) {
@@ -270,20 +262,9 @@
 				<!-- Type d'export -->
 				<div>
 					<div class="mb-3 text-sm font-medium text-gray-700">Actions d'export</div>
-
-					<!-- Chemin Azure DevOps -->
-					<div class="mb-4">
-						<label for="azure-path" class="mb-2 block text-sm font-medium text-gray-700">
-							Chemin Azure DevOps (pour le transfert)
-						</label>
-						<input
-							id="azure-path"
-							type="text"
-							bind:value={azurePath}
-							placeholder="ex: MonProjet/MonArea/Backlog"
-							class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
-						/>
-					</div>
+					<p class="mb-4 text-xs text-gray-500">
+						Export JSON compatible Azure DevOps pour créer automatiquement les Features et User Stories.
+					</p>
 				</div>
 			</div>
 
@@ -297,7 +278,7 @@
 				</button>
 
 				<div class="flex gap-3">
-					<!-- Bouton Export Excel -->
+					<!-- Bouton Export Excel/CSV -->
 					<button
 						on:click={handleExportToExcel}
 						disabled={isExporting || !selectedEpic || filteredEpics.length === 0}
@@ -327,17 +308,14 @@
 									d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
 								></path>
 							</svg>
-							Export Excel
+							Export CSV
 						{/if}
 					</button>
 
-					<!-- Bouton Transférer Azure -->
+					<!-- Bouton Export JSON pour Azure DevOps -->
 					<button
-						on:click={handleTransferToAzure}
-						disabled={isExporting ||
-							!selectedEpic ||
-							!azurePath.trim() ||
-							filteredEpics.length === 0}
+						on:click={handleExportToJson}
+						disabled={isExporting || !selectedEpic || filteredEpics.length === 0}
 						class="flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-2 font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
 					>
 						{#if isExporting}
@@ -354,17 +332,17 @@
 									d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
 								></path>
 							</svg>
-							Transfert en cours...
+							Export en cours...
 						{:else}
 							<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 								<path
 									stroke-linecap="round"
 									stroke-linejoin="round"
 									stroke-width="2"
-									d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+									d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 5v10"
 								></path>
 							</svg>
-							Transférer à Azure
+							Export JSON (Azure DevOps)
 						{/if}
 					</button>
 				</div>
