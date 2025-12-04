@@ -39,8 +39,9 @@ RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 COPY --from=publish /app/publish .
 
-# Railway utilise la variable PORT pour le port d'écoute
-# On configure ASP.NET pour écouter sur ce port (avec fallback à 8080)
-ENV ASPNETCORE_URLS=http://+:${PORT:-8080}
+# Railway injecte automatiquement la variable PORT au runtime
+# ASP.NET Core lit la variable d'environnement ASPNETCORE_URLS ou PORT
+# Si PORT n'est pas définie (dev local), on utilise 8080 par défaut
+# Note: Railway configure ASPNETCORE_URLS via ses variables d'environnement
 
-ENTRYPOINT ["dotnet", "EpicMapping.WebApi.dll"]
+ENTRYPOINT ["/bin/sh", "-c", "exec dotnet EpicMapping.WebApi.dll --urls http://+:${PORT:-8080}"]
