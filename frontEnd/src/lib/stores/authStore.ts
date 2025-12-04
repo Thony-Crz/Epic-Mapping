@@ -6,20 +6,30 @@ export interface User {
 	id: string;
 	name: string;
 	email: string;
-	provider?: 'local' | 'github' | 'azure' | 'gitlab';
+	avatarUrl?: string;
+	role: 'User' | 'Admin';
+	approvalStatus: 'Pending' | 'Approved' | 'Rejected';
+	isApproved: boolean;
+	isAdmin: boolean;
 }
 
 interface AuthState {
 	isAuthenticated: boolean;
 	user: User | null;
+	token: string | null;
 	loading: boolean;
+	error: string | null;
 }
 
 const initialState: AuthState = {
 	isAuthenticated: false,
 	user: null,
-	loading: false
+	token: null,
+	loading: false,
+	error: null
 };
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
 function createAuthStore() {
 	const { subscribe, set, update } = writable<AuthState>(initialState);
@@ -27,66 +37,168 @@ function createAuthStore() {
 	return {
 		subscribe,
 
-		// Connexion locale (fake pour l'instant)
-		loginLocal: async (email: string) => {
-			update((state) => ({ ...state, loading: true }));
+		// Initiate GitHub OAuth flow
+		loginWithGitHub: async () => {
+			update((state) => ({ ...state, loading: true, error: null }));
 
-			// Simulation d'une connexion
-			await new Promise((resolve) => setTimeout(resolve, 1000));
-
-			const user: User = {
-				id: '1',
-				name: 'Utilisateur Demo',
-				email: email,
-				provider: 'local'
-			};
-
-			set({
-				isAuthenticated: true,
-				user,
-				loading: false
-			});
-
-			// Sauvegarder dans le localStorage pour persister la session
-			localStorage.setItem('auth', JSON.stringify({ isAuthenticated: true, user }));
-			
-			// Rediriger vers l'accueil après connexion
-			const homeUrl = base || '/';
-			goto(homeUrl);
+			try {
+				const response = await fetch(`${API_BASE_URL}/api/auth/github/url`);
+				if (!response.ok) {
+					throw new Error('Impossible de récupérer l\'URL d\'authentification GitHub');
+				}
+				
+				const data = await response.json();
+				
+				// Store state for CSRF protection
+				sessionStorage.setItem('oauth_state', data.state);
+				
+				// Redirect to GitHub
+				window.location.href = data.url;
+			} catch (error) {
+				console.error('Erreur lors de l\'authentification GitHub:', error);
+				update((state) => ({ 
+					...state, 
+					loading: false, 
+					error: error instanceof Error ? error.message : 'Erreur d\'authentification'
+				}));
+				throw error;
+			}
 		},
 
-		// Connexion avec un provider externe (fake pour l'instant)
-		loginWithProvider: async (provider: 'github' | 'azure' | 'gitlab') => {
-			update((state) => ({ ...state, loading: true }));
+		// Handle GitHub OAuth callback
+		handleGitHubCallback: async (code: string, state: string) => {
+			update((state) => ({ ...state, loading: true, error: null }));
 
-			// Simulation d'une connexion
-			await new Promise((resolve) => setTimeout(resolve, 1500));
+			try {
+				// Verify state for CSRF protection
+				const storedState = sessionStorage.getItem('oauth_state');
+				if (!storedState || state !== storedState) {
+					throw new Error('État OAuth invalide - possible attaque CSRF');
+				}
+				sessionStorage.removeItem('oauth_state');
 
-			const user: User = {
-				id: '1',
-				name: `Utilisateur ${provider}`,
-				email: `user@${provider}.com`,
-				provider
-			};
+				const response = await fetch(`${API_BASE_URL}/api/auth/github/callback`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ code, state })
+				});
 
-			set({
-				isAuthenticated: true,
-				user,
-				loading: false
-			});
+				if (!response.ok) {
+					const errorData = await response.json().catch(() => ({}));
+					throw new Error(errorData.error || 'Échec de l\'authentification');
+				}
 
-			// Sauvegarder dans le localStorage
-			localStorage.setItem('auth', JSON.stringify({ isAuthenticated: true, user }));
-			
-			// Rediriger vers l'accueil après connexion
-			const homeUrl = base || '/';
-			goto(homeUrl);
+				const data = await response.json();
+				
+				const user: User = {
+					id: data.user.id,
+					name: data.user.name,
+					email: data.user.email || '',
+					avatarUrl: data.user.avatarUrl,
+					role: data.user.role,
+					approvalStatus: data.user.approvalStatus,
+					isApproved: data.user.isApproved,
+					isAdmin: data.user.isAdmin
+				};
+
+				set({
+					isAuthenticated: true,
+					user,
+					token: data.token,
+					loading: false,
+					error: null
+				});
+
+				// Save to localStorage
+				localStorage.setItem('auth', JSON.stringify({ 
+					isAuthenticated: true, 
+					user,
+					token: data.token
+				}));
+				
+				// Redirect based on approval status
+				const homeUrl = base || '/';
+				if (!user.isApproved) {
+					goto(`${base}/pending-approval`);
+				} else {
+					goto(homeUrl);
+				}
+
+				return user;
+			} catch (error) {
+				console.error('Erreur lors du callback GitHub:', error);
+				update((state) => ({ 
+					...state, 
+					loading: false, 
+					error: error instanceof Error ? error.message : 'Erreur d\'authentification'
+				}));
+				throw error;
+			}
+		},
+
+		// Refresh current user from API
+		refreshUser: async () => {
+			const stored = localStorage.getItem('auth');
+			if (!stored) return null;
+
+			try {
+				const parsed = JSON.parse(stored);
+				if (!parsed.token) return null;
+
+				const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
+					headers: {
+						'Authorization': `Bearer ${parsed.token}`
+					}
+				});
+
+				if (!response.ok) {
+					// Token invalid, logout
+					localStorage.removeItem('auth');
+					set(initialState);
+					return null;
+				}
+
+				const userData = await response.json();
+				const user: User = {
+					id: userData.id,
+					name: userData.name,
+					email: userData.email || '',
+					avatarUrl: userData.avatarUrl,
+					role: userData.role,
+					approvalStatus: userData.approvalStatus,
+					isApproved: userData.isApproved,
+					isAdmin: userData.isAdmin
+				};
+
+				set({
+					isAuthenticated: true,
+					user,
+					token: parsed.token,
+					loading: false,
+					error: null
+				});
+
+				localStorage.setItem('auth', JSON.stringify({ 
+					isAuthenticated: true, 
+					user,
+					token: parsed.token
+				}));
+
+				return user;
+			} catch (error) {
+				console.error('Erreur lors du rafraîchissement utilisateur:', error);
+				return null;
+			}
 		},
 
 		// Déconnexion
 		logout: () => {
 			set(initialState);
 			localStorage.removeItem('auth');
+			const loginUrl = `${base}/login`;
+			goto(loginUrl);
 		},
 
 		// Initialiser l'état depuis le localStorage
@@ -97,17 +209,36 @@ function createAuthStore() {
 				if (stored) {
 					const parsed = JSON.parse(stored);
 					
-					if (parsed.isAuthenticated && parsed.user) {
+					if (parsed.isAuthenticated && parsed.user && parsed.token) {
 						set({
 							isAuthenticated: true,
 							user: parsed.user,
-							loading: false
+							token: parsed.token,
+							loading: false,
+							error: null
 						});
 					}
 				}
 			} catch (error) {
 				console.error("🔐 AuthStore: Error parsing auth from localStorage:", error);
 			}
+		},
+
+		// Get current token
+		getToken: (): string | null => {
+			const stored = localStorage.getItem('auth');
+			if (!stored) return null;
+			try {
+				const parsed = JSON.parse(stored);
+				return parsed.token || null;
+			} catch {
+				return null;
+			}
+		},
+
+		// Clear error
+		clearError: () => {
+			update((state) => ({ ...state, error: null }));
 		}
 	};
 }

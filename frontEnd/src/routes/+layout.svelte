@@ -16,6 +16,11 @@
 		const loginUrl = `${base}/login`;
 		goto(loginUrl);
 	}
+
+	// Public routes that don't require auth guard
+	$: isPublicRoute = $page.route.id === '/login' || 
+		$page.route.id === '/auth/callback' || 
+		$page.route.id === '/pending-approval';
 </script>
 
 <!-- Header -->
@@ -32,7 +37,7 @@
 			</div>
 
 			<!-- Navigation principale -->
-			{#if $authStore.isAuthenticated && $page.route.id !== '/login'}
+			{#if $authStore.isAuthenticated && $authStore.user?.isApproved && !isPublicRoute}
 				<nav class="flex items-center space-x-6">
 					<a 
 						href="{base}/" 
@@ -56,15 +61,40 @@
 						</svg>
 						Feature Flags
 					</a>
+					{#if $authStore.user?.isAdmin}
+						<a 
+							href="{base}/admin/users" 
+							class="text-gray-600 hover:text-blue-600 font-medium transition-colors"
+							class:text-blue-600={$page.route.id?.startsWith('/admin')}
+							class:text-gray-900={$page.route.id?.startsWith('/admin')}
+						>
+							<svg class="inline-block w-4 h-4 mr-1 mb-1" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+							</svg>
+							Utilisateurs
+						</a>
+					{/if}
 				</nav>
 			{/if}
 
 			<!-- Actions utilisateur -->
 			<div class="flex items-center space-x-4">
-				{#if $authStore.isAuthenticated && $page.route.id !== '/login'}
+				{#if $authStore.isAuthenticated && !isPublicRoute}
 					<!-- Utilisateur connecté -->
 					<div class="flex items-center space-x-3">
-						<span class="text-gray-700">Bonjour, {$authStore.user?.name}</span>
+						{#if $authStore.user?.avatarUrl}
+							<img 
+								src={$authStore.user.avatarUrl} 
+								alt={$authStore.user.name}
+								class="h-8 w-8 rounded-full"
+							/>
+						{/if}
+						<span class="text-gray-700">
+							{$authStore.user?.name}
+							{#if $authStore.user?.isAdmin}
+								<span class="ml-1 text-xs bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full">Admin</span>
+							{/if}
+						</span>
 						<button
 							on:click={handleLogout}
 							class="flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 font-medium text-white transition-colors duration-200 hover:bg-red-700"
@@ -80,7 +110,7 @@
 							Se déconnecter
 						</button>
 					</div>
-				{:else if $page.route.id !== '/login'}
+				{:else if !isPublicRoute}
 					<!-- Bouton d'authentification -->
 					<button
 						on:click={handleLoginClick}
@@ -115,12 +145,12 @@
 	<!-- Contenu avec AuthGuard -->
 	<div class="relative z-10">
 		<AuthGuard>
-			{#if $page.route.id === '/login'}
+			{#if isPublicRoute}
 				<slot />
 			{:else}
 				<div class="container mx-auto px-4 py-8">
 					<!-- Breadcrumb pour la navigation -->
-					{#if $authStore.isAuthenticated}
+					{#if $authStore.isAuthenticated && $authStore.user?.isApproved}
 						<Breadcrumb />
 					{/if}
 					<slot />

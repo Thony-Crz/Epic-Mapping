@@ -10,6 +10,7 @@ public class EpicMappingDbContext : DbContext
     }
 
     public DbSet<ExportAuditEvent> ExportAuditEvents => Set<ExportAuditEvent>();
+    public DbSet<UserEntity> Users => Set<UserEntity>();
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

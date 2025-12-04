@@ -6,6 +6,15 @@ namespace Application.Interfaces
     public interface IAuthService
     {
         Task<string> GenerateTokenAsync(User user);
-        Task<OAuthUserInfoDto> GetUserInfoFromProviderAsync(string provider, string authCode);
+        Task<GitHubUserInfo?> GetGitHubUserInfoAsync(string code);
+        string GetGitHubAuthorizationUrl(string state);
     }
+
+    public record GitHubUserInfo(
+        string Id,
+        string Login,
+        string? Name,
+        string? Email,
+        string? AvatarUrl
+    );
 }

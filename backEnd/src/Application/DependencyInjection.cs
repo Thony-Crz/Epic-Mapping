@@ -16,6 +16,10 @@ public static class DependencyInjection
     {
         // Enregistrer MediatR avec tous les handlers de l'assembly Application
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+        
+        // Add HttpClient for external API calls
+        services.AddHttpClient();
+        
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IReadyEpicExportPolicy, ReadyEpicExportPolicy>();
         services.AddScoped<IEpicExportMapper, EpicExportMapper>();
