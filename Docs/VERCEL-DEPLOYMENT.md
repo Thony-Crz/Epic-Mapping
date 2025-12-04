@@ -182,8 +182,9 @@ Ou utilisez le Vercel CLI dans GitHub Actions :
 
 ### Erreur CORS
 
-Vérifiez que l'URL du frontend est dans `Security.AllowedOrigins` du backend :
+Le frontend Vercel communique directement avec l'API backend. Vous devez configurer CORS sur le backend :
 
+**Via appsettings.json :**
 ```json
 {
   "Security": {
@@ -193,6 +194,12 @@ Vérifiez que l'URL du frontend est dans `Security.AllowedOrigins` du backend :
     ]
   }
 }
+```
+
+**Via variables d'environnement (recommandé pour production) :**
+```env
+Security__AllowedOrigins__0=https://votre-app.vercel.app
+Security__AllowedOrigins__1=http://localhost:5173
 ```
 
 ### Erreur de connexion à la base
