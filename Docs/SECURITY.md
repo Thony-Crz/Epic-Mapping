@@ -109,11 +109,11 @@ dotnet run --project EpicMapping.WebApi
 L'application utilise l'authentification GitHub OAuth. Le premier admin est défini via une variable d'environnement :
 
 ```env
-# Méthode 1: Par GitHub User ID (recommandé)
+# GitHub User ID de l'administrateur (recommandé)
 # Trouvez votre ID: https://api.github.com/users/VOTRE_USERNAME
 ADMIN_GITHUB_ID=12345678
 
-# Méthode 2: Par nom d'utilisateur GitHub (pour les notifications)
+# Email pour les notifications admin (optionnel)
 ADMIN_NOTIFICATION_EMAIL=admin@example.com
 ```
 
