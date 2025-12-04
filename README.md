@@ -42,6 +42,7 @@
 |-------|-------------|
 | [**Guide de développement**](./Docs/DEVELOPMENT-ENVIRONMENT.md) | 🌟 Démarrage environnement complet |
 | [**Guide Docker**](./Docs/README-DOCKER.md) | 🐳 Configuration Docker avancée |
+| [**Déploiement Railway**](./Docs/RAILWAY-DEPLOYMENT.md) | 🚀 Déploiement cloud sur Railway |
 | [**Architecture**](./Docs/ARCHITECTURE.md) | 🏗️ Structure DDD du code |
 | [**Sécurité**](./Docs/SECURITY.md) | 🔒 Bonnes pratiques sécurité |
 

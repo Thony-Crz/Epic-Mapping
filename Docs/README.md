@@ -17,6 +17,12 @@ Ce dossier contient toute la documentation du projet Epic Mapping.
 | [**SECURITY.md**](./SECURITY.md) | Guide de sécurité et bonnes pratiques |
 | [**DEV-TOKEN-README.md**](./DEV-TOKEN-README.md) | Tokens de développement pour l'API |
 
+## ☁️ Déploiement
+
+| Document | Description |
+|----------|-------------|
+| [**RAILWAY-DEPLOYMENT.md**](./RAILWAY-DEPLOYMENT.md) | 🚀 Guide complet de déploiement sur Railway |
+
 ## 🤖 Flux Specify obligatoire
 
 1. **Constitution** : lire et respecter `.specify/memory/constitution.md` (Clean Architecture, specs techniques, TDD Red-Green-Refactor, validation par step).
