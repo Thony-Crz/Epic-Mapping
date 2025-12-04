@@ -74,6 +74,7 @@ VITE_API_BASE_URL=http://localhost:5000
 | Guide | Description |
 |-------|-------------|
 | [**Guide de développement**](./Docs/DEVELOPMENT-ENVIRONMENT.md) | 🌟 Démarrage environnement complet |
+| [**Déploiement Vercel**](./Docs/VERCEL-DEPLOYMENT.md) | 🚀 Déploiement sur Vercel + Railway |
 | [**Guide Docker**](./Docs/README-DOCKER.md) | 🐳 Configuration Docker avancée |
 | [**Architecture**](./Docs/ARCHITECTURE.md) | 🏗️ Structure DDD du code |
 | [**Sécurité**](./Docs/SECURITY.md) | 🔒 Bonnes pratiques sécurité |
