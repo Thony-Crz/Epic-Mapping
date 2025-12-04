@@ -43,6 +43,20 @@ cp .env.example .env
 # JWT Configuration
 JWT_SECRET_KEY=votre-cle-secrete-jwt-doit-faire-au-moins-32-caracteres-pour-etre-securisee
 
+# GitHub OAuth Configuration
+GITHUB_CLIENT_ID=votre-github-client-id
+GITHUB_CLIENT_SECRET=votre-github-client-secret
+
+# Admin Configuration
+ADMIN_GITHUB_ID=votre-github-user-id
+ADMIN_NOTIFICATION_EMAIL=votre-email@example.com
+
+# SMTP Configuration (optionnel - pour les notifications email)
+# SMTP_HOST=smtp.example.com
+# SMTP_PORT=587
+# SMTP_USER=
+# SMTP_PASS=
+
 # Azure AD Configuration (optionnel)
 AZURE_CLIENT_ID=votre-azure-client-id
 AZURE_CLIENT_SECRET=votre-azure-client-secret
@@ -89,6 +103,40 @@ dotnet run --project EpicMapping.WebApi
   }
 }
 ```
+
+### Configuration Admin GitHub
+
+L'application utilise l'authentification GitHub OAuth. Le premier admin est défini via une variable d'environnement :
+
+```env
+# GitHub User ID de l'administrateur (recommandé)
+# Trouvez votre ID: https://api.github.com/users/VOTRE_USERNAME
+ADMIN_GITHUB_ID=12345678
+
+# Email pour les notifications admin (optionnel)
+ADMIN_NOTIFICATION_EMAIL=admin@example.com
+```
+
+**Comment trouver votre GitHub User ID :**
+1. Allez sur `https://api.github.com/users/VOTRE_USERNAME`
+2. Le champ `id` contient votre User ID numérique
+
+**Note :** L'utilisateur correspondant à `ADMIN_GITHUB_ID` sera automatiquement assigné le rôle Admin lors de sa première connexion.
+
+### Configuration SMTP (Notifications Email)
+
+Pour activer les notifications par email, configurez les variables SMTP :
+
+```env
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=votre-email@gmail.com
+SMTP_PASS=votre-mot-de-passe-application
+SMTP_FROM=noreply@votre-domaine.com
+SMTP_ENABLE_SSL=true
+```
+
+**Conseil :** Pour Gmail, utilisez un [mot de passe d'application](https://support.google.com/accounts/answer/185833) plutôt que votre mot de passe principal.
 
 ## 🧪 Test de l'API
 

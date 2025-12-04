@@ -34,6 +34,39 @@
 - 🔧 **API**: http://localhost:8080
 - 🏥 **Health Check**: http://localhost:8080/api/Database/health
 
+## 🔐 Configuration and Security
+
+> **⚠️ Important for open source projects**: Never push secrets (`.env`, API keys, tokens) to GitHub.
+
+### Quick Setup
+
+1. **Copy example files and configure your variables:**
+
+```bash
+# Backend
+cp backEnd/.env.example backEnd/.env
+
+# Frontend
+cp frontEnd/.env.example frontEnd/.env.local
+```
+
+2. **Configure required variables in your `.env` files:**
+
+```env
+# Backend - Required variables
+JWT_SECRET_KEY=your-jwt-secret-key-minimum-32-characters
+GITHUB_CLIENT_ID=your-github-client-id
+GITHUB_CLIENT_SECRET=your-github-client-secret
+ADMIN_GITHUB_ID=your-github-user-id
+
+# Frontend
+VITE_API_BASE_URL=http://localhost:5000
+```
+
+3. **For deployment (Vercel, Railway, Docker)**: Add your variables through your hosting platform's UI, never in source code.
+
+📖 **[Complete Security Guide →](./Docs/SECURITY.md)**
+
 ## 📚 Documentation
 
 👀 **[Check the complete documentation in /Docs/](./Docs/README.md)**
@@ -41,6 +74,7 @@
 | Guide | Description |
 |-------|-------------|
 | [**Development Guide**](./Docs/DEVELOPMENT-ENVIRONMENT.md) | 🌟 Complete environment setup |
+| [**Vercel Deployment**](./Docs/VERCEL-DEPLOYMENT.md) | 🚀 Deploy on Vercel + Railway |
 | [**Docker Guide**](./Docs/README-DOCKER.md) | 🐳 Advanced Docker configuration |
 | [**Architecture**](./Docs/ARCHITECTURE.md) | 🏗️ DDD code structure |
 | [**Security**](./Docs/SECURITY.md) | 🔒 Security best practices |
