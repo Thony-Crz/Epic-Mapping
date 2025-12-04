@@ -1,0 +1,50 @@
+# Dependencies
+node_modules
+
+# Build outputs
+.output
+.vercel
+.netlify
+.wrangler
+.svelte-kit
+build
+storybook-static
+
+# Test outputs
+test-results
+coverage
+playwright-report
+accessibility-report
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Logs
+*.log
+*storybook.log
+
+# IDE
+.vscode
+.idea
+
+# Git
+.git
+.gitignore
+
+# Documentation
+*.md
+!README.md
+
+# E2E tests (not needed for production build)
+e2e
+accessibility

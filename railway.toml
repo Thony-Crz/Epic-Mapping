@@ -1,0 +1,30 @@
+# ============================================
+# Epic Mapping - Railway Configuration
+# ============================================
+# 
+# Ce fichier de configuration racine est informatif.
+# Railway utilise la configuration via l'interface web ou railway.json
+# pour les projets multi-services.
+#
+# Pour déployer ce projet sur Railway :
+# 1. Créez un projet sur railway.app
+# 2. Ajoutez 3 services :
+#    - PostgreSQL (depuis le catalogue Railway)
+#    - Backend .NET (depuis ce repo, root: backEnd)
+#    - Frontend SvelteKit (depuis ce repo, root: frontEnd)
+#
+# Consultez Docs/RAILWAY-DEPLOYMENT.md pour le guide complet.
+
+[build]
+# Railway détecte automatiquement le Dockerfile dans chaque sous-dossier
+builder = "DOCKERFILE"
+
+[deploy]
+# Politique de redémarrage
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
+
+# Healthcheck (configuré dans les Dockerfiles)
+healthcheckPath = "/"
+healthcheckTimeout = 300
+
