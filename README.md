@@ -34,6 +34,39 @@
 - 🔧 **API**: http://localhost:8080
 - 🏥 **Health Check**: http://localhost:8080/api/Database/health
 
+## 🔐 Configuration et Sécurité
+
+> **⚠️ Important pour les projets open source** : Ne jamais pousser de secrets (`.env`, clés API, tokens) sur GitHub.
+
+### Configuration rapide
+
+1. **Copiez les fichiers d'exemple et configurez vos variables :**
+
+```bash
+# Backend
+cp backEnd/.env.example backEnd/.env
+
+# Frontend
+cp frontEnd/.env.example frontEnd/.env.local
+```
+
+2. **Configurez les variables obligatoires dans vos fichiers `.env` :**
+
+```env
+# Backend - Variables obligatoires
+JWT_SECRET_KEY=votre-cle-secrete-jwt-minimum-32-caracteres
+GITHUB_CLIENT_ID=votre-github-client-id
+GITHUB_CLIENT_SECRET=votre-github-client-secret
+ADMIN_GITHUB_ID=votre-github-user-id
+
+# Frontend
+VITE_API_BASE_URL=http://localhost:5000
+```
+
+3. **Pour le déploiement (Vercel, Railway, Docker)** : Ajoutez vos variables via l'interface de votre hébergeur, jamais dans le code source.
+
+📖 **[Guide complet de sécurité →](./Docs/SECURITY.md)**
+
 ## 📚 Documentation
 
 👀 **[Consultez la documentation complète dans /Docs/](./Docs/README.md)**
